@@ -2,6 +2,7 @@ package com.janeullah.apps.healthinspectionviewer.services;
 
 import android.util.Log;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,41 +25,24 @@ public class FirebaseInitialization {
 
     private FirebaseInitialization() {
         DatabaseReference databaseReference = setup();
-        if (databaseReference != null){
-            setupListener(databaseReference);
+        if (databaseReference != null) {
             negaReference = databaseReference;
         }
     }
 
-    private void setupListener(DatabaseReference reference){
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    private DatabaseReference setup(){
-        try{
+    private DatabaseReference setup() {
+        try {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
+            database.setPersistenceEnabled(Boolean.TRUE);
             return database.getReference("nega");
-        }catch(Exception e){
-            Log.e(TAG,"Failed to setup Firebase initialization",e);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to setup Firebase initialization", e);
+            FirebaseCrash.report(e);
         }
         return null;
     }
 
-    public DatabaseReference getNegaDatabaseReference(){
+    public DatabaseReference getNegaDatabaseReference() {
         return negaReference;
     }
 }

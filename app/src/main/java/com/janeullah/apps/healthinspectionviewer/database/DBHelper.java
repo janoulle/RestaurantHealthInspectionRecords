@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.domain.adapters;
+package com.janeullah.apps.healthinspectionviewer.database;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -17,7 +17,7 @@ import java.io.OutputStream;
  * @date 4/22/2017.
  */
 
-public class DBHelper  extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper {
 
     private static String TAG = "DBHelper"; // Tag just for the LogCat window
 
@@ -34,47 +34,39 @@ public class DBHelper  extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
         this.mContext = context;
 
-        if(android.os.Build.VERSION.SDK_INT >= 17){
+        if (android.os.Build.VERSION.SDK_INT >= 17) {
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
-        }
-        else
-        {
+        } else {
             DB_PATH = context.getFilesDir().getPath() + context.getPackageName() + "/databases/";
         }
     }
 
     /**
      * Creates a empty database on the system and rewrites it with your own database.
-     * */
-    public void createDataBase() throws IOException
-    {
+     */
+    public void createDataBase() throws IOException {
         //If the database does not exist, copy it from the assets.
 
         boolean mDataBaseExist = checkDataBase();
-        if(!mDataBaseExist)
-        {
+        if (!mDataBaseExist) {
             this.getReadableDatabase();
             this.close();
-            try
-            {
+            try {
                 //Copy the database from assests
                 copyDataBase();
                 Log.e(TAG, "createDatabase database created");
-            }
-            catch (IOException mIOException)
-            {
+            } catch (IOException mIOException) {
                 throw new Error("ErrorCopyingDataBase");
             }
             mDataBase = this.getReadableDatabase();
-        }else {
+        } else {
             mDataBase = this.getReadableDatabase();
         }
     }
 
 
     //Check that the database exists here: /data/data/your package/databases/Da Name
-    private boolean checkDataBase()
-    {
+    private boolean checkDataBase() {
         //String myPath = mContext.getFilesDir().getAbsolutePath().replace("files", "databases")+ File.separator + DB_NAME;
         File dbFile = new File(DB_PATH + DB_NAME);
         //Log.v("dbFile", dbFile + "   "+ dbFile.exists());
@@ -82,15 +74,13 @@ public class DBHelper  extends SQLiteOpenHelper {
     }
 
     //Copy the database from assets
-    private void copyDataBase() throws IOException
-    {
+    private void copyDataBase() throws IOException {
         InputStream mInput = mContext.getAssets().open(DB_NAME);
         String outFileName = DB_PATH + DB_NAME;
         OutputStream mOutput = new FileOutputStream(outFileName);
         byte[] mBuffer = new byte[1024];
         int mLength;
-        while ((mLength = mInput.read(mBuffer))>0)
-        {
+        while ((mLength = mInput.read(mBuffer)) > 0) {
             mOutput.write(mBuffer, 0, mLength);
         }
         mOutput.flush();
@@ -99,8 +89,7 @@ public class DBHelper  extends SQLiteOpenHelper {
     }
 
     //Open the database, so we can query it
-    public boolean openDataBase() throws SQLException
-    {
+    public boolean openDataBase() throws SQLException {
         String mPath = DB_PATH + DB_NAME;
         Log.v("mPath", mPath);
         mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.OPEN_READWRITE);
@@ -109,9 +98,8 @@ public class DBHelper  extends SQLiteOpenHelper {
     }
 
     @Override
-    public synchronized void close()
-    {
-        if(mDataBase != null)
+    public synchronized void close() {
+        if (mDataBase != null)
             mDataBase.close();
         super.close();
     }

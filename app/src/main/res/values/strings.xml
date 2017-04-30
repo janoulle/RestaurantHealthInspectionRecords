@@ -1,4 +1,19 @@
 <resources>
-    <string name="app_name">RestaurantHealthInspectionRecords</string>
+    <string name="app_name">NEGA Restaurant Scores</string>
     <string name="action_settings">Settings</string>
+    <string name="restaurantNameListView">Name</string>
+    <string name="restaurantAddressListView">HomeTown</string>
+    <string name="submit_county_selection">Show Restaurants</string>
+    <string name="submit_restaurant_selection">Search</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key"></string>
+    <string name="title_activity_runtime_permissions_fragment">RuntimePermissionsFragment</string>
+    <string name="title_activity_runtime_permissions">RuntimePermissions</string>
+    <string name="no_geocoder_available">Unable to geocode restaurant address</string>
+    <string name="address_found">Address located</string>
+    <string name="no_address_found">No address found</string>
+    <string name="invalid_lat_long_used">Invalid coordinates provided</string>
+    <string name="service_not_available">Geocoding service not available</string>
+    <string name="operation_failure">Operation to retrieve coordinates failed</string>
+    <string name="no_geocoded_address_found">Unable to geocode address</string>
 </resources>

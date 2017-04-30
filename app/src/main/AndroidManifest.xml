@@ -2,15 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.janeullah.apps.healthinspectionviewer">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.janeullah.apps.healthinspectionviewer.HomeActivity"
+            android:name=".activities.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,6 +25,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.RestaurantsInCountyActivity"
+            android:parentActivityName=".activities.HomeActivity">
+
+            <!--
+                 The meta-data tag is required if you support API level 15 and lower
+                 https://developer.android.com/training/basics/firstapp/starting-activity.html
+            -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+        </activity>
+        <activity android:name=".activities.InspectionReportByRestaurantActivity" />
+        <!--
+                 The API key for Google Maps-based APIs is defined as a string resource.
+                 (See the file "res/values/google_maps_api.xml").
+                 Note that the API key is linked to the encryption key used to sign the APK.
+                 You need a different API key for each encryption key, including the release key that is used to
+                 sign the APK for publishing.
+                 You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${google_map_key}" />
+
+        <activity
+            android:name=".activities.MapsActivity"
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".fragments.RuntimePermissions"
+            android:label="@string/title_activity_runtime_permissions"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".services.FetchAddressIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>

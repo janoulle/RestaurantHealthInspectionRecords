@@ -7,3 +7,14 @@
 /build
 /captures
 .externalNativeBuild
+/google-services.json
+/gradle.properties
+/src/debug/res/values/google_maps_api.xml
+/src/release/res/values/google_maps_api.xml
+/gradlew
+/gradlew.bat
+.idea/
+app/libs/
+gradle/
+libs/
+!/app/libs/
