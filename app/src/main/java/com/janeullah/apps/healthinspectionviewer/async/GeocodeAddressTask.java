@@ -1,6 +1,5 @@
 package com.janeullah.apps.healthinspectionviewer.async;
 
-import android.location.Geocoder;
 import android.os.AsyncTask;
 
 import com.google.maps.model.GeocodingResult;

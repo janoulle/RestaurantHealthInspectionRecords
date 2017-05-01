@@ -1,7 +1,6 @@
 package com.janeullah.apps.healthinspectionviewer.interfaces;
 
 import android.content.Context;
-import android.widget.Toast;
 
 /**
  * @author Jane Ullah

@@ -5,8 +5,7 @@
     <string name="restaurantAddressListView">HomeTown</string>
     <string name="submit_county_selection">Show Restaurants</string>
     <string name="submit_restaurant_selection">Search</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="google_maps_key"></string>
+    <string name="title_activity_maps">Inspection Report</string>
     <string name="title_activity_runtime_permissions_fragment">RuntimePermissionsFragment</string>
     <string name="title_activity_runtime_permissions">RuntimePermissions</string>
     <string name="no_geocoder_available">Unable to geocode restaurant address</string>
@@ -16,4 +15,5 @@
     <string name="service_not_available">Geocoding service not available</string>
     <string name="operation_failure">Operation to retrieve coordinates failed</string>
     <string name="no_geocoded_address_found">Unable to geocode address</string>
+    <string name="restaurants_in_county_label">Restaurants In County</string>
 </resources>

@@ -4,4 +4,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="bottom_margin_title_restaurantsincounty">2dp</dimen>
+    <dimen name="mapview_height">217dp</dimen>
 </resources>

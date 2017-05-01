@@ -3,11 +3,8 @@ package com.janeullah.apps.healthinspectionviewer.services;
 import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * @author Jane Ullah

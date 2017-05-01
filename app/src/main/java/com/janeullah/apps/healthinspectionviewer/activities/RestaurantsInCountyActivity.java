@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,7 +40,7 @@ import butterknife.ButterKnife;
  */
 
 public class RestaurantsInCountyActivity extends BaseActivity {
-    private static final String TAG = "RestaurantsView";
+    private static final String TAG = "RestaurantsListing";
 
     private DatabaseReference negaRestaurantsDatabaseReference;
     private Query mQuery;
@@ -63,6 +62,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         showProgressDialog();
         mCountyName = getIntent().getStringExtra(IntentNames.COUNTY_SELECTED);
         if (mCountyName == null) {
+            Log.e(TAG,"County not selected");
             throw new IllegalArgumentException("Must pass a county selection");
         }
 
@@ -115,7 +115,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             protected void populateViewHolder(final RestaurantViewHolder viewHolder, final FlattenedRestaurant model, int position) {
                 final DatabaseReference queryRef = getRef(position);
                 String key = queryRef.getKey();
-                Log.i(TAG, "Key: " + key);
+                Log.v(TAG, "Key: " + key);
                 viewHolder.bindData(model);
                 hideProgressDialog();
                 countOfRestaurants.incrementAndGet();
@@ -133,7 +133,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(RestaurantsInCountyActivity.this, MapsActivity.class);
+                final Intent intent = new Intent(RestaurantsInCountyActivity.this, RestaurantDataActivity.class);
                 intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
                 intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
                 intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));

@@ -14,6 +14,18 @@ public class InspectionReport {
     private int nonCriticalViolationCount;
     private FlattenedRestaurant restaurant;
 
+    public InspectionReport(){
+
+    }
+
+    public InspectionReport(FlattenedRestaurant restaurant){
+        setRestaurant(restaurant);
+        setScore(restaurant.score);
+        setCriticalViolationCount(restaurant.criticalViolations);
+        setNonCriticalViolationCount(restaurant.nonCriticalViolations);
+        setMostRecentInspectionDate(restaurant.dateReported);
+    }
+
     public int getScore() {
         return score;
     }

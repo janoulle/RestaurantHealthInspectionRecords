@@ -1,35 +1,33 @@
 package com.janeullah.apps.healthinspectionviewer.services;
 
 import android.app.IntentService;
-import android.content.Intent;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.os.ResultReceiver;
-import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
-import com.google.android.gms.maps.model.LatLng;
-
 import com.janeullah.apps.healthinspectionviewer.R;
-import com.janeullah.apps.healthinspectionviewer.activities.MapsActivity;
+import com.janeullah.apps.healthinspectionviewer.activities.RestaurantDataActivity;
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
+import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
+import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
+
+import org.parceler.Parcels;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -40,18 +38,15 @@ import java.util.Locale;
  */
 public class FetchAddressIntentService extends IntentService {
     public static final String TAG = "FetchAddressSvc";
-    protected ResultReceiver mReceiver;
     public static final GeoApiContext geocodeContext = new GeoApiContext();
+    protected ResultReceiver mReceiver;
+    private NotificationManager mNotificationManager;
 
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+    public static final int NOTIFICATION_ID = 1;
     public static final String ACTION_GEOCODE = "com.janeullah.apps.healthinspectionviewer.services.action.geocode";
-    public static final String ACTION_REVERSE_GEOCODE = "com.janeullah.apps.healthinspectionviewer.services.action.reversegeocode";
-
-    // TODO: Rename parameters
     public static final String RECEIVER = "com.janeullah.apps.healthinspectionviewer.services.extra.geocoderesultsreceiver";
-    public static final String ADDRESS_KEY = "com.janeullah.apps.healthinspectionviewer.services.extra.restaurantAddress";
-    private static final String COORDINATES = "com.janeullah.apps.healthinspectionviewer.services.extra.coordinates";
 
     public FetchAddressIntentService() {
         super("FetchAddressIntentService");
@@ -81,8 +76,6 @@ public class FetchAddressIntentService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_GEOCODE.equals(action)) {
                 processGeocode(intent);
-            } else if (ACTION_REVERSE_GEOCODE.equals(action)) {
-                processReverseGeocode(intent);
             }
         }
     }
@@ -90,13 +83,14 @@ public class FetchAddressIntentService extends IntentService {
     private void processGeocode(Intent intent) {
         String errorMessage = "";
         GeocodingResult[] geocodingResults = null;
-        final String address = intent.getStringExtra(ADDRESS_KEY);
+        FlattenedRestaurant restaurantSelected = null;
         try {
+            restaurantSelected = Parcels.unwrap(intent.getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
             geocodeContext
                     .setApiKey(fetchGoogleApiKey())
                     .setMaxRetries(3);
-            geocodingResults = GeocodingApi.geocode(geocodeContext, address).await();
-            Log.i(TAG,"Address: " + address + " latlng: " + geocodingResults[0].geometry.location.toString());
+            geocodingResults = GeocodingApi.geocode(geocodeContext, restaurantSelected.address).await();
+            Log.i(TAG,"Address: " + restaurantSelected.address + " latlng: " + geocodingResults[0].geometry.location.toString());
         }catch(ApiException | IOException e){
             errorMessage = getString(R.string.service_not_available);
             Log.e(TAG, errorMessage, e);
@@ -118,69 +112,55 @@ public class FetchAddressIntentService extends IntentService {
             //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
             com.google.maps.model.LatLng originalLatLng = geocodedAddress.geometry.location;
             LatLng latLng = new LatLng(originalLatLng.lat,originalLatLng.lng);
-            Log.i(TAG, "Coordinates " + latLng + " for address " + address + " found!");
+            Log.i(TAG, "Coordinates " + latLng + " for address " + restaurantSelected.address + " found!");
+            sendNotification("Geocoding completed for address " + restaurantSelected.address,restaurantSelected);
             deliverSuccessResultToReceiver(GeocodeConstants.SUCCESS_RESULT, latLng);
         }
     }
 
     /**
-     * https://developer.android.com/training/location/display-address.html#start-intent
-     * @param intent
+     * TODO replace with better icon
+     * http://stackoverflow.com/questions/28698278/how-to-start-a-notification-in-intentservice
+     * https://developer.android.com/guide/topics/ui/notifiers/notifications.html
+     * @param msg
      */
-    protected void processReverseGeocode(Intent intent) {
-        String errorMessage = "";
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        // Get the location passed to this service through an extra.
-        Location location = intent.getParcelableExtra(
-                GeocodeConstants.LOCATION_DATA_EXTRA);
+    private void sendNotification(String msg, FlattenedRestaurant restaurant) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_greencheckmark)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(msg))
+                        .setContentTitle("NEGA Restaurant Scores")
+                        .setContentText(msg);
 
-        List<Address> addresses = null;
+        mNotificationManager = (NotificationManager)
+                this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        try {
-            addresses = geocoder.getFromLocation(
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    // In this sample, get just a single address.
-                    1);
-        } catch (IOException ioException) {
-            // Catch network or other I/O problems.
-            errorMessage = getString(R.string.service_not_available);
-            Log.e(TAG, errorMessage, ioException);
-            FirebaseCrash.report(ioException);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
-            errorMessage = getString(R.string.invalid_lat_long_used);
-            Log.e(TAG, errorMessage + ". " +
-                    "Latitude = " + location.getLatitude() +
-                    ", Longitude = " +
-                    location.getLongitude(), illegalArgumentException);
-            FirebaseCrash.report(illegalArgumentException);
-        }
-        processReverseGeocodeResult(errorMessage, addresses);
-    }
+        //doing this to preserve data needed by RestaurantDataActivity
+        Intent resultIntent = new Intent(this, RestaurantDataActivity.class);
+        resultIntent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(restaurant));
+        resultIntent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, restaurant.getNameKey());
+        resultIntent.putExtra(IntentNames.COUNTY_SELECTED, restaurant.county);
+        resultIntent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,restaurant.address);
 
-    private void processReverseGeocodeResult(String errorMessage, List<Address> addresses) {
-        // Handle case where no address was found.
-        if (addresses == null || addresses.size()  == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = getString(R.string.no_address_found);
-                Log.e(TAG, errorMessage);
-            }
-            deliverResultToReceiver(GeocodeConstants.FAILURE_RESULT, errorMessage);
-        } else {
-            Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(RestaurantDataActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
 
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the thread.
-            for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
-            Log.i(TAG, getString(R.string.address_found));
-            deliverResultToReceiver(GeocodeConstants.SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
-        }
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     private void deliverSuccessResultToReceiver(int resultCode, LatLng coordinates) {

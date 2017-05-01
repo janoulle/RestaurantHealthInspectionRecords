@@ -1,9 +1,7 @@
 package com.janeullah.apps.healthinspectionviewer.dtos;
 
-import com.google.common.base.CharMatcher;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.janeullah.apps.healthinspectionviewer.utils.FirebaseUtils;
 
 import org.parceler.Parcel;
 
