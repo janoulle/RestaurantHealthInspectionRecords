@@ -32,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * http://stackoverflow.com/questions/26435231/getactionbar-returns-null-appcompat-v7-21
  * http://stackoverflow.com/questions/5049852/android-drawing-separator-divider-line-in-layout
  * https://guides.codepath.com/android/using-parcelable
  * https://guides.codepath.com/android/Using-Parceler
