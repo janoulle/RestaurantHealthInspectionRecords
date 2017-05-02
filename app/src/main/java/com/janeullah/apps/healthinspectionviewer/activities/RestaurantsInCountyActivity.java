@@ -134,6 +134,12 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        showProgressDialog();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
