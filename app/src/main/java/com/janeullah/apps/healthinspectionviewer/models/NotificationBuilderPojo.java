@@ -7,8 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
-import com.janeullah.apps.healthinspectionviewer.R;
-
 
 /**
  * @author Jane Ullah

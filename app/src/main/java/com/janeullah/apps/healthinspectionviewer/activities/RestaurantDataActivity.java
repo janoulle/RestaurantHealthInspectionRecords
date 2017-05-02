@@ -3,6 +3,7 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.NavUtils;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 import android.view.Menu;
@@ -59,6 +60,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         setContentView(R.layout.activity_restaurant_data);
         ButterKnife.bind(this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRestaurantSelected = Parcels.unwrap(getIntent().getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
         if (mRestaurantSelected == null) {
             Log.e(TAG,"Restaurant not selected before launching RestaurantDataActivity");
@@ -105,16 +107,12 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
