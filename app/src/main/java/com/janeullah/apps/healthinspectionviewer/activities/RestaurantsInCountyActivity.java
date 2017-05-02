@@ -66,6 +66,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             throw new IllegalArgumentException("Must pass a county selection");
         }
 
+        setTitle("Restaurants In " + mCountyName);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
@@ -149,7 +150,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // the initial data has been loaded, hide the progress bar
                 Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                headerForView.setText(mCountyName + " " + mAdapter.getItemCount());
+                headerForView.setText("Restaurants found: " + mAdapter.getItemCount());
             }
 
             @Override
