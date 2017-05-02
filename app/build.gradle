@@ -86,6 +86,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.yelp.clientlib:yelp-android:3.0.0'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:0.5'

@@ -1,13 +1,12 @@
 package com.janeullah.apps.healthinspectionviewer.services;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.os.ResultReceiver;
@@ -24,6 +23,8 @@ import com.janeullah.apps.healthinspectionviewer.activities.RestaurantDataActivi
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
+import com.janeullah.apps.healthinspectionviewer.models.NotificationBuilderPojo;
+import com.janeullah.apps.healthinspectionviewer.utils.TaskCompleteNotification;
 
 import org.parceler.Parcels;
 
@@ -40,10 +41,7 @@ public class FetchAddressIntentService extends IntentService {
     public static final String TAG = "FetchAddressSvc";
     public static final GeoApiContext geocodeContext = new GeoApiContext();
     protected ResultReceiver mReceiver;
-    private NotificationManager mNotificationManager;
 
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final int NOTIFICATION_ID = 1;
     public static final String ACTION_GEOCODE = "com.janeullah.apps.healthinspectionviewer.services.action.geocode";
     public static final String RECEIVER = "com.janeullah.apps.healthinspectionviewer.services.extra.geocoderesultsreceiver";
@@ -112,36 +110,41 @@ public class FetchAddressIntentService extends IntentService {
             //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
             com.google.maps.model.LatLng originalLatLng = geocodedAddress.geometry.location;
             LatLng latLng = new LatLng(originalLatLng.lat,originalLatLng.lng);
+            restaurantSelected.coordinates = latLng;
             Log.i(TAG, "Coordinates " + latLng + " for address " + restaurantSelected.address + " found!");
             sendNotification("Geocoding completed for address " + restaurantSelected.address,restaurantSelected);
             deliverSuccessResultToReceiver(GeocodeConstants.SUCCESS_RESULT, latLng);
         }
     }
 
-    /**
-     * TODO replace with better icon
-     * http://stackoverflow.com/questions/28698278/how-to-start-a-notification-in-intentservice
-     * https://developer.android.com/guide/topics/ui/notifiers/notifications.html
-     * @param msg
-     */
-    private void sendNotification(String msg, FlattenedRestaurant restaurant) {
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_greencheckmark)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setContentTitle("NEGA Restaurant Scores")
-                        .setContentText(msg);
+    private void sendNotification(String msg, FlattenedRestaurant restaurant){
+        NotificationBuilderPojo dataNeededForNotification = new NotificationBuilderPojo();
+        dataNeededForNotification.notificationId = NOTIFICATION_ID;
+        dataNeededForNotification.bigText = msg;
+        dataNeededForNotification.contentText = msg;
+        dataNeededForNotification.contentTitle = "NEGA Restaurant Scores";
+        dataNeededForNotification.smallIconResourceId = R.drawable.ic_greencheckmark;
+        dataNeededForNotification.notificationStyle = new NotificationCompat.BigTextStyle()
+                .setSummaryText("Geocoding complete: "+ restaurant.address)
+                .bigText("Completed geocoding for " + restaurant.name +  " at address: " + restaurant.address)
+                .setBigContentTitle(msg);
+        TaskStackBuilder stackBuilder = preserveStack(restaurant);
+        dataNeededForNotification.pendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mNotificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
+        TaskCompleteNotification.notify(this,dataNeededForNotification);
+    }
 
+    @NonNull
+    private TaskStackBuilder preserveStack(FlattenedRestaurant restaurant) {
         //doing this to preserve data needed by RestaurantDataActivity
         Intent resultIntent = new Intent(this, RestaurantDataActivity.class);
+        resultIntent.putExtra(IntentNames.STARTED_BY_NOTIFICATION,true);
         resultIntent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(restaurant));
         resultIntent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, restaurant.getNameKey());
         resultIntent.putExtra(IntentNames.COUNTY_SELECTED, restaurant.county);
         resultIntent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,restaurant.address);
+        resultIntent.putExtra(GeocodeConstants.RESULT_DATA_KEY,restaurant.coordinates);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
@@ -152,15 +155,7 @@ public class FetchAddressIntentService extends IntentService {
         stackBuilder.addParentStack(RestaurantDataActivity.class);
         // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
-
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
-        mBuilder.setContentIntent(resultPendingIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        return stackBuilder;
     }
 
     private void deliverSuccessResultToReceiver(int resultCode, LatLng coordinates) {

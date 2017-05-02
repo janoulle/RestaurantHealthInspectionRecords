@@ -1,5 +1,6 @@
 package com.janeullah.apps.healthinspectionviewer.dtos;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -25,6 +26,9 @@ public class FlattenedRestaurant {
     public String dateReported;
     public String address;
     public String county;
+
+    @Exclude
+    public LatLng coordinates;
 
     public FlattenedRestaurant() {
     }

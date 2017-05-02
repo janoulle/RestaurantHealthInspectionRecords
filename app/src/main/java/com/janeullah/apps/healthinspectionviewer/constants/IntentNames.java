@@ -12,4 +12,5 @@ public class IntentNames {
     public final static String RESTAURANT_KEY_SELECTED = "restaurantKeySelected";
     public final static String RESTAURANT_SELECTED = "restaurantSelected";
     public final static String RESTAURANT_ADDRESS_SELECTED = "restaurantAddress";
+    public final static String STARTED_BY_NOTIFICATION = "fromNotification";
 }
