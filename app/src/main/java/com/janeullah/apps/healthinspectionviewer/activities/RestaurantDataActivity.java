@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
 import android.support.v4.os.ResultReceiver;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,9 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     @BindView(R.id.inspection_score)
     protected TextView mRestaurantScore;
 
+    @BindView(R.id.app_toolbar)
+    public Toolbar mAppToolbar;
+
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
     @Override
@@ -60,7 +64,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         setContentView(R.layout.activity_restaurant_data);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(mAppToolbar);
         mRestaurantSelected = Parcels.unwrap(getIntent().getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
         if (mRestaurantSelected == null) {
             Log.e(TAG,"Restaurant not selected before launching RestaurantDataActivity");

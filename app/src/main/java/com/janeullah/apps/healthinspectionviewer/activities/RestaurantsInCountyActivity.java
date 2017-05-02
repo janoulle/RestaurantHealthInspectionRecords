@@ -6,6 +6,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,15 +54,17 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     @BindView(R.id.restaurants_in_county_recyclerview)
     protected RecyclerView mRecycler;
 
-    @BindView(R.id.titleForRestaurantsInCounty)
-    protected TextView headerForView;
+    //@BindView(R.id.titleForRestaurantsInCounty)
+    //protected TextView headerForView;
+
+    @BindView(R.id.app_toolbar)
+    public Toolbar mAppToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants_in_county);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         showProgressDialog();
         mCountyName = getIntent().getStringExtra(IntentNames.COUNTY_SELECTED);
@@ -70,6 +73,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             throw new IllegalArgumentException("Must pass a county selection");
         }
 
+        setSupportActionBar(mAppToolbar);
         setTitle("Restaurants In " + mCountyName);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycler.setHasFixedSize(true);
@@ -149,7 +153,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // the initial data has been loaded, hide the progress bar
                 Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                headerForView.setText(mAdapter.getItemCount() + " found");
+                //headerForView.setText(mAdapter.getItemCount() + " found");
             }
 
             @Override

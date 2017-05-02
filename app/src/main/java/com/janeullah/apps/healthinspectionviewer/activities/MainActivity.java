@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -27,6 +28,7 @@ import butterknife.OnClick;
 import io.fabric.sdk.android.Fabric;
 
 /**
+ * https://developer.android.com/training/appbar/setting-up.html
  * https://www.bignerdranch.com/blog/a-view-divided-adding-dividers-to-your-recyclerview-with-itemdecoration/
  */
 public class MainActivity extends BaseActivity {
@@ -39,6 +41,9 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.countySubmitButton)
     public Button mCountyButton;
+
+    @BindView(R.id.app_toolbar)
+    public Toolbar mAppToolbar;
 
     private ChildEventListener mCountyListener;
 
@@ -53,6 +58,8 @@ public class MainActivity extends BaseActivity {
                 .build();
         Fabric.with(fabric);
         ButterKnife.bind(this);
+
+        setSupportActionBar(mAppToolbar);
         negaCountyDatabaseReference = FirebaseInitialization
                 .getInstance()
                 .getNegaDatabaseReference()
