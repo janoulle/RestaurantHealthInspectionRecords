@@ -28,6 +28,9 @@ public class FlattenedRestaurant {
     public String county;
 
     @Exclude
+    public int restaurantCheckMarkResourceId;
+
+    @Exclude
     public LatLng coordinates;
 
     public FlattenedRestaurant() {
