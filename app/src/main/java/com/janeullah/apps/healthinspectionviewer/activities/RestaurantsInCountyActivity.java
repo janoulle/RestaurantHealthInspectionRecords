@@ -58,8 +58,8 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     @BindView(R.id.restaurants_in_county_recyclerview)
     protected RecyclerView mRecycler;
 
-    //@BindView(R.id.titleForRestaurantsInCounty)
-    //protected TextView headerForView;
+    @BindView(R.id.titleForRestaurantsInCounty)
+    protected TextView headerForView;
 
     @BindView(R.id.app_toolbar)
     public Toolbar mAppToolbar;
@@ -111,8 +111,6 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                Log.i(TAG,"Up clicked!");
-
                 Log.i(TAG,"Up clicked!");
                 Intent upIntent = NavUtils.getParentActivityIntent(this);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -183,7 +181,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // the initial data has been loaded, hide the progress bar
                 Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                //headerForView.setText(mAdapter.getItemCount() + " found");
+                headerForView.setText(mAdapter.getItemCount() + " found");
             }
 
             @Override
