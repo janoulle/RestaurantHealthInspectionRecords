@@ -18,7 +18,7 @@
         android:background="@color/col1"
         android:paddingBottom="2dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/app_name"
+        android:text="@string/ne_ga_restaurants"
         android:textColor="@color/logoblue1"
         android:textSize="34sp"
         android:textStyle="bold" />
@@ -27,14 +27,16 @@
         android:id="@+id/counties_spinner"
         android:layout_width="380dp"
         android:layout_height="46dp"
-        android:layout_marginTop="51dp"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="3dp"
+        android:scrollbarStyle="outsideOverlay"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleForMainPage"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1"
-        tools:padding="1dp" />
+        tools:padding="3dp" />
 
     <Button
         android:id="@+id/countySubmitButton"

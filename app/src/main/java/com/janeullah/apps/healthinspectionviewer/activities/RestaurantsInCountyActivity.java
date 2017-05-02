@@ -150,7 +150,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // the initial data has been loaded, hide the progress bar
                 Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                headerForView.setText("Restaurants found: " + mAdapter.getItemCount());
+                headerForView.setText("Found: " + mAdapter.getItemCount());
             }
 
             @Override
