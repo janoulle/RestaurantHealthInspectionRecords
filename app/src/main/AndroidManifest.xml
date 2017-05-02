@@ -18,8 +18,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,13 +52,22 @@
 
         <activity
             android:name=".activities.RestaurantDataActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".activities.RestaurantsInCountyActivity">
+
+            <!--
+                 The meta-data tag is required if you support API level 15 and lower
+                 https://developer.android.com/training/basics/firstapp/starting-activity.html
+            -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.RestaurantsInCountyActivity" />
+        </activity>
 
         <service
             android:name=".services.FetchAddressIntentService"
             android:exported="false" />
 
-        <!-- <activity android:name=".activities.MainActivity"></activity> -->
     </application>
 
 </manifest>

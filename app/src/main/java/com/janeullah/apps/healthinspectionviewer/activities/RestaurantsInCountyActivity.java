@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -100,6 +101,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this,"settings clicked from " + TAG,Toast.LENGTH_SHORT);
             return true;
         }
 
@@ -150,7 +152,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // the initial data has been loaded, hide the progress bar
                 Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                headerForView.setText("Found: " + mAdapter.getItemCount());
+                headerForView.setText(mAdapter.getItemCount() + " found");
             }
 
             @Override
