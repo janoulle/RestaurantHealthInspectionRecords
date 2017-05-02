@@ -146,7 +146,8 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         mMap.addMarker(new MarkerOptions()
                 .draggable(true)
                 .position(mRestaurantCoordinates)
-                .title(mRestaurantSelected.name));
+                .title(mRestaurantSelected.name))
+                .showInfoWindow();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
