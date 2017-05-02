@@ -3,6 +3,8 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * https://developer.android.com/training/implementing-navigation/ancestral.html
  * http://stackoverflow.com/questions/26435231/getactionbar-returns-null-appcompat-v7-21
  * http://stackoverflow.com/questions/5049852/android-drawing-separator-divider-line-in-layout
  * https://guides.codepath.com/android/using-parcelable
@@ -74,6 +78,9 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         }
 
         setSupportActionBar(mAppToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
         setTitle("Restaurants In " + mCountyName);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycler.setHasFixedSize(true);
@@ -104,11 +111,28 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                Log.i(TAG,"Up clicked!");
+
+                Log.i(TAG,"Up clicked!");
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(this)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                            // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onStart() {
         super.onStart();

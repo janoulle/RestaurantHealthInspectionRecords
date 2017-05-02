@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.os.ResultReceiver;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -65,6 +67,9 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         ButterKnife.bind(this);
 
         setSupportActionBar(mAppToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
         mRestaurantSelected = Parcels.unwrap(getIntent().getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
         if (mRestaurantSelected == null) {
             Log.e(TAG,"Restaurant not selected before launching RestaurantDataActivity");
@@ -114,7 +119,22 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                Log.i(TAG,"Up clicked!");
+                Intent upIntent = NavUtils.getParentActivityIntent(this);
+                upIntent.putExtra(IntentNames.COUNTY_SELECTED,mRestaurantSelected.county);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is NOT part of this app's task, so create a new task
+                    // when navigating up, with a synthesized back stack.
+                    TaskStackBuilder.create(this)
+                            // Add all of this activity's parents to the back stack
+                            .addNextIntentWithParentStack(upIntent)
+                            // Navigate up to the closest parent
+                            .startActivities();
+                } else {
+                    // This activity is part of this app's task, so simply
+                    // navigate up to the logical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
