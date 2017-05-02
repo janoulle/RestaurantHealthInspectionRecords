@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -45,6 +46,9 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.app_toolbar)
     public Toolbar mAppToolbar;
 
+    @BindView(R.id.titleForMainScreen)
+    public TextView mTitleView;
+
     private ChildEventListener mCountyListener;
 
     @Override
@@ -60,6 +64,7 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(mAppToolbar);
+        mTitleView.setText("Select County");
         negaCountyDatabaseReference = FirebaseInitialization
                 .getInstance()
                 .getNegaDatabaseReference()
