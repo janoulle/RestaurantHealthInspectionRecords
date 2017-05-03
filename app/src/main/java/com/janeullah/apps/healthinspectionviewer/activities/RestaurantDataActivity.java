@@ -76,6 +76,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             Log.e(TAG,"Restaurant not selected before launching RestaurantDataActivity");
             throw new IllegalArgumentException("Failed to pass a restaurant selection before viewing inspection report activity");
         }
+        Log.v(TAG,"resource id = " + mRestaurantSelected.restaurantCheckMarkResourceId);
         mDataBinding.setRestaurantSelected(mRestaurantSelected);
         initializeMapView(savedInstanceState);
         startBackgroundGeocodeServiceLookup();
