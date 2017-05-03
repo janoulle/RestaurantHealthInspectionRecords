@@ -1,36 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="2dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/app_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    <data>
+        <variable
+            name="restaurantSelected"
+            type="com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant" />
+    </data>
 
-    <include
-        android:id="@+id/item_map"
-        layout="@layout/include_mapview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="237dp"
-        android:layout_below="@+id/app_toolbar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="2dp">
 
-    <TextView
-        android:id="@+id/inspection_score"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Yoo hoo"
-        android:layout_marginTop="22dp"
-        android:layout_below="@+id/item_map"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <include
+            android:id="@+id/item_map"
+            layout="@layout/include_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="237dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/app_toolbar" />
+
+        <include
+            layout="@layout/include_restaurant_summary_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/item_map"
+            bind:restaurantSelected="@{restaurantSelected}" />
+    </RelativeLayout>
+</layout>

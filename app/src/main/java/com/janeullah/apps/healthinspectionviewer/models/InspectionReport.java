@@ -1,6 +1,9 @@
 package com.janeullah.apps.healthinspectionviewer.models;
 
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
+import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedViolation;
+
+import java.util.List;
 
 /**
  * @author Jane Ullah
@@ -8,54 +11,16 @@ import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
  */
 
 public class InspectionReport {
-    private int score;
-    private String mostRecentInspectionDate;
-    private int criticalViolationCount;
-    private int nonCriticalViolationCount;
+
     private FlattenedRestaurant restaurant;
+    private List<FlattenedViolation> violations;
 
     public InspectionReport(){
 
     }
 
     public InspectionReport(FlattenedRestaurant restaurant){
-        setRestaurant(restaurant);
-        setScore(restaurant.score);
-        setCriticalViolationCount(restaurant.criticalViolations);
-        setNonCriticalViolationCount(restaurant.nonCriticalViolations);
-        setMostRecentInspectionDate(restaurant.dateReported);
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public String getMostRecentInspectionDate() {
-        return mostRecentInspectionDate;
-    }
-
-    public void setMostRecentInspectionDate(String mostRecentInspectionDate) {
-        this.mostRecentInspectionDate = mostRecentInspectionDate;
-    }
-
-    public int getCriticalViolationCount() {
-        return criticalViolationCount;
-    }
-
-    public void setCriticalViolationCount(int criticalViolationCount) {
-        this.criticalViolationCount = criticalViolationCount;
-    }
-
-    public int getNonCriticalViolationCount() {
-        return nonCriticalViolationCount;
-    }
-
-    public void setNonCriticalViolationCount(int nonCriticalViolationCount) {
-        this.nonCriticalViolationCount = nonCriticalViolationCount;
+        this.restaurant = restaurant;
     }
 
     public FlattenedRestaurant getRestaurant() {
@@ -66,7 +31,11 @@ public class InspectionReport {
         this.restaurant = restaurant;
     }
 
-    public String getName() {
-        return restaurant.name;
+    public List<FlattenedViolation> getViolations() {
+        return violations;
+    }
+
+    public void setViolations(List<FlattenedViolation> violations) {
+        this.violations = violations;
     }
 }
