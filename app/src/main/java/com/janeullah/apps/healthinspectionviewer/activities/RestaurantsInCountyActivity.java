@@ -70,12 +70,12 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         setContentView(R.layout.activity_restaurants_in_county);
         ButterKnife.bind(this);
 
-        showProgressDialog();
         mCountyName = getIntent().getStringExtra(IntentNames.COUNTY_SELECTED);
         if (mCountyName == null) {
             Log.e(TAG,"County not selected");
             throw new IllegalArgumentException("Must pass a county selection");
         }
+        showProgressDialog("Loading restaurants in " + mCountyName);
 
         setSupportActionBar(mAppToolbar);
         ActionBar ab = getSupportActionBar();
@@ -134,7 +134,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     @Override
     public void onResume(){
         super.onResume();
-        showProgressDialog();
+        showProgressDialog("Loading restaurants in " + mCountyName);
     }
 
     @Override
