@@ -21,14 +21,18 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.async.YelpAccessRequestTask;
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.databinding.ActivityRestaurantDataBinding;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.models.InspectionReport;
+import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
+import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.services.FetchAddressIntentService;
 
 import org.parceler.Parcels;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +52,9 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     private GoogleMap mMap;
     private GeocodingResultsReceiver mGeocodeResultsReceiver;
     private LatLng mRestaurantCoordinates;
+    private GeocodedAddressComponent mGeocodedAddressComponents;
     private FlattenedRestaurant mRestaurantSelected;
+    private YelpAccessRequestTask mAccessRequestTask = new YelpAccessRequestTask();
 
     @BindView(R.id.item_map)
     protected MapView mMapView;
@@ -78,7 +84,11 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         }
         Log.v(TAG,"resource id = " + mRestaurantSelected.restaurantCheckMarkResourceId);
         mDataBinding.setRestaurantSelected(mRestaurantSelected);
+        setTitle(mRestaurantSelected.name);
+
         initializeMapView(savedInstanceState);
+        mAccessRequestTask.setListener(createListener());
+        mAccessRequestTask.execute();
         startBackgroundGeocodeServiceLookup();
     }
 
@@ -166,9 +176,10 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         mMap.addMarker(new MarkerOptions()
                 .draggable(true)
                 .position(mRestaurantCoordinates)
-                .title(mRestaurantSelected.name))
+                .title(mRestaurantSelected.address))
                 .showInfoWindow();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mRestaurantCoordinates, 17));
@@ -200,6 +211,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
 
     @Override
     protected void onDestroy() {
+        mAccessRequestTask.setListener(null);
         mMapView.onDestroy();
         super.onDestroy();
     }
@@ -208,6 +220,16 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    private YelpAccessRequestTask.Listener createListener() {
+        return new YelpAccessRequestTask.Listener() {
+            @Override
+            public void onSuccess(YelpAuthTokenResponse authTokenResponse) {
+                Log.i(TAG,"Received valid auth token response: " + authTokenResponse.getAccessToken());
+                Toast.makeText(getApplicationContext(),"Make it to Yelp and got token! Token: " + authTokenResponse.getAccessToken(),Toast.LENGTH_LONG);
+            }
+        };
     }
 
     public class GeocodingResultsReceiver extends ResultReceiver {
@@ -226,8 +248,9 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if (resultCode == GeocodeConstants.SUCCESS_RESULT) {
-                mRestaurantCoordinates = resultData.getParcelable(GeocodeConstants.RESULT_DATA_KEY);
-                Log.i(TAG,"Coordinates ("+ mRestaurantCoordinates +") received");
+                mGeocodedAddressComponents = Parcels.unwrap(resultData.getParcelable(GeocodeConstants.RESULT_DATA_KEY));
+                mRestaurantCoordinates = mGeocodedAddressComponents.coordinates;
+                Log.i(TAG, String.format(Locale.getDefault(),"Coordinates (%s) received", mRestaurantCoordinates));
                 mMapView.getMapAsync(RestaurantDataActivity.this);
             } else {
                 String output = resultData.getString(GeocodeConstants.RESULT_DATA_KEY);

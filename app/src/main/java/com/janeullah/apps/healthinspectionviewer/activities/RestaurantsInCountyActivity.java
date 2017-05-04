@@ -29,6 +29,7 @@ import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder
 
 import org.parceler.Parcels;
 
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.BindView;
@@ -74,13 +75,13 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             Log.e(TAG,"County not selected");
             throw new IllegalArgumentException("Must pass a county selection");
         }
-        showProgressDialog("Loading restaurants in " + mCountyName);
+        showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants in %s", mCountyName));
 
         setSupportActionBar(mAppToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Restaurants In " + mCountyName);
+        setTitle(String.format(Locale.getDefault(),"Restaurants In %s", mCountyName));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
@@ -165,6 +166,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(RestaurantsInCountyActivity.this, RestaurantDataActivity.class);
+                Log.i(TAG,String.format(Locale.getDefault(),"%s selected",model.name));
                 intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
                 intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
                 intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
@@ -180,7 +182,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // the initial data has been loaded, hide the progress bar
                 Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                headerForView.setText(mAdapter.getItemCount() + " found");
+                headerForView.setText(String.format(Locale.getDefault(),"%d found", mAdapter.getItemCount()));
             }
 
             @Override

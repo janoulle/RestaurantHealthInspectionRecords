@@ -12,7 +12,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
@@ -23,12 +22,15 @@ import com.janeullah.apps.healthinspectionviewer.activities.RestaurantDataActivi
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
+import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
 import com.janeullah.apps.healthinspectionviewer.models.NotificationBuilderPojo;
 import com.janeullah.apps.healthinspectionviewer.utils.TaskCompleteNotification;
 
 import org.parceler.Parcels;
 
 import java.io.IOException;
+
+import static com.janeullah.apps.healthinspectionviewer.utils.GeocodingUtils.convertAddressComponentToGeocodedAddressComponent;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -37,7 +39,7 @@ import java.io.IOException;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-public class FetchAddressIntentService extends IntentService {
+public final class FetchAddressIntentService extends IntentService {
     public static final String TAG = "FetchAddressSvc";
     public static final GeoApiContext geocodeContext = new GeoApiContext();
     protected ResultReceiver mReceiver;
@@ -98,6 +100,10 @@ public class FetchAddressIntentService extends IntentService {
             Log.e(TAG, errorMessage, e);
             FirebaseCrash.report(e);
         }
+        processResponse(errorMessage, geocodingResults, restaurantSelected);
+    }
+
+    private void processResponse(String errorMessage, GeocodingResult[] geocodingResults, FlattenedRestaurant restaurantSelected) {
         // Handle case where no address was found.
         if (geocodingResults == null || geocodingResults.length  == 0) {
             if (errorMessage.isEmpty()) {
@@ -106,15 +112,17 @@ public class FetchAddressIntentService extends IntentService {
             }
             deliverResultToReceiver(GeocodeConstants.FAILURE_RESULT, errorMessage);
         } else {
-            GeocodingResult geocodedAddress = geocodingResults[0];
-            //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
-            com.google.maps.model.LatLng originalLatLng = geocodedAddress.geometry.location;
-            LatLng latLng = new LatLng(originalLatLng.lat,originalLatLng.lng);
-            restaurantSelected.coordinates = latLng;
-            Log.i(TAG, "Coordinates " + latLng + " for address " + restaurantSelected.address + " found!");
-            sendNotification("Geocoding completed for address " + restaurantSelected.address,restaurantSelected);
-            deliverSuccessResultToReceiver(GeocodeConstants.SUCCESS_RESULT, latLng);
+            handleGeocodedHappyPath(geocodingResults[0], restaurantSelected);
         }
+    }
+
+    private void handleGeocodedHappyPath(GeocodingResult geocodingResult, FlattenedRestaurant restaurantSelected) {
+        //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
+        GeocodedAddressComponent geocodedAddressComponent = convertAddressComponentToGeocodedAddressComponent(geocodingResult);
+        restaurantSelected.coordinates = geocodedAddressComponent.coordinates;
+        Log.i(TAG, "Coordinates "+ geocodedAddressComponent.coordinates + " for restaurant " + restaurantSelected.name + " at address " + restaurantSelected.address +" found!");
+        sendNotification("Geocoding completed for address " + restaurantSelected.address,restaurantSelected);
+        deliverSuccessResultToReceiver(GeocodeConstants.SUCCESS_RESULT,geocodedAddressComponent);
     }
 
     private void sendNotification(String msg, FlattenedRestaurant restaurant){
@@ -158,9 +166,9 @@ public class FetchAddressIntentService extends IntentService {
         return stackBuilder;
     }
 
-    private void deliverSuccessResultToReceiver(int resultCode, LatLng coordinates) {
+    private void deliverSuccessResultToReceiver(int resultCode, GeocodedAddressComponent addressComponents) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(GeocodeConstants.RESULT_DATA_KEY, coordinates);
+        bundle.putParcelable(GeocodeConstants.RESULT_DATA_KEY, Parcels.wrap(addressComponents));
         mReceiver.send(resultCode, bundle);
     }
 

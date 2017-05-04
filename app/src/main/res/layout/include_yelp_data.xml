@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/yelpDataLayout" android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:layout_alignParentLeft="true"
+    android:layout_below="@+id/dateTypeLayout" android:visibility="gone">
+
+    <ImageView android:id="@+id/yelpIndicatorLabel" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" android:contentDescription=""
+        android:visibility="gone" />
+
+    <ImageView android:id="@+id/yelpStartListing" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/yelpIndicatorLabel" android:contentDescription=""
+        android:paddingTop="8dp" android:visibility="gone" />
+
+    <TextView android:id="@+id/yelpReviewCount" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/yelpStartListing" android:linksClickable="true"
+        android:paddingTop="5dp" android:text="" android:textSize="24sp"
+        android:textStyle="bold" android:visibility="gone" />
+</RelativeLayout>
