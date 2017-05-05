@@ -17,6 +17,9 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromCache;
+import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromNetwork;
+
 /**
  * https://medium.com/google-developer-experts/weakreference-in-android-dd1e66b9be9d
  * https://futurestud.io/tutorials/retrofit-synchronous-and-asynchronous-requests
@@ -39,16 +42,22 @@ public class YelpAccessRequestTask extends AsyncTask<Void,Integer,YelpAuthTokenR
             accessRequestData.put(YelpConstants.CLIENT_SECRET, BuildConfig.YELP_CLIENT_SECRET);
             Call<YelpAuthTokenResponse> accessRequest = yelpService.getAuthToken(accessRequestData);
             Response<YelpAuthTokenResponse> response = accessRequest.execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
+                if (isFromCache(response)){
+                    Log.v(TAG,"Received auth token from cache");
+                }else if (isFromNetwork(response)){
+                    Log.v(TAG,"Received yelp auth token from network");
+                }
                 return response.body();
             }
             Log.d(TAG,"Unsuccessful api call to Yelp token api");
-        }catch(Exception e){
+        }catch(IOException e){
             Log.e(TAG,"Errored out while checking Yelp for data with message: " + e.getMessage(),e);
             FirebaseCrash.report(e);
         }
         return null;
     }
+
 
     @Override
     protected void onPostExecute(YelpAuthTokenResponse result) {

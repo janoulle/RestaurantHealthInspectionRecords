@@ -12,6 +12,7 @@ import android.widget.ImageView;
  */
 
 public class DataBindingAdapters {
+    private DataBindingAdapters(){}
 
     @BindingAdapter("imageResource")
     public static void setImageUri(ImageView view, String imageUri) {

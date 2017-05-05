@@ -100,6 +100,8 @@ dependencies {
         exclude module: 'okhttp'
     }
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 
 
     compile 'com.yelp.clientlib:yelp-android:3.0.0'

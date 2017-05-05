@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.os.ResultReceiver;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
@@ -36,7 +37,6 @@ import static com.janeullah.apps.healthinspectionviewer.utils.GeocodingUtils.con
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
 public final class FetchAddressIntentService extends IntentService {
@@ -62,9 +62,9 @@ public final class FetchAddressIntentService extends IntentService {
             Bundle bundle = ai.metaData;
             return bundle.getString("com.google.android.geo.API_KEY");
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage());
+            Log.e(TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage(),e);
         } catch (NullPointerException e) {
-            Log.e(TAG, "Failed to load meta-data, NullPointer: " + e.getMessage());
+            Log.e(TAG, "Failed to load meta-data, NullPointer: " + e.getMessage(),e);
         }
         return "";
     }
@@ -99,18 +99,21 @@ public final class FetchAddressIntentService extends IntentService {
             errorMessage = getString(R.string.operation_failure);
             Log.e(TAG, errorMessage, e);
             FirebaseCrash.report(e);
+            Thread.currentThread().interrupt();
+
         }
         processResponse(errorMessage, geocodingResults, restaurantSelected);
     }
 
     private void processResponse(String errorMessage, GeocodingResult[] geocodingResults, FlattenedRestaurant restaurantSelected) {
         // Handle case where no address was found.
+        String errMessage = errorMessage;
         if (geocodingResults == null || geocodingResults.length  == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = getString(R.string.no_geocoded_address_found);
+            if (TextUtils.isEmpty(errMessage)) {
+                errMessage = getString(R.string.no_geocoded_address_found);
                 Log.e(TAG, errorMessage);
             }
-            deliverResultToReceiver(GeocodeConstants.FAILURE_RESULT, errorMessage);
+            deliverResultToReceiver(GeocodeConstants.FAILURE_RESULT, errMessage);
         } else {
             handleGeocodedHappyPath(geocodingResults[0], restaurantSelected);
         }

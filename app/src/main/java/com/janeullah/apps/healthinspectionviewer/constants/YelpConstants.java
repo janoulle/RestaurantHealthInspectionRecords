@@ -6,6 +6,7 @@ package com.janeullah.apps.healthinspectionviewer.constants;
  */
 
 public class YelpConstants {
+    private YelpConstants(){}
     // API constants, you shouldn't have to change these.
     public static final String API_HOST = "https://api.yelp.com";
     public static final String VERSION = "v3";
@@ -27,5 +28,9 @@ public class YelpConstants {
 
     public static final int MAX_AGE = 60 * 60 * 24;
     public static final int MAX_STALE = 60 * 60 * 24;
+    public static final String YELP_PREFERENCES = "yelp_preferences";
+    public static final String SAVED_YELP_AUTH_TOKEN = "saved_yelp_auth_token";
+    public static final String SAVED_YELP_TOKEN_EXPIRATION = "saved_yelp_token_expiration";
+    public static final String SAVED_YELP_TOKEN_TYPE = "saved_yelp_token_type";
 
 }

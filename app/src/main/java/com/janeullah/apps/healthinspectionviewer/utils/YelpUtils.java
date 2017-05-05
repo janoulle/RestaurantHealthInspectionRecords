@@ -1,24 +1,20 @@
 package com.janeullah.apps.healthinspectionviewer.utils;
 
+import retrofit2.Response;
+
 /**
  * @author Jane Ullah
  * @date 5/3/2017.
  */
 
 public class YelpUtils {
-//    private YelpUtils(){}
-//
-//    public static void getYelpSearchUrl(YelpRequest yelpRequest){
-//        Uri builtUri = Uri.parse(API_HOST + SEARCH_PATH).buildUpon()
-//                //.appendQueryParameter()
-//                .appendQueryParameter(DEFAULT_SEARCH_LOCALE.getKey(), getValue(DEFAULT_SEARCH_LOCALE.getValue()))
-//                .appendQueryParameter(DEFAULT_LIMIT.getKey(), getValue(DEFAULT_LIMIT.getValue()))
-//                .appendQueryParameter(DEFAULT_SORT.getKey(), getValue(DEFAULT_SORT.getValue()))
-//                .build();
-//        //return new URL(builtUri.toString());
-//    }
-//
-//    private static String getValue(Object value){
-//        return String.valueOf(value);
-//    }
+    //http://stackoverflow.com/questions/41727750/detect-if-okhttp-response-comes-from-cache-with-retrofit
+    public static <T> boolean isFromCache(Response<T> response) {
+        return response.raw().cacheResponse() != null;
+    }
+
+    public static <T> boolean isFromNetwork(Response<T> response) {
+        return response.raw().networkResponse() != null;
+    }
+
 }

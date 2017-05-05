@@ -1,5 +1,7 @@
 package com.janeullah.apps.healthinspectionviewer.services;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.interfaces.YelpService;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.
  */
 
 public final class FetchYelpDataService {
-    public static final Retrofit RETROFIT;
+    private static final Retrofit RETROFIT;
 
     public static final YelpService YELP_API_SERVICE;
 
@@ -29,28 +31,26 @@ public final class FetchYelpDataService {
     }
 
     static{
+        //https://guides.codepath.com/android/Using-OkHttp#caching-network-responses
+        //http://stackoverflow.com/questions/32727599/cache-post-requests-with-okhttp
         //http://stackoverflow.com/questions/23429046/can-retrofit-with-okhttp-use-cache-data-when-offline
         Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Response originalResponse = chain.proceed(chain.request());
-                String cacheControl = originalResponse.header("Cache-Control");
-                if (cacheControl == null || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||
-                        cacheControl.contains("must-revalidate") || cacheControl.contains("max-age=0")) {
-                    return originalResponse.newBuilder()
-                            .header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24)
-                            .build();
-                } else {
-                    return originalResponse;
-                }
+                return originalResponse.newBuilder()
+                        .header("Cache-Control", "public, only-if-cached, max-stale=" + YelpConstants.MAX_STALE)
+                        .build();
             }
         };
 
+        //https://github.com/codepath/android_guides/wiki/Debugging-with-Stetho
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR);
-        httpClient.addInterceptor(logging);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+                .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
+                .addNetworkInterceptor(new StethoInterceptor())
+                .addInterceptor(logging);
 
         RETROFIT = new Retrofit.Builder()
                 .baseUrl(API_HOST)

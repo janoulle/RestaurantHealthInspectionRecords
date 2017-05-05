@@ -24,6 +24,9 @@ public class FlattenedInspectionReport {
     public List<FlattenedViolation> violations;
 
     public FlattenedInspectionReport() {
+        /**
+         * Default constructor
+         */
     }
 
     public FlattenedInspectionReport(String name, Long id, int score, String dateReported, List<FlattenedViolation> violations) {

@@ -62,16 +62,15 @@ public class DBAdapter {
     public Cursor getTestData(String sqlQuery) {
         try {
             Cursor mCur = mDb.rawQuery(sqlQuery, null);
-            if (mCur != null) {
-                if (mCur.moveToFirst()) {
+            if (mCur != null && mCur.moveToFirst()) {
                     do {
                         Cursor c = mCur;
                         String[] sample = c.getColumnNames();
-                        System.out.println("Column names : " + Arrays.toString(sample));
+                        Log.v(TAG,"Column names : " + Arrays.toString(sample));
                     } while (mCur.moveToNext());
                 }
 
-            }
+
             return mCur;
         } catch (SQLException mSQLException) {
             Log.e(TAG, "getTestData >>" + mSQLException.getMessage());

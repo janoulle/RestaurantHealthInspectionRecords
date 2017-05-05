@@ -16,7 +16,9 @@ import android.support.v4.app.NotificationCompat;
 public class NotificationBuilderPojo {
     public int notificationId;
     public NotificationCompat.Style notificationStyle;
-    public String contentTitle, contentText, bigText;
+    public String contentTitle;
+    public String contentText;
+    public String bigText;
     public int smallIconResourceId;
     public int largeIconResourceId;
     public PendingIntent pendingIntent;

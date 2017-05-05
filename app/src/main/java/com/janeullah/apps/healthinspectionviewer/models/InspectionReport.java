@@ -16,7 +16,9 @@ public class InspectionReport {
     private List<FlattenedViolation> violations;
 
     public InspectionReport(){
-
+        /**
+         * Declaring default constructor due to overloaded one below
+         */
     }
 
     public InspectionReport(FlattenedRestaurant restaurant){

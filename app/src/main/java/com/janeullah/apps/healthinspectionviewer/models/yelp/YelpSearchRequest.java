@@ -9,7 +9,25 @@ import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
  */
 
 public class YelpSearchRequest {
-    public static YelpAuthTokenResponse bearerToken;
-    public static GeocodedAddressComponent restaurantMetadata;
-    public static FlattenedRestaurant restaurant;
+    public YelpAuthTokenResponse bearerToken;
+    public GeocodedAddressComponent restaurantMetadata;
+    public FlattenedRestaurant restaurant;
+
+    public String retrieveAccessToken(){
+        return bearerToken.getAccessToken();
+    }
+
+    public YelpSearchRequest(){
+        /**
+         * Default constructor
+         */
+    }
+
+    public YelpSearchRequest(YelpAuthTokenResponse bearerToken, GeocodedAddressComponent component, FlattenedRestaurant restaurant){
+        this.bearerToken = bearerToken;
+        this.restaurantMetadata = component;
+        this.restaurant = restaurant;
+    }
+
+
 }
