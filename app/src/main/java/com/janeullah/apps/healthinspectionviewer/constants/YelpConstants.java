@@ -25,4 +25,7 @@ public class YelpConstants {
     public static final String LONGITUDE = "longitude";
     public static final String TERM = "term";
 
+    public static final int MAX_AGE = 60 * 60 * 24;
+    public static final int MAX_STALE = 60 * 60 * 24;
+
 }

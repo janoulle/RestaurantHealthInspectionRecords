@@ -227,7 +227,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             @Override
             public void onSuccess(YelpAuthTokenResponse authTokenResponse) {
                 Log.i(TAG,"Received valid auth token response: " + authTokenResponse.getAccessToken());
-                Toast.makeText(getApplicationContext(),"Make it to Yelp and got token! Token: " + authTokenResponse.getAccessToken(),Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(),"Make it to Yelp and got token!",Toast.LENGTH_LONG).show();
             }
         };
     }

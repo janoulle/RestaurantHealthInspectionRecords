@@ -10,10 +10,12 @@ import com.janeullah.apps.healthinspectionviewer.interfaces.YelpService;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.services.FetchYelpDataService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * https://medium.com/google-developer-experts/weakreference-in-android-dd1e66b9be9d
@@ -36,12 +38,15 @@ public class YelpAccessRequestTask extends AsyncTask<Void,Integer,YelpAuthTokenR
             accessRequestData.put(YelpConstants.CLIENT_ID, BuildConfig.YELP_CLIENT_ID);
             accessRequestData.put(YelpConstants.CLIENT_SECRET, BuildConfig.YELP_CLIENT_SECRET);
             Call<YelpAuthTokenResponse> accessRequest = yelpService.getAuthToken(accessRequestData);
-            return accessRequest.execute().body();
+            Response<YelpAuthTokenResponse> response = accessRequest.execute();
+            if (response.isSuccessful()){
+                return response.body();
+            }
+            Log.d(TAG,"Unsuccessful api call to Yelp token api");
         }catch(Exception e){
-            Log.e(TAG,"Errored out while checking Yelp for data",e);
+            Log.e(TAG,"Errored out while checking Yelp for data with message: " + e.getMessage(),e);
             FirebaseCrash.report(e);
         }
-        Log.e(TAG,"Failed to retrieve auth response");
         return null;
     }
 
