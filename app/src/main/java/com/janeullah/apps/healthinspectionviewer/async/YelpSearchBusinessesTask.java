@@ -5,10 +5,7 @@ import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
-import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
 import com.janeullah.apps.healthinspectionviewer.interfaces.YelpService;
-import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.services.FetchYelpDataService;
@@ -38,18 +35,18 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
         try {
             Log.i(TAG,"Initiated background processing...");
             YelpService yelpService = FetchYelpDataService.YELP_API_SERVICE;
-            YelpAuthTokenResponse bearerToken = params[0].bearerToken;
-            GeocodedAddressComponent restaurantMetadata = params[0].restaurantMetadata;
+            //YelpAuthTokenResponse bearerToken = params[0].bearerToken;
+            //GeocodedAddressComponent restaurantMetadata = params[0].restaurantMetadata;
             //FlattenedRestaurant restaurantData = params[0].restaurant;
 
             //prepare query
             Map<String, Object> queryParams = new HashMap<>();
             queryParams.put(YelpQueryParams.DEFAULT_SEARCH_LOCALE.getKey(), YelpQueryParams.DEFAULT_SEARCH_LOCALE.getValue());
             queryParams.put(YelpQueryParams.DEFAULT_SORT.getKey(), YelpQueryParams.DEFAULT_SORT.getValue());
-            queryParams.put(YelpConstants.LATITUDE, restaurantMetadata.coordinates.latitude);
-            queryParams.put(YelpConstants.LONGITUDE, restaurantMetadata.coordinates.longitude);
+            queryParams.put(YelpConstants.LATITUDE, params[0].getLatitude());
+            queryParams.put(YelpConstants.LONGITUDE, params[0].getLongitude());
             queryParams.put(YelpConstants.TERM, "food");
-            Call<YelpResults> searchRequest = yelpService.searchBusinesses(bearerToken.getAccessToken(),queryParams);
+            Call<YelpResults> searchRequest = yelpService.searchBusinesses(params[0].getBearerToken(),queryParams);
             Response<YelpResults> response = searchRequest.execute();
             if (response.isSuccessful()) {
                 if (isFromCache(response)){

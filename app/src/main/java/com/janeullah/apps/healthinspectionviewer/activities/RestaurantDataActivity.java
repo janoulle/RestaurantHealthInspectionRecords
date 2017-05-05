@@ -251,9 +251,11 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 editor.putInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,authTokenResponse.getExpiresIn());
                 editor.putString(YelpConstants.SAVED_YELP_TOKEN_TYPE,authTokenResponse.getTokenType());
                 editor.apply();
-                YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,mGeocodedAddressComponents,mRestaurantSelected);
-                mYelpSearchRequestTask.setListener(createYelpSearchListener());
-                mYelpSearchRequestTask.execute(yelpSearchRequest);
+                if (mGeocodedAddressComponents != null){
+                    YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,mGeocodedAddressComponents,mRestaurantSelected);
+                    mYelpSearchRequestTask.setListener(createYelpSearchListener());
+                    mYelpSearchRequestTask.execute(yelpSearchRequest);
+                }
             }
         };
     }
@@ -269,7 +271,22 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         };
     }
 
-    public class GeocodingResultsReceiver extends ResultReceiver {
+    private void makeAsyncYelpSearchCall(GeocodedAddressComponent component){
+        //TODO: expire token plan
+        Log.i(TAG,"Saved auth token found");
+        String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
+        String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
+        Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
+        YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
+        authTokenResponse.setAccessToken(yelpAuthToken);
+        authTokenResponse.setExpiresIn(expiry);
+        authTokenResponse.setTokenType(tokenType);
+        YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,component,mRestaurantSelected);
+        mYelpSearchRequestTask.setListener(createYelpSearchListener());
+        mYelpSearchRequestTask.execute(yelpSearchRequest);
+    }
+
+    private class GeocodingResultsReceiver extends ResultReceiver {
         private static final String TAG = "GeocodingReceiver";
         /**
          * Create a new ResultReceive to receive results.  Your
@@ -288,6 +305,9 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 mGeocodedAddressComponents = Parcels.unwrap(resultData.getParcelable(GeocodeConstants.RESULT_DATA_KEY));
                 mRestaurantCoordinates = mGeocodedAddressComponents.coordinates;
                 Log.i(TAG, String.format(Locale.getDefault(),"Coordinates (%s) received", mRestaurantCoordinates));
+                if (!TextUtils.isEmpty(mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,""))){
+                    makeAsyncYelpSearchCall(mGeocodedAddressComponents);
+                }
                 mMapView.getMapAsync(RestaurantDataActivity.this);
             } else {
                 String output = resultData.getString(GeocodeConstants.RESULT_DATA_KEY);

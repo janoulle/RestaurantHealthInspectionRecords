@@ -18,7 +18,7 @@ public class GeocodingUtils {
 
     private GeocodingUtils(){}
 
-    public static GeocodedAddressComponent convertAddressComponentToGeocodedAddressComponent(GeocodingResult geocodingResult){
+    public static GeocodedAddressComponent convertGeocodingResultsToGeocodedAddressComponent(GeocodingResult geocodingResult){
         GeocodedAddressComponent geocodedAddressComponent = new GeocodedAddressComponent();
         geocodedAddressComponent.coordinates = new LatLng(
                 geocodingResult.geometry.location.lat,

@@ -31,7 +31,7 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 
-import static com.janeullah.apps.healthinspectionviewer.utils.GeocodingUtils.convertAddressComponentToGeocodedAddressComponent;
+import static com.janeullah.apps.healthinspectionviewer.utils.GeocodingUtils.convertGeocodingResultsToGeocodedAddressComponent;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -121,7 +121,7 @@ public final class FetchAddressIntentService extends IntentService {
 
     private void handleGeocodedHappyPath(GeocodingResult geocodingResult, FlattenedRestaurant restaurantSelected) {
         //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
-        GeocodedAddressComponent geocodedAddressComponent = convertAddressComponentToGeocodedAddressComponent(geocodingResult);
+        GeocodedAddressComponent geocodedAddressComponent = convertGeocodingResultsToGeocodedAddressComponent(geocodingResult);
         restaurantSelected.coordinates = geocodedAddressComponent.coordinates;
         Log.i(TAG, "Coordinates "+ geocodedAddressComponent.coordinates + " for restaurant " + restaurantSelected.name + " at address " + restaurantSelected.address +" found!");
         sendNotification("Geocoding completed for address " + restaurantSelected.address,restaurantSelected);

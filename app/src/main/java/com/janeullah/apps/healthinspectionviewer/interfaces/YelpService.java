@@ -8,6 +8,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -15,6 +16,7 @@ import retrofit2.http.QueryMap;
 
 import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.SEARCH_PATH;
 import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.TOKEN_PATH;
+import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.VERSION;
 
 /**
  * https://futurestud.io/tutorials/android-basic-authentication-with-retrofit
@@ -37,12 +39,7 @@ public interface YelpService {
     @POST(TOKEN_PATH)
     Call<YelpAuthTokenResponse> getAuthToken(@FieldMap Map<String,String> requestData);
 
-    @POST(SEARCH_PATH)
+    @GET(VERSION + "/" + SEARCH_PATH)
     Call<YelpResults> searchBusinesses(@Header("Authorization") String token,
                                        @QueryMap Map<String,Object> params);
-                                       /*@Query(YelpConstants.LOCALE) String locale,
-                                       @Query(YelpConstants.SORT_BY) String sortBy,
-                                       @Query(YelpConstants.LATITUDE) String latitude,
-                                       @Query(YelpConstants.LONGITUDE) String longitude,
-                                       @Query(YelpConstants.TERM) String term);*/
 }

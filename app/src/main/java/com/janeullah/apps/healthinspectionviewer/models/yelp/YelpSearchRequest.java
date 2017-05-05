@@ -13,8 +13,22 @@ public class YelpSearchRequest {
     public GeocodedAddressComponent restaurantMetadata;
     public FlattenedRestaurant restaurant;
 
-    public String retrieveAccessToken(){
-        return bearerToken.getAccessToken();
+    public String getBearerToken(){
+        return "Bearer " + bearerToken.getAccessToken();
+    }
+
+    public double getLatitude(){
+        if (restaurantMetadata != null && restaurantMetadata.coordinates != null){
+            return restaurantMetadata.coordinates.latitude;
+        }
+        return 0d;
+    }
+
+    public double getLongitude(){
+        if (restaurantMetadata != null && restaurantMetadata.coordinates != null){
+            return restaurantMetadata.coordinates.longitude;
+        }
+        return 0d;
     }
 
     public YelpSearchRequest(){
