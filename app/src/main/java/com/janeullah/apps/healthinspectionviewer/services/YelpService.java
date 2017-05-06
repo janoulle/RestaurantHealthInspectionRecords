@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.interfaces;
+package com.janeullah.apps.healthinspectionviewer.services;
 
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;

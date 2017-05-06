@@ -6,11 +6,11 @@ import android.util.Log;
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.dtos.Match;
-import com.janeullah.apps.healthinspectionviewer.interfaces.YelpService;
+import com.janeullah.apps.healthinspectionviewer.services.YelpService;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
-import com.janeullah.apps.healthinspectionviewer.services.FetchYelpDataService;
+import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfigurationForYelp;
 import com.janeullah.apps.healthinspectionviewer.utils.YelpQueryParams;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
     protected YelpResults doInBackground(YelpSearchRequest... params) {
         try {
             Log.i(TAG,"Initiated background processing...");
-            YelpService yelpService = FetchYelpDataService.YELP_API_SERVICE;
+            YelpService yelpService = RetrofitConfigurationForYelp.YELP_API_SERVICE;
 
             //prepare query
             Map<String, Object> queryParams = new HashMap<>();

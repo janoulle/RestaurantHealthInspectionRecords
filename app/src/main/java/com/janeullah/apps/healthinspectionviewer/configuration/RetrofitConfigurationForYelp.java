@@ -1,8 +1,8 @@
-package com.janeullah.apps.healthinspectionviewer.services;
+package com.janeullah.apps.healthinspectionviewer.configuration;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
-import com.janeullah.apps.healthinspectionviewer.interfaces.YelpService;
+import com.janeullah.apps.healthinspectionviewer.services.YelpService;
 
 import java.io.IOException;
 
@@ -21,12 +21,12 @@ import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.
  * @date 5/4/2017.
  */
 
-public final class FetchYelpDataService {
+public final class RetrofitConfigurationForYelp {
     private static final Retrofit RETROFIT;
 
     public static final YelpService YELP_API_SERVICE;
 
-    private FetchYelpDataService(){
+    private RetrofitConfigurationForYelp(){
 
     }
 

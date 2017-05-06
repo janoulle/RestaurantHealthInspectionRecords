@@ -230,6 +230,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     @Override
     protected void onDestroy() {
         mAccessRequestTask.setListener(null);
+        mYelpSearchRequestTask.setListener(null);
         mMapView.onDestroy();
         super.onDestroy();
     }
