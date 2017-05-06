@@ -19,4 +19,8 @@ public class GeocodedAddressComponent {
     public String postalCode;
     public String formattedAddress;
     public LatLng coordinates;
+
+    public String getAddressLine1(){
+        return streetNumber + " " + route;
+    }
 }

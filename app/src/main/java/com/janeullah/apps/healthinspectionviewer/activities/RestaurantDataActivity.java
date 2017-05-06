@@ -23,6 +23,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.async.YelpAccessRequestTask;
 import com.janeullah.apps.healthinspectionviewer.async.YelpSearchBusinessesTask;
@@ -55,6 +56,7 @@ import butterknife.ButterKnife;
  * https://developers.google.com/maps/documentation/android-api/map
  */
 public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCallback {
+    private static final Gson gson = new Gson();
     private static final String TAG = "RestaurantDataActivity";
     private GoogleMap mMap;
     private GeocodingResultsReceiver mGeocodeResultsReceiver;
@@ -266,6 +268,9 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 Intent intent = getIntent();
                 intent.putExtra(IntentNames.YELP_RESULTS,Parcels.wrap(yelpResults));
                 Log.v(TAG,"Received yelp results for " + mRestaurantSelected.name + ": " + yelpResults);
+                if (yelpResults.getMatchedBusiness() != null){
+                    Log.v(TAG,"Found business match from Yelp listings: " + gson.toJson(yelpResults.getMatchedBusiness()));
+                }
             }
         };
     }

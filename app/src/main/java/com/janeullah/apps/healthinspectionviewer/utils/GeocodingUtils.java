@@ -20,6 +20,7 @@ public class GeocodingUtils {
 
     public static GeocodedAddressComponent convertGeocodingResultsToGeocodedAddressComponent(GeocodingResult geocodingResult){
         GeocodedAddressComponent geocodedAddressComponent = new GeocodedAddressComponent();
+        geocodedAddressComponent.formattedAddress = geocodingResult.formattedAddress;
         geocodedAddressComponent.coordinates = new LatLng(
                 geocodingResult.geometry.location.lat,
                 geocodingResult.geometry.location.lng);

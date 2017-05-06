@@ -120,6 +120,9 @@ public final class FetchAddressIntentService extends IntentService {
     }
 
     private void handleGeocodedHappyPath(GeocodingResult geocodingResult, FlattenedRestaurant restaurantSelected) {
+        if (geocodingResult.partialMatch){
+            Log.d(TAG,"Inexact Geocoding results received on requested address (" + restaurantSelected.address + ")");
+        }
         //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
         GeocodedAddressComponent geocodedAddressComponent = convertGeocodingResultsToGeocodedAddressComponent(geocodingResult);
         restaurantSelected.coordinates = geocodedAddressComponent.coordinates;

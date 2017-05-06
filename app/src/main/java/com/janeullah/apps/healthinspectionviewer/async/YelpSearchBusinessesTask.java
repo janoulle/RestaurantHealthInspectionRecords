@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
+import com.janeullah.apps.healthinspectionviewer.dtos.Match;
 import com.janeullah.apps.healthinspectionviewer.interfaces.YelpService;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
@@ -13,7 +14,9 @@ import com.janeullah.apps.healthinspectionviewer.services.FetchYelpDataService;
 import com.janeullah.apps.healthinspectionviewer.utils.YelpQueryParams;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -64,10 +67,20 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
     }
 
     private YelpResults findFirstAndSetYelpRestaurantOfInterest(YelpSearchRequest yelpRequest, YelpResults yelpResults){
+        List<Match> listOfPotentialMatches = new ArrayList<>();
         for(Business business : yelpResults.getBusinesses()){
-            if (yelpRequest.matches(business)){
-                yelpResults.setMatchedBusiness(business);
-                return yelpResults;
+            if (yelpRequest.matchesCityStateZip(business)){
+                Match scoredPotentialMatch = yelpRequest.scoreMatch(business);
+                listOfPotentialMatches.add(scoredPotentialMatch);
+            }
+        }
+        if (!listOfPotentialMatches.isEmpty()) {
+            Match closestMatch = Match.SCORE_ORDER.max(listOfPotentialMatches);
+            if (closestMatch.isAtOrAboveTolerance()) {
+                Log.i(TAG,"Found a match at or above tolerance level for yelp listings with following data: ");
+                yelpResults.setMatchedBusiness(closestMatch.getCandidate());
+            }else{
+                Log.i(TAG,"Match found was below the tolerance level - " + Match.TOLERANCE);
             }
         }
         return yelpResults;

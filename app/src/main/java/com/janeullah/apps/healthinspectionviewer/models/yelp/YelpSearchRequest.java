@@ -4,6 +4,9 @@ import android.text.TextUtils;
 
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
+import com.janeullah.apps.healthinspectionviewer.dtos.Match;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Jane Ullah
@@ -45,17 +48,37 @@ public class YelpSearchRequest {
         this.restaurant = restaurant;
     }
 
-    public boolean matches(Business yelpBusinessObject){
+    public Match scoreMatch(Business yelpBusinessObject){
+        if (matchesCityStateZip(yelpBusinessObject)){
+            Location yelpLocation = yelpBusinessObject.getLocation();
+            int longestStringLength = Math.max(getStringLength(restaurantMetadata.getAddressLine1()),getStringLength(yelpLocation.getAddress1()));
+            int levenshteinDistance = StringUtils.getLevenshteinDistance(trimString(yelpLocation.getAddress1()),trimString(restaurantMetadata.getAddressLine1()));
+            double score = 1.0 - ((levenshteinDistance * 1.0) / longestStringLength);
+            return new Match(yelpBusinessObject,score);
+        }
+        return new Match(yelpBusinessObject,0);
+    }
+
+    private String trimString(String s){
+        if (StringUtils.isNotBlank(s)){
+            return s.trim();
+        }
+        return StringUtils.EMPTY;
+    }
+
+    private int getStringLength(String s){
+        if (StringUtils.isNotBlank(s)){
+            return s.length();
+        }
+        return 0;
+    }
+
+    public boolean matchesCityStateZip(Business yelpBusinessObject){
         if (yelpBusinessObject != null && yelpBusinessObject.getLocation() != null){
             Location yelpLocation = yelpBusinessObject.getLocation();
-            boolean hasMatchedBasicData = (TextUtils.equals(yelpLocation.getZipCode(),restaurantMetadata.postalCode) &&
+            return (TextUtils.equals(yelpLocation.getZipCode(),restaurantMetadata.postalCode) &&
                     TextUtils.equals(yelpLocation.getCity(),restaurantMetadata.locality) &&
                     TextUtils.equals(yelpLocation.getState(),restaurantMetadata.state));
-            if (hasMatchedBasicData){
-                return yelpLocation.getAddress1().contains(restaurantMetadata.streetNumber);
-                //TODO: figure out how to reuse some library/algorithm that can give a certainty-of-match rank
-                // yelpLocation.getAddress1().contains(restaurantMetadata.route);
-            }
         }
         return false;
     }
