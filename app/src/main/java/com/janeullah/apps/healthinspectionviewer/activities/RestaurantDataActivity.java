@@ -279,8 +279,10 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                     //RelativeLayout restaurantSummaryData = (RelativeLayout)findViewById(R.id.item_restaurant_summary_data);
                     RelativeLayout mYelpLayout = (RelativeLayout)findViewById(R.id.yelpDataLayout);
                     ImageView yelpStars = (ImageView) findViewById(R.id.yelpStarsDisplay);
-                    yelpStars.setImageResource(flattenedYelpData.yelpStarsResourceId);
-                    mYelpLayout.setVisibility(View.VISIBLE);
+                    if (mYelpLayout != null) {
+                        yelpStars.setImageResource(flattenedYelpData.yelpStarsResourceId);
+                        mYelpLayout.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         };
