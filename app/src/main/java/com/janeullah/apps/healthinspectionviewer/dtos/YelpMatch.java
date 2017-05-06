@@ -11,7 +11,7 @@ import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 
 public class YelpMatch {
     //Uninformed choice of tolerance. TODO: revisit method of picking a tolerance level for similarity matching
-    public static final double TOLERANCE = 0.9;
+    public static final double TOLERANCE = 0.83;
     private Business candidate;
     private double score; // 0 - definitely not, 1.0 - perfect match
 

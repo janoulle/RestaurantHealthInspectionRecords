@@ -15,6 +15,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +35,7 @@ import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.databinding.ActivityRestaurantDataBinding;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
+import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedYelpData;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
@@ -271,6 +275,12 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 Log.v(TAG,"Received yelp results for " + mRestaurantSelected.name + ": " + yelpResults);
                 if (yelpResults.getMatchedBusiness() != null){
                     Log.v(TAG,"Found business match from Yelp listings: " + gson.toJson(yelpResults.getMatchedBusiness()));
+                    FlattenedYelpData flattenedYelpData = new FlattenedYelpData(yelpResults.getMatchedBusiness());
+                    //RelativeLayout restaurantSummaryData = (RelativeLayout)findViewById(R.id.item_restaurant_summary_data);
+                    RelativeLayout mYelpLayout = (RelativeLayout)findViewById(R.id.yelpDataLayout);
+                    ImageView yelpStars = (ImageView) findViewById(R.id.yelpStarsDisplay);
+                    yelpStars.setImageResource(flattenedYelpData.yelpStarsResourceId);
+                    mYelpLayout.setVisibility(View.VISIBLE);
                 }
             }
         };
@@ -324,9 +334,5 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
 
     public void showToast(String message, int duration) {
         Toast.makeText(this, message, duration).show();
-    }
-
-    public void showToast(int resId, int duration) {
-        Toast.makeText(this, resId, duration).show();
     }
 }
