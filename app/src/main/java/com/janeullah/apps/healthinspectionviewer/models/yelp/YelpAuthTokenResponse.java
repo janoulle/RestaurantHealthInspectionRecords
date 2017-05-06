@@ -4,12 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelProperty;
 
 /**
  * @author Jane Ullah
  * @date 5/3/2017.
  */
-@Parcel
+@Parcel(Parcel.Serialization.BEAN)
 public class YelpAuthTokenResponse {
 
     @SerializedName("access_token")
@@ -22,6 +23,7 @@ public class YelpAuthTokenResponse {
     @Expose
     private String tokenType;
 
+    @ParcelProperty("accessToken")
     public String getAccessToken() {
         return accessToken;
     }
@@ -30,6 +32,7 @@ public class YelpAuthTokenResponse {
         this.accessToken = accessToken;
     }
 
+    @ParcelProperty("expiresIn")
     public Integer getExpiresIn() {
         return expiresIn;
     }
@@ -38,6 +41,7 @@ public class YelpAuthTokenResponse {
         this.expiresIn = expiresIn;
     }
 
+    @ParcelProperty("tokenType")
     public String getTokenType() {
         return tokenType;
     }

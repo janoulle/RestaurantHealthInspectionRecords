@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.interfaces.YelpService;
+import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.services.FetchYelpDataService;
@@ -35,9 +36,6 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
         try {
             Log.i(TAG,"Initiated background processing...");
             YelpService yelpService = FetchYelpDataService.YELP_API_SERVICE;
-            //YelpAuthTokenResponse bearerToken = params[0].bearerToken;
-            //GeocodedAddressComponent restaurantMetadata = params[0].restaurantMetadata;
-            //FlattenedRestaurant restaurantData = params[0].restaurant;
 
             //prepare query
             Map<String, Object> queryParams = new HashMap<>();
@@ -55,7 +53,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
                     Log.v(TAG,"Received Yelp results from network");
                 }
                 Log.i(TAG,"Successful call to Yelp api for query params: " +queryParams);
-                return response.body();
+                return findFirstAndSetYelpRestaurantOfInterest(params[0],response.body());
             }
             Log.i(TAG,"Unsuccessful api call to Yelp for query params: " + queryParams);
         }catch(IOException e){
@@ -63,6 +61,16 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
             FirebaseCrash.report(e);
         }
         return null;
+    }
+
+    private YelpResults findFirstAndSetYelpRestaurantOfInterest(YelpSearchRequest yelpRequest, YelpResults yelpResults){
+        for(Business business : yelpResults.getBusinesses()){
+            if (yelpRequest.matches(business)){
+                yelpResults.setMatchedBusiness(business);
+                return yelpResults;
+            }
+        }
+        return yelpResults;
     }
 
     @Override

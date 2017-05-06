@@ -11,7 +11,7 @@ import java.util.List;
  * @author Jane Ullah
  * @date 5/4/2017.
  */
-@Parcel
+@Parcel(Parcel.Serialization.BEAN)
 public class YelpResults {
 
     @SerializedName("businesses")
@@ -23,6 +23,12 @@ public class YelpResults {
     @SerializedName("region")
     @Expose
     private Region region;
+
+    /*TODO: investigate solution here http://stackoverflow.com/questions/4802887/gson-how-to-exclude-specific-fields-from-serialization-without-annotations
+        Marking as 'transient' to prevent Gson serializaton issues
+        Previously marke as @Transient to prevent Parceling
+    */
+    private transient Business matchedBusiness;
 
     public List<Business> getBusinesses() {
         return businesses;
@@ -48,4 +54,11 @@ public class YelpResults {
         this.region = region;
     }
 
+    public Business getMatchedBusiness() {
+        return matchedBusiness;
+    }
+
+    public void setMatchedBusiness(Business matchedBusiness) {
+        this.matchedBusiness = matchedBusiness;
+    }
 }

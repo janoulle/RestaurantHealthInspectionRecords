@@ -12,7 +12,7 @@ import org.parceler.Parcel;
 
 import java.util.List;
 
-@Parcel
+@Parcel(Parcel.Serialization.BEAN)
 public class Location {
 
     @SerializedName("address1")

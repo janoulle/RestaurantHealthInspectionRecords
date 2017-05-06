@@ -12,7 +12,7 @@ import org.parceler.Parcel;
 
 import java.util.List;
 
-@Parcel
+@Parcel(Parcel.Serialization.BEAN)
 public class Business {
 
     @SerializedName("id")

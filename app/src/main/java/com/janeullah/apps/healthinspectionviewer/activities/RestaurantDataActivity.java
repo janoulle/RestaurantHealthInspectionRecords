@@ -139,26 +139,25 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                Log.i(TAG,"Up clicked!");
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                upIntent.putExtra(IntentNames.COUNTY_SELECTED,mRestaurantSelected.county);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is NOT part of this app's task, so create a new task
-                    // when navigating up, with a synthesized back stack.
-                    TaskStackBuilder.create(this)
-                            // Add all of this activity's parents to the back stack
-                            .addNextIntentWithParentStack(upIntent)
-                            // Navigate up to the closest parent
-                            .startActivities();
-                } else {
-                    // This activity is part of this app's task, so simply
-                    // navigate up to the logical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
-                return true;
+        int i = item.getItemId();
+        if (i == android.R.id.home) {
+            Log.i(TAG, "Up clicked!");
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            upIntent.putExtra(IntentNames.COUNTY_SELECTED, mRestaurantSelected.county);
+            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                // This activity is NOT part of this app's task, so create a new task
+                // when navigating up, with a synthesized back stack.
+                TaskStackBuilder.create(this)
+                        // Add all of this activity's parents to the back stack
+                        .addNextIntentWithParentStack(upIntent)
+                        // Navigate up to the closest parent
+                        .startActivities();
+            } else {
+                // This activity is part of this app's task, so simply
+                // navigate up to the logical parent activity.
+                NavUtils.navigateUpTo(this, upIntent);
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -271,21 +270,6 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         };
     }
 
-    private void makeAsyncYelpSearchCall(GeocodedAddressComponent component){
-        //TODO: expire token plan
-        Log.i(TAG,"Saved auth token found");
-        String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
-        String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
-        Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
-        YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
-        authTokenResponse.setAccessToken(yelpAuthToken);
-        authTokenResponse.setExpiresIn(expiry);
-        authTokenResponse.setTokenType(tokenType);
-        YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,component,mRestaurantSelected);
-        mYelpSearchRequestTask.setListener(createYelpSearchListener());
-        mYelpSearchRequestTask.execute(yelpSearchRequest);
-    }
-
     private class GeocodingResultsReceiver extends ResultReceiver {
         private static final String TAG = "GeocodingReceiver";
         /**
@@ -297,6 +281,21 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
          */
         public GeocodingResultsReceiver(Handler handler) {
             super(handler);
+        }
+
+        private void makeAsyncYelpSearchCall(GeocodedAddressComponent component){
+            //TODO: expire token plan
+            Log.i(TAG,"Saved auth token found");
+            String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
+            String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
+            Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
+            YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
+            authTokenResponse.setAccessToken(yelpAuthToken);
+            authTokenResponse.setExpiresIn(expiry);
+            authTokenResponse.setTokenType(tokenType);
+            YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,component,mRestaurantSelected);
+            mYelpSearchRequestTask.setListener(createYelpSearchListener());
+            mYelpSearchRequestTask.execute(yelpSearchRequest);
         }
 
         @Override

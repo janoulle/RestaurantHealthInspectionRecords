@@ -9,7 +9,7 @@ import org.parceler.Parcel;
  * @author Jane Ullah
  * @date 5/4/2017.
  */
-@Parcel
+@Parcel(Parcel.Serialization.BEAN)
 public class Region {
 
     @SerializedName("center")
