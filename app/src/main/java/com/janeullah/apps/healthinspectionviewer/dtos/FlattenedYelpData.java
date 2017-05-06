@@ -16,6 +16,12 @@ public class FlattenedYelpData {
     public String yelpBusinessId;
     public double rating;
 
+    public FlattenedYelpData(){
+        /**
+         * Default constructor
+         */
+    }
+
     public FlattenedYelpData(Business business){
         reviewCount = business.getReviewCount();
         yelpBusinessId = business.getId();

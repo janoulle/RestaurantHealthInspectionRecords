@@ -33,4 +33,5 @@
     <string name="action_reply">Reply</string>
     <string name="ne_ga_restaurants">NEGA Restaurants</string>
     <string name="yelp_logo_desc">Yelp Logo</string>
+    <string name="yelp_restaurant_rating">Yelp Restaurant Rating</string>
 </resources>
