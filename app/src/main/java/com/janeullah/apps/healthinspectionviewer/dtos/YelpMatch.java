@@ -9,13 +9,13 @@ import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
  * @date 5/5/2017.
  */
 
-public class Match {
+public class YelpMatch {
     //Uninformed choice of tolerance. TODO: revisit method of picking a tolerance level for similarity matching
     public static final double TOLERANCE = 0.9;
     private Business candidate;
     private double score; // 0 - definitely not, 1.0 - perfect match
 
-    public Match(Business yelpBusinessObject, double score) {
+    public YelpMatch(Business yelpBusinessObject, double score) {
         this.candidate = yelpBusinessObject;
         this.score = score;
     }
@@ -33,10 +33,10 @@ public class Match {
     }
 
     //http://stackoverflow.com/questions/11758982/how-to-get-max-element-from-list-in-guava
-    public static final Ordering<Match> SCORE_ORDER =
-            new Ordering<Match>() {
+    public static final Ordering<YelpMatch> SCORE_ORDER =
+            new Ordering<YelpMatch>() {
                 @Override
-                public int compare(Match left, Match right) {
+                public int compare(YelpMatch left, YelpMatch right) {
                     return Doubles.compare(left.score, right.score);
                 }
             };

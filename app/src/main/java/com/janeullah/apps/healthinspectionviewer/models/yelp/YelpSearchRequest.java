@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
-import com.janeullah.apps.healthinspectionviewer.dtos.Match;
+import com.janeullah.apps.healthinspectionviewer.dtos.YelpMatch;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,15 +48,15 @@ public class YelpSearchRequest {
         this.restaurant = restaurant;
     }
 
-    public Match scoreMatch(Business yelpBusinessObject){
+    public YelpMatch scoreMatch(Business yelpBusinessObject){
+        double score = 0d;
         if (matchesCityStateZip(yelpBusinessObject)){
             Location yelpLocation = yelpBusinessObject.getLocation();
             int longestStringLength = Math.max(getStringLength(restaurantMetadata.getAddressLine1()),getStringLength(yelpLocation.getAddress1()));
             int levenshteinDistance = StringUtils.getLevenshteinDistance(trimString(yelpLocation.getAddress1()),trimString(restaurantMetadata.getAddressLine1()));
-            double score = 1.0 - ((levenshteinDistance * 1.0) / longestStringLength);
-            return new Match(yelpBusinessObject,score);
+            score = 1.0 - ((levenshteinDistance * 1.0) / longestStringLength);
         }
-        return new Match(yelpBusinessObject,0);
+        return new YelpMatch(yelpBusinessObject,score);
     }
 
     private String trimString(String s){
