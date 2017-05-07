@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * http://stackoverflow.com/questions/16611759/how-set-alpha-opacity-value-to-color-on-xml-drawable
  * @author Jane Ullah
  * @date 4/28/2017.
  */
