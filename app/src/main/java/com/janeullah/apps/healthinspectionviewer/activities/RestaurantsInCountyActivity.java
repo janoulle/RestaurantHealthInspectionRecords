@@ -147,7 +147,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
                 final DatabaseReference queryRef = getRef(position);
                 String key = queryRef.getKey();
                 Log.v(TAG, "Key: " + key);
-                viewHolder.bindData(model);
+                viewHolder.bindData(getApplicationContext(),model);
                 hideProgressDialog();
                 countOfRestaurants.incrementAndGet();
                 addListenerToRestaurantItem(viewHolder, model);

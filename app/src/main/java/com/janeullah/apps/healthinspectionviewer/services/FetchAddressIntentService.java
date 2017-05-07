@@ -137,7 +137,7 @@ public final class FetchAddressIntentService extends IntentService {
         dataNeededForNotification.bigText = msg;
         dataNeededForNotification.contentText = msg;
         dataNeededForNotification.contentTitle = "NEGA Restaurant Scores";
-        dataNeededForNotification.smallIconResourceId = R.drawable.ic_greencheckmark;
+        dataNeededForNotification.smallIconResourceId = R.drawable.ic_greencheck;
         dataNeededForNotification.notificationStyle = new NotificationCompat.BigTextStyle()
                 .setSummaryText("Geocoding complete: "+ restaurant.address)
                 .bigText("Completed geocoding for " + restaurant.name +  " at address: " + restaurant.address)

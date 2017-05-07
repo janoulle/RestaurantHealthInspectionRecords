@@ -5,10 +5,10 @@ import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.BuildConfig;
-import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
-import com.janeullah.apps.healthinspectionviewer.services.YelpService;
-import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfigurationForYelp;
+import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
+import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
+import com.janeullah.apps.healthinspectionviewer.services.YelpService;
 
 import java.io.IOException;
 import java.util.HashMap;

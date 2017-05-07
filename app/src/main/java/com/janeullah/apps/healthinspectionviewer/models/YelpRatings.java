@@ -1,7 +1,5 @@
 package com.janeullah.apps.healthinspectionviewer.models;
 
-import com.janeullah.apps.healthinspectionviewer.R;
-
 /**
  * @author Jane Ullah
  * @date 5/6/2017.
