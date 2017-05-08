@@ -18,7 +18,7 @@
     <ImageView
         android:id="@+id/yelpLogoDisplay"
         android:layout_width="64dp"
-        android:layout_height="31dp"
+        android:layout_height="64dp"
         android:layout_toRightOf="@+id/yelpStarsDisplay"
         android:contentDescription="@string/yelp_logo_desc"
         android:src="@drawable/yelp_trademark" />

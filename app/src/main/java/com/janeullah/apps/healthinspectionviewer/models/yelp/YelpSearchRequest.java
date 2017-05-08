@@ -49,14 +49,18 @@ public class YelpSearchRequest {
     }
 
     public YelpMatch scoreMatch(Business yelpBusinessObject){
-        double score = 0d;
+        double addressMatchScore = 0d, nameMatchScore = 0d;
         if (matchesCityStateZip(yelpBusinessObject)){
             Location yelpLocation = yelpBusinessObject.getLocation();
             int longestStringLength = Math.max(getStringLength(restaurantMetadata.getAddressLine1()),getStringLength(yelpLocation.getAddress1()));
             int levenshteinDistance = StringUtils.getLevenshteinDistance(trimString(yelpLocation.getAddress1()),trimString(restaurantMetadata.getAddressLine1()));
-            score = 1.0 - ((levenshteinDistance * 1.0) / longestStringLength);
+            addressMatchScore = 1.0 - ((levenshteinDistance * 1.0) / longestStringLength);
+
+            longestStringLength = Math.max(getStringLength(restaurant.name),getStringLength(yelpBusinessObject.getName()));
+            levenshteinDistance = StringUtils.getLevenshteinDistance(trimString(yelpBusinessObject.getName()),trimString(restaurant.name));
+            nameMatchScore = 1.0 - ((levenshteinDistance * 1.0) / longestStringLength);
         }
-        return new YelpMatch(yelpBusinessObject,score);
+        return new YelpMatch(yelpBusinessObject,addressMatchScore, nameMatchScore);
     }
 
     private String trimString(String s){
