@@ -34,4 +34,8 @@
     <string name="ne_ga_restaurants">NEGA Restaurants</string>
     <string name="yelp_logo_desc">Yelp Logo</string>
     <string name="yelp_restaurant_rating">Yelp Restaurant Rating</string>
+    <string name="last_inspection_date_label">Last Inspection Date: </string>
+    <string name="score_label">Score</string>
+    <string name="non_critical_violations_text">%d non-critical violations</string>
+    <string name="critical_violations_text">%d critical violations</string>
 </resources>
