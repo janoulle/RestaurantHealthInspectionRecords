@@ -34,6 +34,9 @@ public class FlattenedRestaurant {
     public LatLng coordinates;
 
     public FlattenedRestaurant() {
+        /**
+         * Default constructor
+         */
     }
 
     public FlattenedRestaurant(Long id, int score, int criticalViolations, int nonCriticalViolations, String name, String dateReported, String address, String county) {

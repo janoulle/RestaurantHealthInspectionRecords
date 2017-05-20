@@ -12,11 +12,11 @@ public class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
 
-    public void showProgressDialog() {
+    public void showProgressDialog(String message) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCancelable(false);
-            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setMessage(message);
         }
 
         mProgressDialog.show();

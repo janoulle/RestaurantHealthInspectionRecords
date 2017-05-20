@@ -6,11 +6,13 @@ package com.janeullah.apps.healthinspectionviewer.constants;
  */
 
 public class IntentNames {
-    public final static String RESTAURANTS_IN_COUNTY = "restaurantsInCounty";
-    public final static String VIOLATIONS_IN_RESTAURANT = "violationsInRestaurant";
-    public final static String COUNTY_SELECTED = "countySelected";
-    public final static String RESTAURANT_KEY_SELECTED = "restaurantKeySelected";
-    public final static String RESTAURANT_SELECTED = "restaurantSelected";
-    public final static String RESTAURANT_ADDRESS_SELECTED = "restaurantAddress";
-    public final static String STARTED_BY_NOTIFICATION = "fromNotification";
+    private IntentNames(){}
+    public static final String RESTAURANTS_IN_COUNTY = "restaurantsInCounty";
+    public static final String VIOLATIONS_IN_RESTAURANT = "violationsInRestaurant";
+    public static final String COUNTY_SELECTED = "countySelected";
+    public static final String RESTAURANT_KEY_SELECTED = "restaurantKeySelected";
+    public static final String RESTAURANT_SELECTED = "restaurantSelected";
+    public static final String RESTAURANT_ADDRESS_SELECTED = "restaurantAddress";
+    public static final String STARTED_BY_NOTIFICATION = "fromNotification";
+    public static final String YELP_RESULTS = "yelpResults";
 }

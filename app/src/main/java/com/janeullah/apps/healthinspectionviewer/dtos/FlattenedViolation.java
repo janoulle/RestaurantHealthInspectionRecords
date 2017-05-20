@@ -25,6 +25,9 @@ public class FlattenedViolation {
     public String notes;
 
     public FlattenedViolation() {
+        /**
+         * Default constructor
+         */
     }
 
     public FlattenedViolation(Long violationId, String severity, String category, String section, String inspectionType, String summary, String notes) {

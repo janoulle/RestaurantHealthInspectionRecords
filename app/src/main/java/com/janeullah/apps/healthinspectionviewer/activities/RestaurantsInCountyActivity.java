@@ -3,9 +3,12 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,12 +29,14 @@ import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder
 
 import org.parceler.Parcels;
 
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * https://developer.android.com/training/implementing-navigation/ancestral.html
  * http://stackoverflow.com/questions/26435231/getactionbar-returns-null-appcompat-v7-21
  * http://stackoverflow.com/questions/5049852/android-drawing-separator-divider-line-in-layout
  * https://guides.codepath.com/android/using-parcelable
@@ -56,21 +61,27 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     @BindView(R.id.titleForRestaurantsInCounty)
     protected TextView headerForView;
 
+    @BindView(R.id.app_toolbar)
+    public Toolbar mAppToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants_in_county);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        showProgressDialog();
         mCountyName = getIntent().getStringExtra(IntentNames.COUNTY_SELECTED);
         if (mCountyName == null) {
             Log.e(TAG,"County not selected");
             throw new IllegalArgumentException("Must pass a county selection");
         }
+        showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants in %s", mCountyName));
 
-        setTitle("Restaurants In " + mCountyName);
+        setSupportActionBar(mAppToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        setTitle(String.format(Locale.getDefault(),"Restaurants In %s", mCountyName));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
@@ -97,14 +108,34 @@ public class RestaurantsInCountyActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
+        int i = item.getItemId();
+        if (i == android.R.id.home) {
+            Log.i(TAG, "Up clicked!");
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                // This activity is NOT part of this app's task, so create a new task
+                // when navigating up, with a synthesized back stack.
+                TaskStackBuilder.create(this)
+                        // Add all of this activity's parents to the back stack
+                        .addNextIntentWithParentStack(upIntent)
+                        // Navigate up to the closest parent
+                        .startActivities();
+            } else {
+                // This activity is part of this app's task, so simply
+                // navigate up to the logical parent activity.
+                NavUtils.navigateUpTo(this, upIntent);
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        showProgressDialog("Loading restaurants in " + mCountyName);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -116,7 +147,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
                 final DatabaseReference queryRef = getRef(position);
                 String key = queryRef.getKey();
                 Log.v(TAG, "Key: " + key);
-                viewHolder.bindData(model);
+                viewHolder.bindData(getApplicationContext(),model);
                 hideProgressDialog();
                 countOfRestaurants.incrementAndGet();
                 addListenerToRestaurantItem(viewHolder, model);
@@ -134,6 +165,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(RestaurantsInCountyActivity.this, RestaurantDataActivity.class);
+                Log.i(TAG,String.format(Locale.getDefault(),"%s selected",model.name));
                 intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
                 intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
                 intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
@@ -149,7 +181,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // the initial data has been loaded, hide the progress bar
                 Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                headerForView.setText(mAdapter.getItemCount() + " found");
+                headerForView.setText(String.format(Locale.getDefault(),"%d found", mAdapter.getItemCount()));
             }
 
             @Override

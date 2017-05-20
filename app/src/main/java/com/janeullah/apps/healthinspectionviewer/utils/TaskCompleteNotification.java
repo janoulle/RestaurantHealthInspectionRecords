@@ -29,6 +29,8 @@ public class TaskCompleteNotification {
      */
     private static final String NOTIFICATION_TAG = "TaskComplete";
 
+    private TaskCompleteNotification(){}
+
     /**
      * Shows the notification, or updates a previously shown notification of
      * this type, with the given parameters.

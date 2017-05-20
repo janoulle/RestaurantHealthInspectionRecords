@@ -1,14 +1,23 @@
 package com.janeullah.apps.healthinspectionviewer.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.os.ResultReceiver;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,14 +26,25 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.async.YelpAccessRequestTask;
+import com.janeullah.apps.healthinspectionviewer.async.YelpSearchBusinessesTask;
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
+import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
+import com.janeullah.apps.healthinspectionviewer.databinding.ActivityRestaurantDataBinding;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.models.InspectionReport;
+import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedYelpData;
+import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
+import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
+import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
+import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.services.FetchAddressIntentService;
 
 import org.parceler.Parcels;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,41 +60,59 @@ import butterknife.ButterKnife;
  * https://developers.google.com/maps/documentation/android-api/map
  */
 public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCallback {
+    private static final Gson gson = new Gson();
     private static final String TAG = "RestaurantDataActivity";
     private GoogleMap mMap;
     private GeocodingResultsReceiver mGeocodeResultsReceiver;
     private LatLng mRestaurantCoordinates;
+    private GeocodedAddressComponent mGeocodedAddressComponents;
     private FlattenedRestaurant mRestaurantSelected;
+    public ActivityRestaurantDataBinding mDataBinding;
+    private YelpAccessRequestTask mAccessRequestTask = new YelpAccessRequestTask();
+    private YelpSearchBusinessesTask mYelpSearchRequestTask  = new YelpSearchBusinessesTask();
+    private SharedPreferences mSharedPreferences;
 
     @BindView(R.id.item_map)
     protected MapView mMapView;
 
-    @BindView(R.id.inspection_score)
-    protected TextView mRestaurantScore;
+    @BindView(R.id.app_toolbar)
+    public Toolbar mAppToolbar;
 
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant_data);
+        mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_restaurant_data);
+
         ButterKnife.bind(this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(mAppToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        mSharedPreferences = this.getSharedPreferences(YelpConstants.YELP_PREFERENCES,Context.MODE_PRIVATE);
         mRestaurantSelected = Parcels.unwrap(getIntent().getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
         if (mRestaurantSelected == null) {
             Log.e(TAG,"Restaurant not selected before launching RestaurantDataActivity");
             throw new IllegalArgumentException("Failed to pass a restaurant selection before viewing inspection report activity");
         }
-        mRestaurantScore.setText(String.valueOf(mRestaurantSelected.score));
+        Log.v(TAG,"resource id = " + mRestaurantSelected.restaurantCheckMarkResourceId);
+        mDataBinding.setRestaurantSelected(mRestaurantSelected);
+        setTitle(mRestaurantSelected.name);
 
         initializeMapView(savedInstanceState);
-        initializeReportData();
+        checkAndInitiateYelpTokenRequest();
         startBackgroundGeocodeServiceLookup();
     }
 
-    private void initializeReportData() {
-        InspectionReport report = new InspectionReport(mRestaurantSelected);
+    private void checkAndInitiateYelpTokenRequest() {
+        String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
+        if (TextUtils.isEmpty(yelpAuthToken)){
+            Log.i(TAG,"Yelp token not found! Making api call");
+            mAccessRequestTask.setListener(createYelpAccessTokenListener());
+            mAccessRequestTask.execute();
+        }
     }
 
     private void startBackgroundGeocodeServiceLookup() {
@@ -107,11 +145,25 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
+        int i = item.getItemId();
+        if (i == android.R.id.home) {
+            Log.i(TAG, "Up clicked!");
+            Intent upIntent = NavUtils.getParentActivityIntent(this);
+            upIntent.putExtra(IntentNames.COUNTY_SELECTED, mRestaurantSelected.county);
+            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                // This activity is NOT part of this app's task, so create a new task
+                // when navigating up, with a synthesized back stack.
+                TaskStackBuilder.create(this)
+                        // Add all of this activity's parents to the back stack
+                        .addNextIntentWithParentStack(upIntent)
+                        // Navigate up to the closest parent
+                        .startActivities();
+            } else {
+                // This activity is part of this app's task, so simply
+                // navigate up to the logical parent activity.
+                NavUtils.navigateUpTo(this, upIntent);
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -146,9 +198,10 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         mMap.addMarker(new MarkerOptions()
                 .draggable(true)
                 .position(mRestaurantCoordinates)
-                .title(mRestaurantSelected.name))
+                .title(mRestaurantSelected.address))
                 .showInfoWindow();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mRestaurantCoordinates, 17));
@@ -180,6 +233,8 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
 
     @Override
     protected void onDestroy() {
+        mAccessRequestTask.setListener(null);
+        mYelpSearchRequestTask.setListener(null);
         mMapView.onDestroy();
         super.onDestroy();
     }
@@ -190,7 +245,50 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         mMapView.onLowMemory();
     }
 
-    public class GeocodingResultsReceiver extends ResultReceiver {
+    private YelpAccessRequestTask.Listener createYelpAccessTokenListener() {
+        return new YelpAccessRequestTask.Listener() {
+            @Override
+            public void onSuccess(YelpAuthTokenResponse authTokenResponse) {
+                Log.i(TAG,"Received valid auth token response: " + authTokenResponse.getAccessToken());
+                Toast.makeText(getApplicationContext(),"Make it to Yelp and got token!",Toast.LENGTH_LONG).show();
+                //TODO: figure out proper way to stash this token info
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putString(YelpConstants.SAVED_YELP_AUTH_TOKEN, authTokenResponse.getAccessToken());
+                editor.putInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,authTokenResponse.getExpiresIn());
+                editor.putString(YelpConstants.SAVED_YELP_TOKEN_TYPE,authTokenResponse.getTokenType());
+                editor.apply();
+                if (mGeocodedAddressComponents != null){
+                    YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,mGeocodedAddressComponents,mRestaurantSelected);
+                    mYelpSearchRequestTask.setListener(createYelpSearchListener());
+                    mYelpSearchRequestTask.execute(yelpSearchRequest);
+                }
+            }
+        };
+    }
+
+    private YelpSearchBusinessesTask.Listener createYelpSearchListener() {
+        return new YelpSearchBusinessesTask.Listener() {
+            @Override
+            public void onSuccess(YelpResults yelpResults) {
+                Intent intent = getIntent();
+                intent.putExtra(IntentNames.YELP_RESULTS,Parcels.wrap(yelpResults));
+                Log.v(TAG,"Received yelp results for " + mRestaurantSelected.name + ": " + yelpResults);
+                if (yelpResults.getMatchedBusiness() != null){
+                    Log.v(TAG,"Found business match from Yelp listings: " + gson.toJson(yelpResults.getMatchedBusiness()));
+                    FlattenedYelpData flattenedYelpData = new FlattenedYelpData(yelpResults.getMatchedBusiness());
+                    //RelativeLayout restaurantSummaryData = (RelativeLayout)findViewById(R.id.item_restaurant_summary_data);
+                    RelativeLayout mYelpLayout = (RelativeLayout)findViewById(R.id.yelpDataLayout);
+                    ImageView yelpStars = (ImageView) findViewById(R.id.yelpStarsDisplay);
+                    if (mYelpLayout != null) {
+                        yelpStars.setImageResource(flattenedYelpData.yelpStarsResourceId);
+                        mYelpLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        };
+    }
+
+    private class GeocodingResultsReceiver extends ResultReceiver {
         private static final String TAG = "GeocodingReceiver";
         /**
          * Create a new ResultReceive to receive results.  Your
@@ -203,11 +301,30 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             super(handler);
         }
 
+        private void makeAsyncYelpSearchCall(GeocodedAddressComponent component){
+            //TODO: expire token plan
+            Log.i(TAG,"Saved auth token found");
+            String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
+            String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
+            Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
+            YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
+            authTokenResponse.setAccessToken(yelpAuthToken);
+            authTokenResponse.setExpiresIn(expiry);
+            authTokenResponse.setTokenType(tokenType);
+            YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,component,mRestaurantSelected);
+            mYelpSearchRequestTask.setListener(createYelpSearchListener());
+            mYelpSearchRequestTask.execute(yelpSearchRequest);
+        }
+
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if (resultCode == GeocodeConstants.SUCCESS_RESULT) {
-                mRestaurantCoordinates = resultData.getParcelable(GeocodeConstants.RESULT_DATA_KEY);
-                Log.i(TAG,"Coordinates ("+ mRestaurantCoordinates +") received");
+                mGeocodedAddressComponents = Parcels.unwrap(resultData.getParcelable(GeocodeConstants.RESULT_DATA_KEY));
+                mRestaurantCoordinates = mGeocodedAddressComponents.coordinates;
+                Log.i(TAG, String.format(Locale.getDefault(),"Coordinates (%s) received", mRestaurantCoordinates));
+                if (!TextUtils.isEmpty(mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,""))){
+                    makeAsyncYelpSearchCall(mGeocodedAddressComponents);
+                }
                 mMapView.getMapAsync(RestaurantDataActivity.this);
             } else {
                 String output = resultData.getString(GeocodeConstants.RESULT_DATA_KEY);
@@ -218,10 +335,6 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     }
 
     public void showToast(String message, int duration) {
-        Toast.makeText(this, message, duration);
-    }
-
-    public void showToast(int resId, int duration) {
-        Toast.makeText(this, resId, duration).show();
+        Toast.makeText(this, message, duration).show();
     }
 }

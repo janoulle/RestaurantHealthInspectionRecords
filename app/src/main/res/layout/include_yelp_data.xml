@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/yelpDataLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/yelpStarsDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/yelp_restaurant_rating"
+        android:src="@drawable/stars_large_5" />
+    <!--imageResource="@{yelpData.yelpStarsResourceId}" />-->
+
+    <ImageView
+        android:id="@+id/yelpLogoDisplay"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_toRightOf="@+id/yelpStarsDisplay"
+        android:contentDescription="@string/yelp_logo_desc"
+        android:src="@drawable/yelp_trademark" />
+
+</RelativeLayout>

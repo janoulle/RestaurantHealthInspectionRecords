@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="restaurantSelected"
+            type="com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/item_restaurant_summary_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+
+        <TextView
+            android:id="@+id/inspectionDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_inspection_date_label"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/restaurantRatingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score"
+            android:layout_marginBottom="7dp"
+            app:layout_constraintBottom_toTopOf="@+id/score"
+            android:layout_marginRight="3dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintVertical_bias="0.571"
+            app:layout_constraintLeft_toRightOf="@+id/dateReported"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="3dp" />
+
+        <Button
+            android:id="@+id/criticalViolationsButton"
+            android:layout_width="148dp"
+            android:layout_height="48dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@{String.format(@string/critical_violations_text,restaurantSelected.criticalViolations)}"
+            app:layout_constraintBottom_toTopOf="@+id/nonCriticalViolationsButton"
+            app:layout_constraintRight_toLeftOf="@+id/score"
+            android:layout_marginRight="196dp"
+            android:layout_marginEnd="196dp" />
+
+        <TextView
+            android:id="@+id/dateReported"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{restaurantSelected.dateReported}"
+            app:layout_constraintLeft_toRightOf="@+id/inspectionDateLabel"
+            android:layout_marginLeft="58dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="58dp" />
+
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="32dp"
+            android:layout_height="27dp"
+            android:layout_marginBottom="6dp"
+            android:layout_marginRight="7dp"
+            android:padding="2dp"
+            android:text="@{String.valueOf(restaurantSelected.score)}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintBottom_toTopOf="@+id/restaurantCheckMarkResourceId"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="7dp" />
+
+        <ImageView
+            android:id="@+id/restaurantCheckMarkResourceId"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:padding="2dp"
+            imageResource="@{restaurantSelected.restaurantCheckMarkResourceId}"
+            tools:layout_constraintTop_creator="1"
+            tools:layout_constraintRight_creator="1"
+            app:layout_constraintRight_toRightOf="@+id/score"
+            android:layout_marginTop="104dp"
+            tools:layout_constraintLeft_creator="1"
+            app:layout_constraintLeft_toLeftOf="@+id/score"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/nonCriticalViolationsButton"
+            android:layout_width="148dp"
+            android:layout_height="48dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@{String.format(@string/non_critical_violations_text,restaurantSelected.nonCriticalViolations)}"
+            app:layout_constraintRight_toLeftOf="@+id/restaurantCheckMarkResourceId"
+            android:layout_marginRight="196dp"
+            tools:layout_constraintTop_creator="1"
+            android:layout_marginEnd="196dp"
+            android:layout_marginTop="107dp"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

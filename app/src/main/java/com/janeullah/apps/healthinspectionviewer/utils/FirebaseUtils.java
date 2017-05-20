@@ -8,6 +8,9 @@ import com.google.common.base.CharMatcher;
  */
 
 public class FirebaseUtils {
+
+    private FirebaseUtils(){}
+
     public static String replaceInvalidCharsInKey(String key) {
         return CharMatcher.anyOf("/.#$[]").replaceFrom(key, "");
     }
