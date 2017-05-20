@@ -24,7 +24,7 @@ task printProps {
 //https://developer.android.com/studio/build/manifest-build-variables.html
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.janeullah.apps.healthinspectionviewer"
         minSdkVersion 16
