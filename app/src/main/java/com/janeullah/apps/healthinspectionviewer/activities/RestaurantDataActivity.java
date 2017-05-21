@@ -255,7 +255,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             @Override
             public void onSuccess(YelpAuthTokenResponse authTokenResponse) {
                 Log.i(TAG,"Received valid auth token response: " + authTokenResponse.getAccessToken());
-                Toast.makeText(getApplicationContext(),"Make it to Yelp and got token!",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"Made it to Yelp and got token!",Toast.LENGTH_LONG).show();
                 //TODO: figure out proper way to stash this token info
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(YelpConstants.SAVED_YELP_AUTH_TOKEN, authTokenResponse.getAccessToken());
@@ -306,20 +306,6 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             super(handler);
         }
 
-        private void makeAsyncYelpSearchCall(GeocodedAddressComponent component){
-            //TODO: expire token plan
-            Log.i(TAG,"Saved auth token found");
-            String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
-            String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
-            Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
-            YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
-            authTokenResponse.setAccessToken(yelpAuthToken);
-            authTokenResponse.setExpiresIn(expiry);
-            authTokenResponse.setTokenType(tokenType);
-            YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(authTokenResponse,component,mRestaurantSelected);
-            mYelpSearchRequestTask.setListener(createYelpSearchListener());
-            mYelpSearchRequestTask.execute(yelpSearchRequest);
-        }
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -328,18 +314,29 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 mRestaurantCoordinates = mGeocodedAddressComponents.coordinates;
                 Log.i(TAG, String.format(Locale.getDefault(),"Coordinates (%s) received", mRestaurantCoordinates));
                 if (!TextUtils.isEmpty(mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,""))){
-                    makeAsyncYelpSearchCall(mGeocodedAddressComponents);
+                    YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(constructYelpAuthTokenResponseFromPreferences(),mGeocodedAddressComponents,mRestaurantSelected);
+                    mYelpSearchRequestTask.setListener(createYelpSearchListener());
+                    mYelpSearchRequestTask.execute(yelpSearchRequest);
                 }
                 mMapView.getMapAsync(RestaurantDataActivity.this);
             } else {
                 String output = resultData.getString(GeocodeConstants.RESULT_DATA_KEY);
                 Log.d(TAG,output);
-                showToast(output, Toast.LENGTH_SHORT);
+                showToast(output,Toast.LENGTH_SHORT);
             }
         }
     }
 
-    public void showToast(String message, int duration) {
-        Toast.makeText(this, message, duration).show();
+    private YelpAuthTokenResponse constructYelpAuthTokenResponseFromPreferences(){
+        //TODO: expire token plan
+        Log.i(TAG,"Constructing Yelp response using saved auth token");
+        String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
+        String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
+        Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
+        YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
+        authTokenResponse.setAccessToken(yelpAuthToken);
+        authTokenResponse.setExpiresIn(expiry);
+        authTokenResponse.setTokenType(tokenType);
+        return authTokenResponse;
     }
 }

@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 /**
  * @author Jane Ullah
  * @date 4/27/2017.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
 
@@ -50,6 +51,10 @@ public class BaseActivity extends AppCompatActivity {
             // navigate up to the logical parent activity.
             NavUtils.navigateUpTo(activity, upIntent);
         }
+    }
+
+    public void showToast(String message, int duration) {
+        Toast.makeText(this, message, duration).show();
     }
 }
 
