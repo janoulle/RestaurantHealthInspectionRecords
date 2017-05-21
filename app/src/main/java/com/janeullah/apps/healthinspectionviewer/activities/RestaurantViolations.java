@@ -68,7 +68,7 @@ public class RestaurantViolations extends BaseActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity and Set up the ViewPager with the sections adapter.
-        mSectionsPagerAdapter = new ViolationPagerAdapter(getSupportFragmentManager(),getApplicationContext());
+        mSectionsPagerAdapter = new ViolationPagerAdapter(mRestaurantSelected,getSupportFragmentManager(),getApplicationContext());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.fragments.ViolationFragment;
 
 /* A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -15,9 +16,11 @@ import com.janeullah.apps.healthinspectionviewer.fragments.ViolationFragment;
  */
 public class ViolationPagerAdapter extends FragmentPagerAdapter {
     private Context context;
+    private FlattenedRestaurant restaurantSelected;
 
-    public ViolationPagerAdapter(FragmentManager fm, Context ctx) {
+    public ViolationPagerAdapter(FlattenedRestaurant restaurant, FragmentManager fm, Context ctx) {
         super(fm);
+        restaurantSelected = restaurant;
         context = ctx;
     }
 
@@ -25,7 +28,7 @@ public class ViolationPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a ViolationFragment
-        return ViolationFragment.newInstance(position + 1);
+        return ViolationFragment.newInstance(position + 1,restaurantSelected);
     }
 
     @Override
