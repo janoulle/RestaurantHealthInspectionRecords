@@ -26,8 +26,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.R;
-import com.janeullah.apps.healthinspectionviewer.async.YelpAccessRequestTask;
-import com.janeullah.apps.healthinspectionviewer.async.YelpSearchBusinessesTask;
+import com.janeullah.apps.healthinspectionviewer.callbacks.ViolationActivityCallBack;
+import com.janeullah.apps.healthinspectionviewer.tasks.YelpAccessRequestTask;
+import com.janeullah.apps.healthinspectionviewer.tasks.YelpSearchBusinessesTask;
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
@@ -46,7 +47,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * https://developer.android.com/topic/libraries/data-binding/index.html
@@ -98,6 +98,15 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         Log.v(TAG,"resource id = " + mRestaurantSelected.restaurantCheckMarkResourceId);
         mDataBinding.setRestaurantSelected(mRestaurantSelected);
         setTitle(mRestaurantSelected.name);
+        ViolationActivityCallBack violationActivityCallBack = new ViolationActivityCallBack() {
+            @Override
+            public void onClick(View view, FlattenedRestaurant restaurant) {
+                final Intent intent = new Intent(RestaurantDataActivity.this, RestaurantViolations.class);
+                intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(restaurant));
+                startActivity(intent);
+            }
+        };
+        mDataBinding.setViolationButtonClickCallBack(violationActivityCallBack);
 
         initializeMapView(savedInstanceState);
         checkAndInitiateYelpTokenRequest();
@@ -133,12 +142,14 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         mMapView.onCreate(mapViewBundle);
     }
 
+    /*
+    * Commenting out because this button may not always be visible
     @OnClick(R.id.viewViolationsButton)
     public void launchViolationsActivity(){
         final Intent intent = new Intent(this, RestaurantViolations.class);
         intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(mRestaurantSelected));
         startActivity(intent);
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

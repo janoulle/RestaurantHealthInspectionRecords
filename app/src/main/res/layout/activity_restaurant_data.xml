@@ -4,6 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
+        <variable
+            name="violationButtonClickCallBack"
+            type="com.janeullah.apps.healthinspectionviewer.callbacks.ViolationActivityCallBack" />
         <variable
             name="restaurantSelected"
             type="com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant" />
@@ -48,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/yelpDataLayout"
-            bind:restaurantSelected="@{restaurantSelected}" />
+            bind:restaurantSelected="@{restaurantSelected}"
+            bind:violationButtonClickCallBack="@{violationButtonClickCallBack}"/>
     </RelativeLayout>
 </layout>

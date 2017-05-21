@@ -51,4 +51,5 @@
     <string name="restaurant_violations_title">Health Code Violations</string>
     <string name="critical_violations_tab">Critical</string>
     <string name="non_critical_violations_tab">Non-Critical</string>
+    <string name="healthcode_violations_button_label">HealthCode Violations</string>
 </resources>

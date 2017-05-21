@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.async;
+package com.janeullah.apps.healthinspectionviewer.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;

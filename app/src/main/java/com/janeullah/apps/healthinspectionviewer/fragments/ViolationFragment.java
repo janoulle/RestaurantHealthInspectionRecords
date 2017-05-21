@@ -103,11 +103,6 @@ public class ViolationFragment  extends Fragment {
         mRecycler.setAdapter(mAdapter);
     }
 
-//    public Query getQuery(){
-//        return negaRestaurantsDatabaseReference
-//                .child(restaurant.getNameKey());
-//    }
-
     private String getArgViolationSeverity(){
         int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         if (sectionNumber == 1){
