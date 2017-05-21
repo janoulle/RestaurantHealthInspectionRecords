@@ -6,16 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.janeullah.apps.healthinspectionviewer.R;
-import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.databinding.FragmentRestaurantViolationsBinding;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedViolation;
@@ -23,8 +22,6 @@ import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization
 import com.janeullah.apps.healthinspectionviewer.viewholder.ViolationViewHolder;
 
 import org.parceler.Parcels;
-
-import butterknife.BindView;
 
 /**
  * @author Jane Ullah
@@ -38,8 +35,10 @@ public class ViolationFragment  extends Fragment {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_RESTAURANT = "restaurant";
+    private static final String TAG = "ViolationFragment";
 
     protected RecyclerView mRecycler;
+    private FlattenedRestaurant restaurant;
     private DatabaseReference negaRestaurantsDatabaseReference;
     private FirebaseRecyclerAdapter<FlattenedViolation, ViolationViewHolder> mAdapter;
 
@@ -69,23 +68,42 @@ public class ViolationFragment  extends Fragment {
         //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
         //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-        FlattenedRestaurant restaurant = Parcels.unwrap(getArguments().getParcelable(ARG_RESTAURANT));
+        restaurant = Parcels.unwrap(getArguments().getParcelable(ARG_RESTAURANT));
         binding.setRestaurantSelected(restaurant);
 
         mRecycler = (RecyclerView) rootView.findViewById(R.id.violationsInRestaurant);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
-
-        negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
-                .getNegaDatabaseReference()
-                .child("violations");
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecycler.getContext(),
                 layoutManager.getOrientation());
         mRecycler.addItemDecoration(dividerItemDecoration);
 
+        negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
+                .getNegaDatabaseReference()
+                .child("violations");
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Query violationsQuery = negaRestaurantsDatabaseReference
+                .child(restaurant.getNameKey())
+                .child("violations");
+        mAdapter = new FirebaseRecyclerAdapter<FlattenedViolation, ViolationViewHolder>(FlattenedViolation.class, R.layout.item_flattenedviolation,
+                ViolationViewHolder.class, violationsQuery) {
+
+            @Override
+            protected void populateViewHolder(ViolationViewHolder viewHolder, FlattenedViolation model, int position) {
+                final DatabaseReference violationRef = getRef(position);
+                final String violationRefKey = violationRef.getKey();
+                Log.v(TAG, "Key: " + violationRefKey);
+                viewHolder.bindData(model);
+            }
+        };
+        mRecycler.setAdapter(mAdapter);
     }
 
 //    public Query getQuery(){
