@@ -35,6 +35,8 @@ public class ViolationFragment  extends Fragment {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_RESTAURANT = "restaurant";
+    private static final String ARG_VIOLATION_SEVERITY = "violation_severity";
+
     private static final String TAG = "ViolationFragment";
 
     protected RecyclerView mRecycler;
@@ -62,12 +64,7 @@ public class ViolationFragment  extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentRestaurantViolationsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_restaurant_violations, container, false);
-
-        //View rootView = inflater.inflate(R.layout.fragment_restaurant_violations, container, false);
         View rootView = binding.getRoot();
-        //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
         restaurant = Parcels.unwrap(getArguments().getParcelable(ARG_RESTAURANT));
         binding.setRestaurantSelected(restaurant);
 
@@ -75,9 +72,6 @@ public class ViolationFragment  extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecycler.getContext(),
-                layoutManager.getOrientation());
-        mRecycler.addItemDecoration(dividerItemDecoration);
 
         negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
                 .getNegaDatabaseReference()
@@ -91,7 +85,10 @@ public class ViolationFragment  extends Fragment {
 
         Query violationsQuery = negaRestaurantsDatabaseReference
                 .child(restaurant.getNameKey())
-                .child("violations");
+                .child("violations")
+                .orderByChild("severity")
+                .equalTo(getArgViolationSeverity());
+
         mAdapter = new FirebaseRecyclerAdapter<FlattenedViolation, ViolationViewHolder>(FlattenedViolation.class, R.layout.item_flattenedviolation,
                 ViolationViewHolder.class, violationsQuery) {
 
@@ -110,5 +107,13 @@ public class ViolationFragment  extends Fragment {
 //        return negaRestaurantsDatabaseReference
 //                .child(restaurant.getNameKey());
 //    }
+
+    private String getArgViolationSeverity(){
+        int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+        if (sectionNumber == 1){
+            return "CRITICAL";
+        }
+        return "NONCRITICAL";
+    }
 
 }
