@@ -67,6 +67,16 @@
         <service
             android:name=".services.FetchAddressIntentService"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.RestaurantViolations"
+            android:label="@string/title_activity_restaurant_violations"
+            android:parentActivityName=".activities.RestaurantDataActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.janeullah.apps.healthinspectionviewer.activities.RestaurantDataActivity" />
+        </activity>
     </application>
 
 </manifest>

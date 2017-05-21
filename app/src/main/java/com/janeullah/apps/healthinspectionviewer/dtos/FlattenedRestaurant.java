@@ -31,6 +31,9 @@ public class FlattenedRestaurant {
     public int restaurantCheckMarkResourceId;
 
     @Exclude
+    public String restaurantCheckMarkDescriptor;
+
+    @Exclude
     public LatLng coordinates;
 
     public FlattenedRestaurant() {

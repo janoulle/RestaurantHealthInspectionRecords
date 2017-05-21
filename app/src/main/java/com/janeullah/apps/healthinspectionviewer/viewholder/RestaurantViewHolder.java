@@ -56,10 +56,13 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder  {
         try {
             if (restaurant.criticalViolations == 0 && restaurant.score >= 90) {
                 restaurant.restaurantCheckMarkResourceId = R.drawable.ic_greencheck;
+                restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.greencheckmark_contentdescriptor);
             } else if (restaurant.criticalViolations >= 1) {
                 restaurant.restaurantCheckMarkResourceId = R.drawable.ic_redx;
+                restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.redx_contentdescriptor);
             } else {
                 restaurant.restaurantCheckMarkResourceId = R.drawable.ic_yellowcheck;
+                restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.yellowcheckmark_contentdescriptor);
             }
 
             Resources resources = context.getResources();

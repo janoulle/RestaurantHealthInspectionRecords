@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * https://developer.android.com/topic/libraries/data-binding/index.html
@@ -88,8 +90,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         ButterKnife.bind(this);
 
         setSupportActionBar(mAppToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSharedPreferences = this.getSharedPreferences(YelpConstants.YELP_PREFERENCES,Context.MODE_PRIVATE);
         mRestaurantSelected = Parcels.unwrap(getIntent().getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
@@ -135,6 +136,12 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         mMapView.onCreate(mapViewBundle);
     }
 
+    @OnClick(R.id.viewViolationsButton)
+    public void launchViolationsActivity(){
+        final Intent intent = new Intent(this, RestaurantViolations.class);
+        intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(mRestaurantSelected));
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -150,19 +157,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             Log.i(TAG, "Up clicked!");
             Intent upIntent = NavUtils.getParentActivityIntent(this);
             upIntent.putExtra(IntentNames.COUNTY_SELECTED, mRestaurantSelected.county);
-            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                // This activity is NOT part of this app's task, so create a new task
-                // when navigating up, with a synthesized back stack.
-                TaskStackBuilder.create(this)
-                        // Add all of this activity's parents to the back stack
-                        .addNextIntentWithParentStack(upIntent)
-                        // Navigate up to the closest parent
-                        .startActivities();
-            } else {
-                // This activity is part of this app's task, so simply
-                // navigate up to the logical parent activity.
-                NavUtils.navigateUpTo(this, upIntent);
-            }
+            navigateUp(this,upIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -195,10 +190,12 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.addMarker(new MarkerOptions()
+        MarkerOptions markerOption = new MarkerOptions()
                 .draggable(true)
-                .position(mRestaurantCoordinates)
-                .title(mRestaurantSelected.address))
+                .title(mRestaurantSelected.address)
+                .snippet(getString(R.string.map_marker_snippet))
+                .position(mRestaurantCoordinates);
+        mMap.addMarker(markerOption)
                 .showInfoWindow();
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
@@ -291,7 +288,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     private class GeocodingResultsReceiver extends ResultReceiver {
         private static final String TAG = "GeocodingReceiver";
         /**
-         * Create a new ResultReceive to receive results.  Your
+         * Create a new ResultReceiver to receive results.  Your
          * {@link #onReceiveResult} method will be called from the thread running
          * <var>handler</var> if given, or from an arbitrary thread if null.
          *

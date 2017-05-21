@@ -75,12 +75,12 @@ public final class FetchAddressIntentService extends IntentService {
             mReceiver = intent.getParcelableExtra(FetchAddressIntentService.RECEIVER);
             final String action = intent.getAction();
             if (ACTION_GEOCODE.equals(action)) {
-                processGeocode(intent);
+                performGeocoding(intent);
             }
         }
     }
 
-    private void processGeocode(Intent intent) {
+    private void performGeocoding(Intent intent) {
         String errorMessage = "";
         GeocodingResult[] geocodingResults = null;
         FlattenedRestaurant restaurantSelected = null;
@@ -100,7 +100,6 @@ public final class FetchAddressIntentService extends IntentService {
             Log.e(TAG, errorMessage, e);
             FirebaseCrash.report(e);
             Thread.currentThread().interrupt();
-
         }
         processResponse(errorMessage, geocodingResults, restaurantSelected);
     }
