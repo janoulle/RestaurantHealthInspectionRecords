@@ -1,34 +1,22 @@
 package com.janeullah.apps.healthinspectionviewer.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.adapters.ViolationPagerAdapter;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.fragments.ViolationFragment;
 
 import org.parceler.Parcels;
 
@@ -69,25 +57,28 @@ public class RestaurantViolations extends BaseActivity {
         setContentView(R.layout.activity_restaurant_violations);
         ButterKnife.bind(this);
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new ViolationPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        //mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        //TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        mTabLayout.setupWithViewPager(mViewPager);
-
-        setTitle(getString(R.string.restaurant_violations_title));
 
         mRestaurantSelected = Parcels.unwrap(getIntent().getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
-    }
+        if (mRestaurantSelected == null) {
+            Log.e(TAG,"Restaurant not selected before launching RestaurantDataActivity");
+            throw new IllegalArgumentException("Failed to pass a restaurant selection before viewing inspection report activity");
+        }
 
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity and Set up the ViewPager with the sections adapter.
+        mSectionsPagerAdapter = new ViolationPagerAdapter(getSupportFragmentManager(),getApplicationContext());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        //default user to tab with non-critical violations
+        if (mRestaurantSelected.criticalViolations == 0){
+            mViewPager.setCurrentItem(1);
+        }
+
+        setTitle(getString(R.string.restaurant_violations_title));
+    }
 
     @OnClick(R.id.fab)
     public void launchSnackbarNotification(View view){
@@ -123,4 +114,5 @@ public class RestaurantViolations extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

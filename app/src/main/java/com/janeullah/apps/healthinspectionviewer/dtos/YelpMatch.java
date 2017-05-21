@@ -8,8 +8,6 @@ import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 
 import java.util.Comparator;
 
-import javax.annotation.Nullable;
-
 /**
  * TODO: revisit method of picking a tolerance level for similarity matching and need a better model for matching
  * http://stackoverflow.com/questions/5245093/using-comparator-to-make-custom-sort

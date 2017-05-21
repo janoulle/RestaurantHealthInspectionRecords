@@ -49,4 +49,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="select_county_main_activity">Select County</string>
     <string name="restaurant_violations_title">Health Code Violations</string>
+    <string name="critical_violations_tab">Critical</string>
+    <string name="non_critical_violations_tab">Non-Critical</string>
 </resources>

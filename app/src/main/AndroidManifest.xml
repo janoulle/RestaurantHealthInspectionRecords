@@ -71,8 +71,7 @@
         <activity
             android:name=".activities.RestaurantViolations"
             android:label="@string/title_activity_restaurant_violations"
-            android:parentActivityName=".activities.RestaurantDataActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:parentActivityName=".activities.RestaurantDataActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.janeullah.apps.healthinspectionviewer.activities.RestaurantDataActivity" />

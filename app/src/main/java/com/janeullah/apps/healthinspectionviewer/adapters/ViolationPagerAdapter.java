@@ -1,9 +1,11 @@
 package com.janeullah.apps.healthinspectionviewer.adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.fragments.ViolationFragment;
 
 /* A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -11,17 +13,18 @@ import com.janeullah.apps.healthinspectionviewer.fragments.ViolationFragment;
  * @author Jane Ullah
  * @date 5/20/2017.
  */
-
 public class ViolationPagerAdapter extends FragmentPagerAdapter {
+    private Context context;
 
-    public ViolationPagerAdapter(FragmentManager fm) {
+    public ViolationPagerAdapter(FragmentManager fm, Context ctx) {
         super(fm);
+        context = ctx;
     }
 
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a ViolationFragment (defined as a static inner class below).
+        // Return a ViolationFragment
         return ViolationFragment.newInstance(position + 1);
     }
 
@@ -33,9 +36,9 @@ public class ViolationPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
-            return "Critical Violations";
+            return context.getString(R.string.critical_violations_tab);
         } else if (position == 1) {
-            return "Non-Critical Violations";
+            return context.getString(R.string.non_critical_violations_tab);
         }
         return null;
     }
