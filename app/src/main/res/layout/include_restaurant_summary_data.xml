@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_column="2"
                     android:onClick="@{(btn) -> violationButtonClickCallBack.onClick(btn, restaurantSelected)}"
-                    android:visibility="@{restaurantSelected.hasAnyViolations ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{restaurantSelected.hasViolations() ? View.VISIBLE : View.GONE}"
                     android:text="@string/healthcode_violations_button_label" />
             </TableRow>
 
