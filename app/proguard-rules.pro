@@ -173,10 +173,36 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+-dontwarn retrofit2.Platform$Java8
 
-#Okio
+-keep class com.google.gson.** { *; }
+-keep class com.google.inject.** { *; }
+-keep class org.apache.http.** { *; }
+-keep class org.apache.james.mime4j.** { *; }
+-keep class javax.inject.** { *; }
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.** *;
+}
+-keepclassmembers class * {
+    @retrofit.** *;
+}
+
+# OkHttp
+# Ignore warnings: https://github.com/square/okhttp/wiki/FAQs
+-dontwarn com.squareup.okhttp.internal.huc.**
+# Ignore warnings: https://github.com/square/okio/issues/60
 -dontwarn okio.**
+# Ignore warnings: https://github.com/square/retrofit/issues/435
+-dontwarn com.google.appengine.api.urlfetch.**
+-dontwarn com.google.android.gms.internal.zzhu
 
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
 
 #Butterknife
 -keep class **$$ViewBinder { *; }
@@ -216,6 +242,65 @@
 -dontwarn org.shaded.apache.**
 -dontwarn org.ietf.jgss.**
 
+#Parceler library
+-keep interface org.parceler.Parcel
+-keep @org.parceler.Parcel class * { *; }
+-keep class **$$Parcelable { *; }
+
+#Yelp Serializable objects
+-keep class com.yelp.clientlib.entities.*$* {
+    *;
+}
+
+# autovalue
+-dontwarn javax.lang.**
+-dontwarn javax.tools.**
+-dontwarn javax.annotation.**
+-dontwarn autovalue.shaded.com.**
+-dontwarn com.google.auto.value.**
+-dontwarn javax.servlet.**
+-dontwarn sun.misc.**
+-dontwarn autovalue.shaded.org.apache.commons.**
+-dontwarn org.apache.log4j.**
+-dontwarn org.apache.log.**
+-dontwarn org.apache.velocity.**
+-dontwarn org.apache.tools.**
+-dontwarn org.jdom.**
+-dontwarn org.java.lang.**
+
+# Proguard configuration for Jackson 2.x (fasterxml package instead of codehaus package)
+#https://github.com/Yelp/yelp-android/blob/master/proguard-rules.pro
+-keep class com.fasterxml.jackson.databind.ObjectMapper {
+    public <methods>;
+    protected <methods>;
+}
+-keep class com.fasterxml.jackson.databind.ObjectWriter {
+    public ** writeValueAsString(**);
+}
+-keepattributes *Annotation*,EnclosingMethod,Signature
+-keepnames class com.fasterxml.jackson.** { *; }
+
+-dontwarn com.fasterxml.jackson.databind.**
+-dontwarn com.fasterxml.jackson.databind.PropertyNamingStrategy$LowerCaseWithUnderscoresStrategy
+
+-keep class org.codehaus.** { *; }
+-keep class com.fasterxml.jackson.annotation.** { *; }
+-keepclassmembers public final enum org.codehaus.jackson.annotate.JsonAutoDetect$Visibility {
+ public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *; }
+-keepclassmembers public class com.fasterxml.jackson.databind.PropertyNamingStrategy$LowerCaseWithUnderscoresStrategy {
+    public <init>(...); }
+
+#Guice
+#https://stackoverflow.com/questions/13208784/proguard-returned-with-error-code-1-see-console
+-dontwarn org.mockito.**
+-dontwarn sun.reflect.**
+-dontwarn android.test.**
+
+#Yelp Serializable objects
+-keep class com.yelp.clientlib.entities.*$* {
+    *;
+}
+
 #https://stackoverflow.com/questions/26273929/what-proguard-configuration-do-i-need-for-firebase-on-android
 #App Libs
 -keep class com.janeullah.apps.healthinspectionviewer.** { *; }
@@ -225,3 +310,8 @@
 -keepclassmembers class com.janeullah.apps.healthinspectionviewer.dtos.** {
 *;
 }
+
+
+
+-dontwarn sun.misc.Unsafe
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
