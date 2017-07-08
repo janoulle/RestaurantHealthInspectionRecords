@@ -41,4 +41,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="45dp" />
 
+    <include
+        android:id="@+id/progressBarLayout"
+        layout="@layout/include_action_show_progress" />
 </RelativeLayout>

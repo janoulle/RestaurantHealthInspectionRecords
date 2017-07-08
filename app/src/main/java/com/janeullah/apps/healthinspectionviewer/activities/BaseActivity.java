@@ -1,40 +1,40 @@
 package com.janeullah.apps.healthinspectionviewer.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.janeullah.apps.healthinspectionviewer.R;
+
 /**
+ * https://stackoverflow.com/questions/6745797/how-to-set-entire-application-in-portrait-mode-only/9784269#9784269
  * @author Jane Ullah
  * @date 4/27/2017.
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private ProgressDialog mProgressDialog;
+    private ProgressBar progressBar;
 
     public void showProgressDialog(String message) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setMessage(message);
+        if (progressBar == null) {
+            progressBar = (ProgressBar) findViewById(R.id.loadingModalForIndeterminateProgress);
         }
-
-        mProgressDialog.show();
+        progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
     public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+        if (isProgressBarVisible()) {
+            progressBar.setVisibility(ProgressBar.GONE);
         }
     }
 
-    public boolean isShowing() {
-        return mProgressDialog != null && mProgressDialog.isShowing();
+    private boolean isProgressBarVisible() {
+        return progressBar != null && progressBar.getVisibility() == ProgressBar.VISIBLE;
     }
 
     protected void navigateUp(Activity activity, Intent upIntent) {
