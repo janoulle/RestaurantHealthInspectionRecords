@@ -123,15 +123,22 @@
 -keep @org.parceler.Parcel class * { *; }
 -keep class **$$Parcelable { *; }
 
--injars path/to/myapplication.jar
--injars lib/guava-r07.jar
--libraryjars lib/jsr305.jar
--outjars myapplication-dist.jar
+#-injars path/to/myapplication.jar
+#-injars lib/guava-r07.jar
+#-libraryjars lib/jsr305.jar
+#-outjars myapplication-dist.jar
+
+#https://stuff.mit.edu/afs/sipb/project/android/sdk/android-sdk-linux/tools/proguard/docs/index.html#manual/examples.html
+-injars      bin/classes
+-injars      libs
+-outjars     bin/classes-processed.jar
+#-libraryjars C:\Users\jane\AppData\Local\Android\sdk\platforms\android-26\android.jar
 
 -dontoptimize
 -dontobfuscate
 -dontwarn sun.misc.Unsafe
 -dontwarn com.google.common.collect.MinMaxPriorityQueue
+-dontwarn
 
 -keepclasseswithmembers public class * {
     public static void main(java.lang.String[]);
@@ -143,6 +150,48 @@
 # This rule will properly ProGuard all the model classes in
 # the package com.yourcompany.models. Modify to fit the structure
 # of your app.
--keepclassmembers class com.janeullah.app.healthinspectionviewer.** {
+-keepclassmembers class com.janeullah.apps.healthinspectionviewer.** {
   *;
 }
+
+-dontpreverify
+-repackageclasses ''
+-allowaccessmodification
+-optimizations !code/simplification/arithmetic
+-keepattributes *Annotation*
+
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+
+-keep public class * extends android.view.View {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keepclassmembers class * implements android.os.Parcelable {
+    static android.os.Parcelable$Creator CREATOR;
+}
+
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+
+-dontwarn android.support.**
+-dontwarn java.lang.invoke.*
+-keep class com.google.gson.stream.** { *; }
+
+#https://guides.codepath.com/android/Configuring-ProGuard
+-keep public class * extends java.lang.Exception
