@@ -54,11 +54,11 @@ public class FlattenedRestaurant {
         this.dateReported = dateReported;
         this.address = address;
         this.county = county;
-        this.hasAnyViolations = hasAnyViolations();
+        this.hasAnyViolations = hasViolations();
     }
 
     @Exclude
-    public boolean hasAnyViolations(){
+    public boolean hasViolations(){
         return criticalViolations > 0 || nonCriticalViolations > 0;
     }
 
