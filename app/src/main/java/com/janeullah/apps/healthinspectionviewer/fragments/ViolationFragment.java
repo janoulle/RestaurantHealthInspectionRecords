@@ -27,7 +27,6 @@ import org.parceler.Parcels;
  * @author Jane Ullah
  * @date 5/20/2017.
  */
-
 public class ViolationFragment  extends Fragment {
     /**
      * The fragment argument representing the section number for this
