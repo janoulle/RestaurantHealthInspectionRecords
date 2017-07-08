@@ -2,6 +2,7 @@ package com.janeullah.apps.healthinspectionviewer.services;
 
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
+import com.janeullah.apps.healthinspectionviewer.utils.StringUtilities;
 
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public interface YelpService {
     @POST(TOKEN_PATH)
     Call<YelpAuthTokenResponse> getAuthToken(@FieldMap Map<String,String> requestData);
 
-    @GET(VERSION + "/" + SEARCH_PATH)
+    @GET(VERSION + StringUtilities.FORWARD_SLASH + SEARCH_PATH)
     Call<YelpResults> searchBusinesses(@Header("Authorization") String token,
                                        @QueryMap Map<String,Object> params);
 }

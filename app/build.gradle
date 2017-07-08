@@ -39,7 +39,7 @@ android {
         }
     }
     compileSdkVersion 26
-    buildToolsVersion "25.0.3"
+    buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.janeullah.apps.healthinspectionviewer"
         minSdkVersion 16
@@ -104,6 +104,7 @@ dependencies {
     compile "com.android.support:design:$compile_sdk_version"
     compile "com.android.support:support-v4:$compile_sdk_version"
     compile "com.google.firebase:firebase-messaging:$firebase_version"
+    compile "com.google.firebase:firebase-core:$firebase_version"
     compile "com.google.firebase:firebase-database:$firebase_version"
     compile "com.google.firebase:firebase-crash:$firebase_version"
     compile('com.squareup.retrofit2:retrofit:2.2.0') {
