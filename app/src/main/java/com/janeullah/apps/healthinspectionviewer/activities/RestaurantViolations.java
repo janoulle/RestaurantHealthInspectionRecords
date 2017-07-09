@@ -2,7 +2,6 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
@@ -11,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.adapters.ViolationPagerAdapter;
@@ -22,7 +20,6 @@ import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class RestaurantViolations extends BaseActivity {
     public static final String TAG = "RestaurantViolations";
@@ -79,13 +76,6 @@ public class RestaurantViolations extends BaseActivity {
 
         setTitle(getString(R.string.restaurant_violations_title));
     }
-
-    @OnClick(R.id.fab)
-    public void launchSnackbarNotification(View view){
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
