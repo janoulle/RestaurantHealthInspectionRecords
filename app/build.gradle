@@ -64,6 +64,8 @@ android {
         versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        //https://developer.android.com/studio/build/multidex.html
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -154,6 +156,8 @@ dependencies {
     compile 'org.apache.commons:commons-text:1.0'
     compile 'com.yelp.clientlib:yelp-android:3.0.0'
     compile 'com.google.inject:guice:4.1.0'
+    compile 'com.android.support:multidex:1.0.1'
+
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:0.5'
