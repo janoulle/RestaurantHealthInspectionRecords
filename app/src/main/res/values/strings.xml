@@ -38,4 +38,19 @@
     <string name="score_label">Score</string>
     <string name="non_critical_violations_text">%d non-critical violations</string>
     <string name="critical_violations_text">%d critical violations</string>
+    <string name="select_county_label">Select County</string>
+    <string name="critical_violations_label">Critical Violations:</string>
+    <string name="non_critical_violations_label">Non-Critical Violations:</string>
+    <string name="greencheckmark_contentdescriptor">Score above 90 without critical violations</string>
+    <string name="redx_contentdescriptor">Has at least 1 critical violations</string>
+    <string name="yellowcheckmark_contentdescriptor">Score under 90 without any critical violations</string>
+    <string name="map_marker_snippet">Tap the marker to activate map controls</string>
+    <string name="title_activity_restaurant_violations">RestaurantViolations</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="select_county_main_activity">Select County</string>
+    <string name="restaurant_violations_title">Health Code Violations</string>
+    <string name="critical_violations_tab">Critical</string>
+    <string name="non_critical_violations_tab">Non-Critical</string>
+    <string name="healthcode_violations_button_label">HealthCode Violations</string>
+    <string name="checkmark_description">Checkmark</string>
 </resources>

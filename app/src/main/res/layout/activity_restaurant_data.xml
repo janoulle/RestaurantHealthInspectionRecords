@@ -1,53 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="violationButtonClickCallBack"
+            type="com.janeullah.apps.healthinspectionviewer.callbacks.ViolationActivityCallBack" />
+
         <variable
             name="restaurantSelected"
             type="com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant" />
     </data>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="2dp">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/app_toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="2dp">
 
-        <include
-            android:id="@+id/item_map"
-            layout="@layout/include_mapview"
-            android:layout_width="match_parent"
-            android:layout_height="237dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/app_toolbar" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/app_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <include
-            android:id="@+id/yelpDataLayout"
-            layout="@layout/include_yelp_data"
-            android:layout_below="@+id/item_map"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            <include
+                android:id="@+id/item_map"
+                layout="@layout/include_mapview"
+                android:layout_width="match_parent"
+                android:layout_height="237dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/app_toolbar" />
 
-        <include
-            android:id="@+id/item_restaurant_summary_data"
-            layout="@layout/include_restaurant_summary_data"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/yelpDataLayout"
-            bind:restaurantSelected="@{restaurantSelected}" />
-    </RelativeLayout>
+            <include
+                android:id="@+id/yelpDataLayout"
+                layout="@layout/include_yelp_data"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/item_map" />
+
+            <include
+                android:id="@+id/item_restaurant_summary_data"
+                layout="@layout/include_restaurant_summary_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/yelpDataLayout"
+                bind:restaurantSelected="@{restaurantSelected}"
+                bind:violationButtonClickCallBack="@{violationButtonClickCallBack}" />
+        </RelativeLayout>
+    </ScrollView>
 </layout>

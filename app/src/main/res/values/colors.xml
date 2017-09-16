@@ -28,4 +28,5 @@
     <color name="darkbrown1">#996633</color>
     <color name="mightnightblue">#191970</color>
     <color name="lavender">#E6E6FA</color>
+    <color name="transparent_divider">#00909090</color>
 </resources>

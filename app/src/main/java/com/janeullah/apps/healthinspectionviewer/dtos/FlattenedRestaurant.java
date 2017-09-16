@@ -31,6 +31,12 @@ public class FlattenedRestaurant {
     public int restaurantCheckMarkResourceId;
 
     @Exclude
+    public String restaurantCheckMarkDescriptor;
+
+    @Exclude
+    public boolean hasAnyViolations;
+
+    @Exclude
     public LatLng coordinates;
 
     public FlattenedRestaurant() {
@@ -48,6 +54,12 @@ public class FlattenedRestaurant {
         this.dateReported = dateReported;
         this.address = address;
         this.county = county;
+        this.hasAnyViolations = hasViolations();
+    }
+
+    @Exclude
+    public boolean hasViolations(){
+        return criticalViolations > 0 || nonCriticalViolations > 0;
     }
 
     @Exclude

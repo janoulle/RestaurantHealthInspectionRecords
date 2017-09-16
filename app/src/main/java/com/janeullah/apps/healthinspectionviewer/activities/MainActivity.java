@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,9 +40,6 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.counties_spinner)
     public Spinner mCountySpinner;
 
-    @BindView(R.id.countySubmitButton)
-    public Button mCountyButton;
-
     @BindView(R.id.app_toolbar)
     public Toolbar mAppToolbar;
 
@@ -66,7 +62,7 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(mAppToolbar);
-        mTitleView.setText("Select County");
+        mTitleView.setText(R.string.select_county_main_activity);
         negaCountyDatabaseReference = FirebaseInitialization
                 .getInstance()
                 .getNegaDatabaseReference()

@@ -15,29 +15,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:name="android.support.multidex.MultiDexApplication">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.RestaurantsInCountyActivity"
-            android:label="@string/restaurants_in_county_label"
-            android:parentActivityName=".activities.MainActivity">
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--<meta-data-->
+            <!--android:name="com.google.firebase.messaging.default_notification_icon"-->
+            <!--android:resource="@drawable/ic_stat_ic_notification" />-->
 
-            <!--
-                 The meta-data tag is required if you support API level 15 and lower
-                 https://developer.android.com/training/basics/firstapp/starting-activity.html
-            -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
-        </activity>
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
         <!--
                  The API key for Google Maps-based APIs is defined as a string resource.
                  (See the file "res/values/google_maps_api.xml").
@@ -51,9 +43,35 @@
             android:value="${google_map_key}" />
 
         <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.RestaurantsInCountyActivity"
+            android:label="@string/restaurants_in_county_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait">
+
+            <!--
+                 The meta-data tag is required if you support API level 15 and lower
+                 https://developer.android.com/training/basics/firstapp/starting-activity.html
+            -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".activities.RestaurantDataActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".activities.RestaurantsInCountyActivity">
+            android:parentActivityName=".activities.RestaurantsInCountyActivity"
+            android:screenOrientation="portrait">
 
             <!--
                  The meta-data tag is required if you support API level 15 and lower
@@ -64,9 +82,34 @@
                 android:value=".activities.RestaurantsInCountyActivity" />
         </activity>
 
+        <activity
+            android:name=".activities.RestaurantViolations"
+            android:label="@string/title_activity_restaurant_violations"
+            android:parentActivityName=".activities.RestaurantDataActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.janeullah.apps.healthinspectionviewer.activities.RestaurantDataActivity" />
+        </activity>
+
         <service
             android:name=".services.FetchAddressIntentService"
             android:exported="false" />
+
+        <service android:name=".services.AppFirebaseTokenRetrievalService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".services.AppFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

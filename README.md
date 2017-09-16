@@ -10,4 +10,4 @@ This is very much a work in progress. I am hoping to use this as a opportunity t
 4. Incorporate best practices on release management of the application. 
 5. Incorporate best practices on capturing metrics related to exceptional events within the app. Firebase and Fabric are both Google products that I'm leveraging for this.
 6. Incorporate best practices on managing keys and secrets. Previously, I was hardcoding the aforementioned items directly within the Java code and this time, taking advantage of gradle and learning to love my .gitignore file. Eventually, I'd like to learn more about using Proguard.
-
+7. There are no tests currently. Try not to judge me too harshly. 

@@ -16,10 +16,12 @@ import java.util.Map;
 @IgnoreExtraProperties
 @Parcel
 public class FlattenedViolation {
+    @Exclude
+    public String section;
+
     public Long violationId;
     public String severity;
     public String category;
-    public String section;
     public String inspectionType;
     public String summary;
     public String notes;
