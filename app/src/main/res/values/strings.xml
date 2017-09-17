@@ -73,7 +73,7 @@
         Other third party services in use include: Google Maps API for displaying the restaurant location (<a href="https://developers.google.com/maps/terms">TOS</a>), Firebase Crash Reporting (<a href="https://firebase.google.com/docs/crash/#user_privacy">which does not collect any personally identifiable information</a>) and Fabric (<a href="https://fabric.io/terms">TOS</a>) for monitoring the app\'s stability.
     </string>
     <string name="about_app">
-        Made with duct tape, super glue, and ove By <b><a href="http://janeullah.com/">Jane Ullah</a></b>\n\n
+        Made with duct tape, super glue, and love by <b><a href="http://janeullah.com/">Jane Ullah</a></b>\n\n
         Some details:\n\n
         1. Data was scraped from the websites below using a Spring application that makes use of Jsoup. This data was then transformed into the format needed for consumption by this application and for use with Firebase\n\n
         2. Direct links to the County restaurant reports: <a href="http://publichealthathens.com/healthscores/Barrow_county_restaurant_scores.html">Barrow</a>,
