@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_legal">Legal</string>
+    <string name="action_legal">Disclaimer</string>
     <string name="action_about">About</string>
 </resources>
