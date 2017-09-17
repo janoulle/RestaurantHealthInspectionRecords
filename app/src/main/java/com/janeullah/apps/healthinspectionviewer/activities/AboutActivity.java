@@ -2,6 +2,7 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class AboutActivity extends BaseActivity {
 
         setSupportActionBar(mAppToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mTextView.setMovementMethod(LinkMovementMethod.getInstance());
         logViewEvent(TAG);
     }
 

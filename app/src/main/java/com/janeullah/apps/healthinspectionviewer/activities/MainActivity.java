@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.ChildEventListener;
@@ -55,7 +56,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
+                .kits(new Crashlytics(),new Answers())
                 .debuggable(true)
                 .build();
         Fabric.with(fabric);

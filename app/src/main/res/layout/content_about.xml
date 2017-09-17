@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:text="@string/about_app"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:linksClickable="true"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
