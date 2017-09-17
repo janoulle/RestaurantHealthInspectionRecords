@@ -1,6 +1,5 @@
 package com.janeullah.apps.healthinspectionviewer.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -49,6 +48,7 @@ import org.parceler.Parcels;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,10 +72,11 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     private GeocodedAddressComponent mGeocodedAddressComponents;
     private FlattenedRestaurant mRestaurantSelected;
     public ActivityRestaurantDataBinding mDataBinding;
-    private SharedPreferences mSharedPreferences;
     private YelpAccessRequestTask mAccessRequestTask;
     private YelpSearchBusinessesTask mYelpSearchRequestTask;
 
+    @Inject @Named(YelpConstants.YELP_PREFERENCES)
+    SharedPreferences mSharedPreferences;
 
     @Inject
     YelpApiInterface yelpApiInterface;
@@ -103,7 +104,6 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         setSupportActionBar(mAppToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mSharedPreferences = this.getSharedPreferences(YelpConstants.YELP_PREFERENCES,Context.MODE_PRIVATE);
         mRestaurantSelected = Parcels.unwrap(getIntent().getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
         if (mRestaurantSelected == null) {
             Log.e(TAG,"Restaurant not selected before launching RestaurantDataActivity");

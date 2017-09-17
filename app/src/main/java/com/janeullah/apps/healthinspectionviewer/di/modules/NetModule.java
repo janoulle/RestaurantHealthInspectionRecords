@@ -1,6 +1,7 @@
 package com.janeullah.apps.healthinspectionviewer.di.modules;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -12,6 +13,7 @@ import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 
 import java.io.IOException;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -34,6 +36,13 @@ public class NetModule {
     String mBaseUrl;
     public NetModule(String baseUrl){
         mBaseUrl = baseUrl;
+    }
+
+    @Provides
+    @Named(YelpConstants.YELP_PREFERENCES)
+    @Singleton
+    SharedPreferences providesYelpSharedPreferences(Application application){
+        return application.getApplicationContext().getSharedPreferences(YelpConstants.YELP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     // Dagger will only look for methods annotated with @Provides
