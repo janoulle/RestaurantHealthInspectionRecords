@@ -8,7 +8,7 @@ import com.janeullah.apps.healthinspectionviewer.BuildConfig;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfigurationForYelp;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
-import com.janeullah.apps.healthinspectionviewer.services.YelpService;
+import com.janeullah.apps.healthinspectionviewer.network.interfaces.YelpApiInterface;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,12 +35,12 @@ public class YelpAccessRequestTask extends AsyncTask<Void,Integer,YelpAuthTokenR
     protected YelpAuthTokenResponse doInBackground(Void... params) {
         try {
             Log.i(TAG,"Initiated background processing...");
-            YelpService yelpService = RetrofitConfigurationForYelp.YELP_API_SERVICE;
+            YelpApiInterface yelpApiInterface = RetrofitConfigurationForYelp.YELP_API_SERVICE;
             Map<String, String> accessRequestData = new HashMap<>();
             accessRequestData.put(YelpConstants.GRANT_TYPE, YelpConstants.DEFAULT_GRANT_TYPE);
             accessRequestData.put(YelpConstants.CLIENT_ID, BuildConfig.YELP_CLIENT_ID);
             accessRequestData.put(YelpConstants.CLIENT_SECRET, BuildConfig.YELP_CLIENT_SECRET);
-            Call<YelpAuthTokenResponse> accessRequest = yelpService.getAuthToken(accessRequestData);
+            Call<YelpAuthTokenResponse> accessRequest = yelpApiInterface.getAuthToken(accessRequestData);
             Response<YelpAuthTokenResponse> response = accessRequest.execute();
             if (response.isSuccessful()) {
                 if (isFromCache(response)){

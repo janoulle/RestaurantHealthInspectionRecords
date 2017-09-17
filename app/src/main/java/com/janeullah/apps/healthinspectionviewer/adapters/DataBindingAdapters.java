@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.widget.ImageView;
 
 /**
+ * Usage: <android:imageResource="blah"/>
  * http://stackoverflow.com/questions/35809290/set-drawable-resource-id-in-androidsrc-for-imageview-using-data-binding-in-andr
  * @author Jane Ullah
  * @date 5/2/2017.

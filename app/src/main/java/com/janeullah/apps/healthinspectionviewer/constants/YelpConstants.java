@@ -8,7 +8,7 @@ package com.janeullah.apps.healthinspectionviewer.constants;
 public class YelpConstants {
     private YelpConstants(){}
     // API constants, you shouldn't have to change these.
-    public static final String API_HOST = "https://api.yelp.com";
+    public static final String YELP_API_HOST = "https://api.yelp.com";
     public static final String VERSION = "v3";
     public static final String SEARCH_PATH = "businesses/search";
     public static final String BUSINESS_PATH = "businesses/";  // Business ID will come after slash.

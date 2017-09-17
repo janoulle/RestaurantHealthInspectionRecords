@@ -20,10 +20,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.RestaurantScoresApplication;
 import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.County;
+import com.janeullah.apps.healthinspectionviewer.network.interfaces.YelpApiInterface;
 import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +54,9 @@ public class MainActivity extends BaseActivity {
 
     private ChildEventListener mCountyListener;
 
+    @Inject
+    YelpApiInterface yelpApiInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +72,7 @@ public class MainActivity extends BaseActivity {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+
         setSupportActionBar(mAppToolbar);
 
         mTitleView.setText(R.string.select_county_main_activity);
@@ -73,6 +81,8 @@ public class MainActivity extends BaseActivity {
                 .getNegaDatabaseReference()
                 .child("counties");
         logViewEvent(TAG);
+        //inject
+        ((RestaurantScoresApplication) getApplication()).getYelpComponent().inject(this);
     }
 
     @OnClick(R.id.countySubmitButton)

@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.services;
+package com.janeullah.apps.healthinspectionviewer.network.interfaces;
 
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
@@ -33,7 +33,7 @@ import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.
  * @date 5/4/2017.
  */
 
-public interface YelpService {
+public interface YelpApiInterface {
 
     @FormUrlEncoded
     @Headers({"Cache-Control: max-age=86400"})

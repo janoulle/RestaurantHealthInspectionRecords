@@ -2,7 +2,7 @@ package com.janeullah.apps.healthinspectionviewer.configuration;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
-import com.janeullah.apps.healthinspectionviewer.services.YelpService;
+import com.janeullah.apps.healthinspectionviewer.network.interfaces.YelpApiInterface;
 
 import java.io.IOException;
 
@@ -13,18 +13,18 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.API_HOST;
+import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.YELP_API_HOST;
 
 /**
+ * TODO: replace with dependency injection using Dagger2
  * https://futurestud.io/tutorials/retrofit-2-log-requests-and-responses
  * @author Jane Ullah
  * @date 5/4/2017.
  */
-
 public final class RetrofitConfigurationForYelp {
     private static final Retrofit RETROFIT;
 
-    public static final YelpService YELP_API_SERVICE;
+    public static final YelpApiInterface YELP_API_SERVICE;
 
     private RetrofitConfigurationForYelp(){
 
@@ -53,11 +53,11 @@ public final class RetrofitConfigurationForYelp {
                 .addInterceptor(logging);
 
         RETROFIT = new Retrofit.Builder()
-                .baseUrl(API_HOST)
+                .baseUrl(YELP_API_HOST)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
 
-        YELP_API_SERVICE = RETROFIT.create(YelpService.class);
+        YELP_API_SERVICE = RETROFIT.create(YelpApiInterface.class);
     }
 }

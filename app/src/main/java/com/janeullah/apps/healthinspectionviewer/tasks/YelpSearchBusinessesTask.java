@@ -11,7 +11,7 @@ import com.janeullah.apps.healthinspectionviewer.dtos.YelpMatch;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
-import com.janeullah.apps.healthinspectionviewer.services.YelpService;
+import com.janeullah.apps.healthinspectionviewer.network.interfaces.YelpApiInterface;
 import com.janeullah.apps.healthinspectionviewer.utils.YelpQueryParams;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
     protected YelpResults doInBackground(YelpSearchRequest... params) {
         try {
             Log.i(TAG,"Initiated background processing...");
-            YelpService yelpService = RetrofitConfigurationForYelp.YELP_API_SERVICE;
+            YelpApiInterface yelpApiInterface = RetrofitConfigurationForYelp.YELP_API_SERVICE;
 
             //prepare query
             Map<String, Object> queryParams = new HashMap<>();
@@ -49,7 +49,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
             queryParams.put(YelpConstants.LATITUDE, params[0].getLatitude());
             queryParams.put(YelpConstants.LONGITUDE, params[0].getLongitude());
             queryParams.put(YelpConstants.TERM, "food");
-            Call<YelpResults> searchRequest = yelpService.searchBusinesses(params[0].getBearerToken(),queryParams);
+            Call<YelpResults> searchRequest = yelpApiInterface.searchBusinesses(params[0].getBearerToken(),queryParams);
             Response<YelpResults> response = searchRequest.execute();
             if (response.isSuccessful()) {
                 if (isFromCache(response)){
