@@ -14,12 +14,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
@@ -67,6 +69,8 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants_in_county);
         ButterKnife.bind(this);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         mCountyName = getIntent().getStringExtra(IntentNames.COUNTY_SELECTED);
         if (mCountyName == null) {
@@ -95,6 +99,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecycler.getContext(),
                 layoutManager.getOrientation());
         mRecycler.addItemDecoration(dividerItemDecoration);
+        logViewEvent(TAG);
     }
 
     @Override
@@ -155,6 +160,8 @@ public class RestaurantsInCountyActivity extends BaseActivity {
                 intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
                 intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
                 intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,model.address);
+
+                logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG);
                 startActivity(intent);
             }
         });

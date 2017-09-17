@@ -23,9 +23,11 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.callbacks.ViolationActivityCallBack;
+import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
@@ -82,6 +84,8 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_restaurant_data);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         ButterKnife.bind(this);
 
@@ -102,6 +106,8 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             public void onClick(View view, FlattenedRestaurant restaurant) {
                 final Intent intent = new Intent(RestaurantDataActivity.this, RestaurantViolations.class);
                 intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(restaurant));
+
+                logSelectionEvent(AppConstants.RESTAURANT_DETAIL,restaurant.getNameKey(),TAG);
                 startActivity(intent);
             }
         };
@@ -110,6 +116,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         initializeMapView(savedInstanceState);
         checkAndInitiateYelpTokenRequest();
         startBackgroundGeocodeServiceLookup();
+        logViewEvent(TAG);
     }
 
     private void checkAndInitiateYelpTokenRequest() {
@@ -252,7 +259,6 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             @Override
             public void onSuccess(YelpAuthTokenResponse authTokenResponse) {
                 Log.i(TAG,"Received valid auth token response: " + authTokenResponse.getAccessToken());
-                //Toast.makeText(getApplicationContext(),"Made it to Yelp and got token!",Toast.LENGTH_LONG).show();
                 //TODO: figure out proper way to stash this token info
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(YelpConstants.SAVED_YELP_AUTH_TOKEN, authTokenResponse.getAccessToken());
@@ -278,7 +284,6 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 if (yelpResults.getMatchedBusiness() != null){
                     Log.v(TAG,"Found business match from Yelp listings: " + gson.toJson(yelpResults.getMatchedBusiness()));
                     FlattenedYelpData flattenedYelpData = new FlattenedYelpData(yelpResults.getMatchedBusiness());
-                    //RelativeLayout restaurantSummaryData = (RelativeLayout)findViewById(R.id.item_restaurant_summary_data);
                     RelativeLayout mYelpLayout = (RelativeLayout)findViewById(R.id.yelpDataLayout);
                     ImageView yelpStars = (ImageView) findViewById(R.id.yelpStarsDisplay);
                     if (mYelpLayout != null) {
@@ -322,18 +327,18 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 showToast(output,Toast.LENGTH_SHORT);
             }
         }
-    }
 
-    private YelpAuthTokenResponse constructYelpAuthTokenResponseFromPreferences(){
-        //TODO: expire token plan
-        Log.i(TAG,"Constructing Yelp response using saved auth token");
-        String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
-        String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
-        Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
-        YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
-        authTokenResponse.setAccessToken(yelpAuthToken);
-        authTokenResponse.setExpiresIn(expiry);
-        authTokenResponse.setTokenType(tokenType);
-        return authTokenResponse;
+        private YelpAuthTokenResponse constructYelpAuthTokenResponseFromPreferences(){
+            //TODO: expire token plan
+            Log.i(TAG,"Constructing Yelp response using saved auth token");
+            String yelpAuthToken = mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,"");
+            String tokenType = mSharedPreferences.getString(YelpConstants.SAVED_YELP_TOKEN_TYPE,"Bearer");
+            Integer expiry = mSharedPreferences.getInt(YelpConstants.SAVED_YELP_TOKEN_EXPIRATION,15462984);
+            YelpAuthTokenResponse authTokenResponse = new YelpAuthTokenResponse();
+            authTokenResponse.setAccessToken(yelpAuthToken);
+            authTokenResponse.setExpiresIn(expiry);
+            authTokenResponse.setTokenType(tokenType);
+            return authTokenResponse;
+        }
     }
 }

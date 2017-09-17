@@ -65,14 +65,13 @@
 
     <!-- https://stackoverflow.com/questions/3235131/set-textview-text-from-html-formatted-string-resource-in-xml/18199543#18199543 -->
     <string name="legalese">
-        <p>Please note that <a href="http://publichealthathens.com/">PublicHealthAthens.com</a> is the canonical and most-up-to-date source of information on the restaurant health inspection data. By using this app, you agree to indemnify and hold me, relatives, descendants, my neighbors, friends, and  my dearly departed pet harmless from any events that result from using the application.</p>
-        <p>Restaurant rating data comes from yelp.com and that is the canonical source for rating information. The ratings data shown are not guaranteed to match the actual restaurant being viewed.</p>
-        <p>The green, red, and yellow icons are indicators of the restaurant\'s score. The information on how these restaurants are scored is available on <a href="http://publichealthathens.com/">PublicHealthAthens.com</a>. Captured here as of 09/16/2017, green means no critical violations and a score of >= 90. Red means >= 1 or more critical violations. Yellow means a score below 90 but not in the red.</p>
-        <p>Internet connectivity is required to use this application. The data is fetched from Google\'s servers (<a href="https://firebase.google.com/terms/">Firebase TOS</a>) and is temporarily cached on your device. You agree to bear the cost of any charges associated with the requirement for internet connectivity on your device.</p>
+        <p>Please note that <a href="http://publichealthathens.com/">PublicHealthAthens.com</a> is the canonical and most-up-to-date source of information on the restaurant health inspection data. By using this app, you agree to indemnify and hold me, relatives, descendants, my neighbors, friends, and  my dearly departed pet harmless from any events that result from using the application.</p>\n\n
+        <p>Restaurant rating data comes from yelp.com and that is the canonical source for rating information. The ratings data shown are not guaranteed to match the actual restaurant being viewed.</p>\n\n
+        <p>The green, red, and yellow icons are indicators of the restaurant\'s score. The information on how these restaurants are scored is available on <a href="http://publichealthathens.com/">PublicHealthAthens.com</a>. Captured here as of 09/16/2017, green means no critical violations and a score of >= 90. Red means >= 1 or more critical violations. Yellow means a score below 90 but not in the red.</p>\n\n
+        <p>Internet connectivity is required to use this application. The data is fetched from Google\'s servers (<a href="https://firebase.google.com/terms/">Firebase TOS</a>) and is temporarily cached on your device. You agree to bear the cost of any charges associated with the requirement for internet connectivity on your device.</p>\n\n
         <p>Other third party services in use include: Firebase Crash Reporting (<a href="https://firebase.google.com/docs/crash/#user_privacy">which does not collect any personally identifiable information</a>) and Fabric (<a href="https://fabric.io/terms">TOS</a>) for monitoring the app\'s stability.</p>
     </string>
     <string name="about_app">
-        <p>Made With Love By <b><a href="http://janeullah.com/">Jane Ullah</a></b></p>\n\n
-        <p>Twitter: <a href="https://twitter.com/janetalkstech">@janetalkstech</a></p>
+        <p>Made With Love By <b><a href="http://janeullah.com/">Jane Ullah</a></b></p>
     </string>
 </resources>

@@ -13,11 +13,13 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.County;
 import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
@@ -59,6 +61,8 @@ public class MainActivity extends BaseActivity {
         Fabric.with(fabric);
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         setSupportActionBar(mAppToolbar);
 
@@ -67,6 +71,7 @@ public class MainActivity extends BaseActivity {
                 .getInstance()
                 .getNegaDatabaseReference()
                 .child("counties");
+        logViewEvent(TAG);
     }
 
     @OnClick(R.id.countySubmitButton)
@@ -74,6 +79,8 @@ public class MainActivity extends BaseActivity {
         final Intent intent = new Intent(MainActivity.this, RestaurantsInCountyActivity.class);
         String countyChosen = mCountySpinner.getSelectedItem().toString();
         intent.putExtra(IntentNames.COUNTY_SELECTED, countyChosen);
+
+        logSelectionEvent(AppConstants.COUNTY_SELECTION,countyChosen,TAG);
         startActivity(intent);
     }
 

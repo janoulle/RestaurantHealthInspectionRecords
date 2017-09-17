@@ -2,6 +2,7 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,11 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.services.UUIDInitializer;
+
+import java.util.Calendar;
 
 /**
  * https://stackoverflow.com/questions/6745797/how-to-set-entire-application-in-portrait-mode-only/9784269#9784269
@@ -18,7 +23,7 @@ import com.janeullah.apps.healthinspectionviewer.R;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
-
+    protected FirebaseAnalytics mFirebaseAnalytics;
     private ProgressBar progressBar;
 
     public void showProgressDialog(String message) {
@@ -69,6 +74,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
+
+    protected void logViewEvent(String tag) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.LOCATION, tag);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, UUIDInitializer.getInstance(this).getUUID());
+        bundle.putLong(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().getTimeInMillis());
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+    }
+
+    protected void logSelectionEvent(String key, String value, String tag) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.LOCATION, tag);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, UUIDInitializer.getInstance(this).getUUID());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, key);
+        bundle.putString(FirebaseAnalytics.Param.VALUE,value);
+        bundle.putLong(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().getTimeInMillis());
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
 
 }
 
