@@ -130,41 +130,12 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
-        mAdapter = new FirebaseRecyclerAdapter<FlattenedRestaurant, RestaurantViewHolder>(FlattenedRestaurant.class, R.layout.item_flattenedrestaurant,
-                RestaurantViewHolder.class, mQuery) {
-            @Override
-            protected void populateViewHolder(final RestaurantViewHolder viewHolder, final FlattenedRestaurant model, int position) {
-                final DatabaseReference queryRef = getRef(position);
-                String key = queryRef.getKey();
-                Log.v(TAG, "Key: " + key);
-                viewHolder.bindData(getApplicationContext(),model);
-                hideProgressDialog();
-                countOfRestaurants.incrementAndGet();
-                addListenerToRestaurantItem(viewHolder, model);
-            }
-        };
+        mAdapter = new RestaurantsInCountyAdapter(FlattenedRestaurant.class, R.layout.item_flattenedrestaurant, RestaurantViewHolder.class, mQuery);
         mRecycler.setAdapter(mAdapter);
 
         //https://gist.github.com/puf/f49a1b07e92952b44f2dc36d9af04e3c#file-mainactivity-java-L102
         //http://stackoverflow.com/questions/34982347/how-to-be-notified-when-firebaselistadapter-finishes
         updateTextViewHeader();
-    }
-
-    private void addListenerToRestaurantItem(RestaurantViewHolder viewHolder, final FlattenedRestaurant model) {
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(RestaurantsInCountyActivity.this, RestaurantDataActivity.class);
-                Log.i(TAG,String.format(Locale.getDefault(),"%s selected",model.name));
-                intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
-                intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
-                intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
-                intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,model.address);
-
-                logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG);
-                startActivity(intent);
-            }
-        });
     }
 
     private void updateTextViewHeader() {
@@ -189,6 +160,51 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         super.onDestroy();
         if (mAdapter != null) {
             mAdapter.cleanup();
+        }
+    }
+
+    private class RestaurantsInCountyAdapter extends FirebaseRecyclerAdapter<FlattenedRestaurant, RestaurantViewHolder>{
+        private static final String TAG = "RICAdapter";
+        /**
+         * @param modelClass      Firebase will marshall the data at a location into
+         *                        an instance of a class that you provide
+         * @param modelLayout     This is the layout used to represent a single item in the list.
+         *                        You will be responsible for populating an instance of the corresponding
+         *                        view with the data from an instance of modelClass.
+         * @param viewHolderClass The class that hold references to all sub-views in an instance modelLayout.
+         * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location,
+         *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
+         */
+        public RestaurantsInCountyAdapter(Class<FlattenedRestaurant> modelClass, int modelLayout, Class<RestaurantViewHolder> viewHolderClass, Query ref) {
+            super(modelClass, modelLayout, viewHolderClass, ref);
+        }
+
+        @Override
+        protected void populateViewHolder(RestaurantViewHolder viewHolder, FlattenedRestaurant model, int position) {
+            final DatabaseReference queryRef = getRef(position);
+            String key = queryRef.getKey();
+            Log.v(TAG, "Key: " + key);
+            viewHolder.bindData(model);
+            hideProgressDialog();
+            countOfRestaurants.incrementAndGet();
+            addListenerToRestaurantItem(viewHolder, model);
+        }
+
+        private void addListenerToRestaurantItem(RestaurantViewHolder viewHolder, final FlattenedRestaurant model) {
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Intent intent = new Intent(RestaurantsInCountyActivity.this, RestaurantDataActivity.class);
+                    Log.i(TAG,String.format(Locale.getDefault(),"%s selected",model.name));
+                    intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
+                    intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
+                    intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
+                    intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,model.address);
+
+                    logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG);
+                    startActivity(intent);
+                }
+            });
         }
     }
 }
