@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
-import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfigurationForYelp;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.dtos.YelpMatch;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
@@ -35,12 +34,18 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
     private static final String TAG = "YelpSearchTask";
     private static final Gson gson = new Gson();
     private Listener listener;
+    private YelpApiInterface yelpApiInterface;
+
+    public YelpSearchBusinessesTask(){}
+
+    public YelpSearchBusinessesTask(YelpApiInterface yelpApiInterface){
+        this.yelpApiInterface = yelpApiInterface;
+    }
 
     @Override
     protected YelpResults doInBackground(YelpSearchRequest... params) {
         try {
             Log.i(TAG,"Initiated background processing...");
-            YelpApiInterface yelpApiInterface = RetrofitConfigurationForYelp.YELP_API_SERVICE;
 
             //prepare query
             Map<String, Object> queryParams = new HashMap<>();

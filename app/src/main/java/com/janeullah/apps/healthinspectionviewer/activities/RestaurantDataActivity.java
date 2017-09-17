@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.RestaurantScoresApplication;
 import com.janeullah.apps.healthinspectionviewer.callbacks.ViolationActivityCallBack;
 import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
@@ -38,6 +39,7 @@ import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
+import com.janeullah.apps.healthinspectionviewer.network.interfaces.YelpApiInterface;
 import com.janeullah.apps.healthinspectionviewer.services.FetchAddressIntentService;
 import com.janeullah.apps.healthinspectionviewer.tasks.YelpAccessRequestTask;
 import com.janeullah.apps.healthinspectionviewer.tasks.YelpSearchBusinessesTask;
@@ -45,6 +47,8 @@ import com.janeullah.apps.healthinspectionviewer.tasks.YelpSearchBusinessesTask;
 import org.parceler.Parcels;
 
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,9 +72,13 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     private GeocodedAddressComponent mGeocodedAddressComponents;
     private FlattenedRestaurant mRestaurantSelected;
     public ActivityRestaurantDataBinding mDataBinding;
-    private YelpAccessRequestTask mAccessRequestTask = new YelpAccessRequestTask();
-    private YelpSearchBusinessesTask mYelpSearchRequestTask  = new YelpSearchBusinessesTask();
     private SharedPreferences mSharedPreferences;
+    private YelpAccessRequestTask mAccessRequestTask;
+    private YelpSearchBusinessesTask mYelpSearchRequestTask;
+
+
+    @Inject
+    YelpApiInterface yelpApiInterface;
 
     @BindView(R.id.item_map)
     protected MapView mMapView;
@@ -84,10 +92,13 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_restaurant_data);
+        ButterKnife.bind(this);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        ButterKnife.bind(this);
+        //inject
+        ((RestaurantScoresApplication) getApplication()).getYelpComponent().inject(this);
+        mAccessRequestTask = new YelpAccessRequestTask(yelpApiInterface);
+        mYelpSearchRequestTask = new YelpSearchBusinessesTask(yelpApiInterface);
 
         setSupportActionBar(mAppToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

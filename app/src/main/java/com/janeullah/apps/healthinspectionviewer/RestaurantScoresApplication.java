@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.janeullah.apps.healthinspectionviewer.di.components.DaggerNetComponent;
 import com.janeullah.apps.healthinspectionviewer.di.components.DaggerYelpComponent;
-import com.janeullah.apps.healthinspectionviewer.di.components.NetComponent;
 import com.janeullah.apps.healthinspectionviewer.di.components.YelpComponent;
 import com.janeullah.apps.healthinspectionviewer.di.modules.AppModule;
 import com.janeullah.apps.healthinspectionviewer.di.modules.NetModule;
@@ -22,7 +21,6 @@ import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.
 public class RestaurantScoresApplication extends Application{
 
     private YelpComponent yelpComponent;
-    private NetComponent netComponent;
 
     @Override
     public void onCreate() {
@@ -32,22 +30,17 @@ public class RestaurantScoresApplication extends Application{
         //  myComponent = com.codepath.dagger.components.DaggerNetComponent.create();
         // specify the full namespace of the component
         // Dagger_xxxx (where xxxx = component name)
-        netComponent = DaggerNetComponent.builder()
-                .appModule(new AppModule(this))
-                .netModule(new NetModule(YELP_API_HOST))
-                .build();
 
         yelpComponent = DaggerYelpComponent.builder()
-                .netComponent(netComponent)
+                .netComponent(DaggerNetComponent.builder()
+                        .appModule(new AppModule(this))
+                        .netModule(new NetModule(YELP_API_HOST))
+                        .build())
                 .yelpModule(new YelpModule())
                 .build();
     }
 
     public YelpComponent getYelpComponent() {
         return yelpComponent;
-    }
-
-    public NetComponent getNetComponent(){
-        return netComponent;
     }
 }
