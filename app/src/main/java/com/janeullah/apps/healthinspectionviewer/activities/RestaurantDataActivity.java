@@ -11,7 +11,6 @@ import android.support.v4.os.ResultReceiver;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,8 +26,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.callbacks.ViolationActivityCallBack;
-import com.janeullah.apps.healthinspectionviewer.tasks.YelpAccessRequestTask;
-import com.janeullah.apps.healthinspectionviewer.tasks.YelpSearchBusinessesTask;
 import com.janeullah.apps.healthinspectionviewer.constants.GeocodeConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
@@ -40,6 +37,8 @@ import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenRespon
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.services.FetchAddressIntentService;
+import com.janeullah.apps.healthinspectionviewer.tasks.YelpAccessRequestTask;
+import com.janeullah.apps.healthinspectionviewer.tasks.YelpSearchBusinessesTask;
 
 import org.parceler.Parcels;
 
@@ -152,16 +151,15 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
     }*/
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == android.R.id.home) {
+        int id = item.getItemId();
+        if (id == R.id.action_about) {
+            loadActivity(this, AboutActivity.class);
+            return true;
+        } else if(id == R.id.action_legal){
+            loadActivity(this, LegalActivity.class);
+            return true;
+        }else if (id == android.R.id.home) {
             Log.i(TAG, "Up clicked!");
             Intent upIntent = NavUtils.getParentActivityIntent(this);
             upIntent.putExtra(IntentNames.COUNTY_SELECTED, mRestaurantSelected.county);
@@ -170,7 +168,6 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

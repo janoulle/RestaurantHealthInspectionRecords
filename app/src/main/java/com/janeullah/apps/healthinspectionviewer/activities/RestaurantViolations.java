@@ -8,7 +8,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.janeullah.apps.healthinspectionviewer.R;
@@ -42,7 +41,7 @@ public class RestaurantViolations extends BaseActivity {
     @BindView(R.id.tabs)
     public TabLayout mTabLayout;
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.app_toolbar)
     public Toolbar mToolbar;
 
     private FlattenedRestaurant mRestaurantSelected;
@@ -78,13 +77,6 @@ public class RestaurantViolations extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -92,7 +84,11 @@ public class RestaurantViolations extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            loadActivity(this, AboutActivity.class);
+            return true;
+        } else if(id == R.id.action_legal){
+            loadActivity(this, LegalActivity.class);
             return true;
         }else if (id == android.R.id.home) {
             Log.i(TAG, "Up clicked!");

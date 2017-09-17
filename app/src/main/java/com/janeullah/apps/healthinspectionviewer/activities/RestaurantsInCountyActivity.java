@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -99,16 +98,15 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == android.R.id.home) {
+        int id = item.getItemId();
+        if (id == R.id.action_about) {
+            loadActivity(this, AboutActivity.class);
+            return true;
+        } else if(id == R.id.action_legal){
+            loadActivity(this, LegalActivity.class);
+            return true;
+        }else if (id == android.R.id.home) {
             Log.i(TAG, "Up clicked!");
             Intent upIntent = NavUtils.getParentActivityIntent(this);
             navigateUp(this,upIntent);

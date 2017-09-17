@@ -3,7 +3,6 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -62,6 +61,7 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(mAppToolbar);
+
         mTitleView.setText(R.string.select_county_main_activity);
         negaCountyDatabaseReference = FirebaseInitialization
                 .getInstance()
@@ -79,9 +79,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
+        int id = item.getItemId();
+        if (id == R.id.action_about) {
+            loadActivity(this, AboutActivity.class);
+            return true;
+        } else if(id == R.id.action_legal) {
+            loadActivity(this, LegalActivity.class);
             return true;
         }
         return super.onOptionsItemSelected(item);
