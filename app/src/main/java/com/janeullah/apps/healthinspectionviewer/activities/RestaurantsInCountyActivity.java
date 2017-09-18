@@ -3,7 +3,6 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -80,8 +79,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants in %s", mCountyName));
 
         setSupportActionBar(mAppToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle(String.format(Locale.getDefault(),"Restaurants In %s", mCountyName));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
