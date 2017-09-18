@@ -89,6 +89,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
                 .getNegaDatabaseReference()
                 .child("restaurants");
+        negaRestaurantsDatabaseReference.keepSynced(true);
 
         mQuery = negaRestaurantsDatabaseReference
                 .orderByChild("county")
