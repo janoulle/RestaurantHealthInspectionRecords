@@ -2,9 +2,9 @@
 
 buildscript {
     ext.compile_sdk_version = '25.4.0'
-    ext.firebase_version = '11.0.2'
-    ext.google_maps_services_version = '11.0.2'
-    ext.google_play_services_version = '11.0.2'
+    ext.firebase_version = '11.4.0'
+    ext.google_maps_services_version = '11.4.0'
+    ext.google_play_services_version = '11.4.0'
     ext.butterknife_version = '8.5.1'
     ext.leakcanary_version = '1.5'
     ext.parceler_version = '1.1.6'
@@ -17,6 +17,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'com.google.gms:google-services:3.1.0'
+        classpath 'com.google.firebase:firebase-plugins:1.1.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
