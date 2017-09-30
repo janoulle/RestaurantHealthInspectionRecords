@@ -40,6 +40,8 @@ public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,Aws
             Response<AwsElasticSearchResponse> response = searchRequest.execute();
             if (response.isSuccessful()) {
                 Log.i(TAG,"Search results received for query="+awsSearchRequests[0]);
+                Log.e(TAG,"Search response is successful. Result="+response);
+                return response.body();
             }
             Log.e(TAG,"Search response not successful. Result="+response);
         }catch(Exception e){
@@ -48,6 +50,14 @@ public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,Aws
         }
         return null;
     }
+
+    @Override
+    protected void onPostExecute(AwsElasticSearchResponse result) {
+        if (awsEsSearchTaskListener != null) {
+            awsEsSearchTaskListener.onSuccess(result);
+        }
+    }
+
 
     /**
      * Making a http call using OkHttp sample

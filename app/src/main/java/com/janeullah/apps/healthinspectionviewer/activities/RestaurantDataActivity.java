@@ -126,7 +126,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             YelpAccessTaskListener taskListener = new YelpAccessTaskListener();
             taskListener.setGeocodedComponents(mGeocodedAddressComponents);
             taskListener.setSharedPreferences(mSharedPreferences);
-            taskListener.setView(this.getCurrentFocus());
+            taskListener.setActivity(this);
             taskListener.setIntent(getIntent());
             mAccessRequestTask.setYelpAccessTaskListener(taskListener);
             mAccessRequestTask.execute();
@@ -135,6 +135,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
 
     private void startBackgroundGeocodeServiceLookup() {
         mGeocodeResultsReceiver = new GeocodingResultsReceiver(new Handler());
+        mGeocodeResultsReceiver.setActivity(this);
         Intent intent = new Intent(FetchAddressIntentService.ACTION_GEOCODE, null, this, FetchAddressIntentService.class);
         intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(mRestaurantSelected));
         intent.putExtra(FetchAddressIntentService.RECEIVER, mGeocodeResultsReceiver);
@@ -264,6 +265,8 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
      */
     private class GeocodingResultsReceiver extends ResultReceiver {
         private static final String TAG = "GeocodingReceiver";
+        private BaseActivity activity;
+
         /**
          * Create a new ResultReceiver to receive results.  Your
          * {@link #onReceiveResult} method will be called from the thread running
@@ -275,6 +278,9 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
             super(handler);
         }
 
+        public void setActivity(BaseActivity activity){
+            this.activity = activity;
+        }
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -286,7 +292,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                     YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(constructYelpAuthTokenResponseFromPreferences(),mGeocodedAddressComponents,mRestaurantSelected);
                     YelpSearchTaskListener yelpSearchTaskListener = new YelpSearchTaskListener();
                     yelpSearchTaskListener.setIntent(getIntent());
-                    yelpSearchTaskListener.setView(getCurrentFocus());
+                    yelpSearchTaskListener.setActivity(activity);
                     mYelpSearchRequestTask.setYelpSearchTaskListener(yelpSearchTaskListener);
                     mYelpSearchRequestTask.execute(yelpSearchRequest);
                 }

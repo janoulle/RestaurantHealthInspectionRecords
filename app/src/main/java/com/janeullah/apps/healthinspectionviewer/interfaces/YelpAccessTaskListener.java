@@ -3,8 +3,8 @@ package com.janeullah.apps.healthinspectionviewer.interfaces;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.View;
 
+import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.async.yelp.YelpSearchBusinessesTask;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
@@ -21,15 +21,15 @@ public class YelpAccessTaskListener implements TaskListener<Void, YelpAuthTokenR
     private SharedPreferences mSharedPreferences;
     private GeocodedAddressComponent mGeocodedAddressComponents;
     private YelpSearchBusinessesTask mYelpSearchRequestTask;
-    private View view;
+    private BaseActivity activity;
     private Intent intent;
 
     public void setIntent(Intent intent){
         this.intent = intent;
     }
 
-    public void setView(View view){
-        this.view = view;
+    public void setActivity(BaseActivity activity){
+        this.activity = activity;
     }
 
     public void setSharedPreferences(SharedPreferences preferences){
@@ -56,7 +56,7 @@ public class YelpAccessTaskListener implements TaskListener<Void, YelpAuthTokenR
             mYelpSearchRequestTask = new YelpSearchBusinessesTask();
             YelpSearchTaskListener yelpSearchTaskListener = new YelpSearchTaskListener();
             yelpSearchTaskListener.setIntent(intent);
-            yelpSearchTaskListener.setView(view);
+            yelpSearchTaskListener.setActivity(activity);
             mYelpSearchRequestTask.setYelpSearchTaskListener(yelpSearchTaskListener);
             mYelpSearchRequestTask.execute(yelpSearchRequest);
         }

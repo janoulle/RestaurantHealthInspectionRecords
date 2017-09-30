@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.adapters.RestaurantsSearchListAdapter;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
@@ -23,10 +24,15 @@ import java.util.List;
 public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSearchResponse> {
     private static final String TAG = "AwsEsSearchTaskListener";
     private Intent intent;
+    private BaseActivity activity;
     private RecyclerView recyclerView;
 
     public void setIntent(Intent intent){
         this.intent = intent;
+    }
+
+    public void setActivity(BaseActivity activity){
+        this.activity = activity;
     }
 
     public void setRecyclerView(RecyclerView view){
@@ -35,11 +41,16 @@ public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSea
 
     @Override
     public Void onSuccess(AwsElasticSearchResponse awsElasticSearchResponse) {
-        intent.putExtra(IntentNames.AWS_ES_RESULTS, Parcels.wrap(awsElasticSearchResponse));
-        List<FlattenedRestaurant> processedAwsResponse = processAwsResponse(awsElasticSearchResponse);
-        //add adapter to recyclerview
-        RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(recyclerView.getContext(),processedAwsResponse);
-        recyclerView.setAdapter(adapter);
+        if (awsElasticSearchResponse != null) {
+            intent.putExtra(IntentNames.AWS_ES_RESULTS, Parcels.wrap(awsElasticSearchResponse));
+            List<FlattenedRestaurant> processedAwsResponse = processAwsResponse(awsElasticSearchResponse);
+            //add adapter to recyclerview
+            RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(recyclerView.getContext(), processedAwsResponse);
+            recyclerView.setAdapter(adapter);
+        }else {
+            //show error message
+            // turn off spinner
+        }
         return null;
     }
 
