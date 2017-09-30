@@ -90,7 +90,6 @@ public class AwsSearchRequest {
     }
 
     private SortedMap<String,String> generateHttpHeaders(String timeStampedDate){
-        headersSorted.put("cache-control","no-cache");
         headersSorted.put("content-type","application/json");
         headersSorted.put("host", AWS_ES_HOST);
         headersSorted.put("x-amz-date", timeStampedDate);
@@ -168,7 +167,7 @@ public class AwsSearchRequest {
         signedHeaders = trimTrailingSemiColonAndAppendNewLine(signedHeadersBuilder);
         canonicalRequestBuilder.append(signedHeadersBuilder);
         canonicalRequestBuilder.append(NEW_LINE);
-        canonicalRequestBuilder.append(createHashedPayload());
+        canonicalRequestBuilder.append(createHashedPayload(searchRequest));
         return canonicalRequestBuilder.toString();
     }
 
@@ -180,6 +179,8 @@ public class AwsSearchRequest {
     private String createStringToSign(String canonicalRequest){
         StringBuilder signedString = new StringBuilder();
         signedString.append(AWS_ALGORITHM);
+        signedString.append(NEW_LINE);
+        signedString.append(timeStampedDate);
         signedString.append(NEW_LINE);
         signedString.append(getCredentialScope());
         signedString.append(NEW_LINE);
@@ -195,7 +196,7 @@ public class AwsSearchRequest {
     private String createSignature(String stringToBeSigned) {
         try {
             byte[] signatureInformation = getSignatureKey(AWS_ES_READONLY_SECRET, date, AWS_REGION, AWS_ES_SERVICE);
-            byte[] hashedPayload = hmacSHA256(stringToBeSigned,signatureInformation);
+            byte[] hashedPayload = hmacSHA256(stringToBeSigned, signatureInformation);
             return convertByteArrayToHexadecimalAsLowercase(hashedPayload);
         }catch(Exception e){
             FirebaseCrash.report(e);
@@ -211,30 +212,16 @@ public class AwsSearchRequest {
         return signedHeaders + NEW_LINE;
     }
 
-    //YYYYMMDD'T'HHMMSS'Z'
-    //https://stackoverflow.com/questions/7401841/java-date-formatting
-    /*private String generateDateForHeader(){
-        //DateTime now = DateTime.now( DateTimeZone.UTC );
-        //return now.toString();
-        final SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.US);
-        f.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return f.format(new Date());
-    }*/
-
     private String getCredentialScope() {
         return AWS_REGION + '/' + AWS_ES_SERVICE + '/' + "aws4_request";
     }
 
-    private String createHashedPayload(){
-        return createHexEncodingOfHashedData(getString(searchRequest));
+    private String createHashedPayload(AwsElasticSearchRequest searchRequest){
+        return convertByteArrayToHexadecimalAsLowercase(hashPayload(getString(searchRequest)));
     }
 
     private String createHashedCanonicalRequest(String request){
-        return createHexEncodingOfHashedData(request);
-    }
-
-    private String createHexEncodingOfHashedData(String data){
-        return convertByteArrayToHexadecimalAsLowercase(hashPayload(getString(data)));
+        return convertByteArrayToHexadecimalAsLowercase(hashPayload(request));
     }
 
     @Override

@@ -58,11 +58,16 @@ public class AwsUtilities {
         return "";
     }
 
+    /**
+     * http://www.baeldung.com/sha-256-hashing-java
+     * https://stackoverflow.com/questions/5531455/how-to-hash-some-string-with-sha256-in-java
+     * @param data String to be hashed
+     * @return byte representation of the hash
+     */
     public static byte[] hashPayload(String data) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(data.getBytes("UTF-8"));
-            return md.digest();
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return digest.digest(data.getBytes("UTF-8"));
         }catch(Exception e){
             FirebaseCrash.report(e);
             Log.e(TAG,"Failed to hash data=" + data);

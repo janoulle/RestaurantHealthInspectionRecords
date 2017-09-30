@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
 public class RestaurantNameSearchActivity extends BaseActivity {
     private static final String TAG = "RestaurantSearch";
     private AwsSearchRequest searchRequest = null;
+    private AwsSearchRequestTask asyncTask = new AwsSearchRequestTask();
 
     @BindView(R.id.restaurants_search_listing_recyclerview)
     protected RecyclerView mRecycler;
@@ -75,6 +76,14 @@ public class RestaurantNameSearchActivity extends BaseActivity {
         handleIntent(intent);
     }
 
+    @Override
+    public void onDestroy(){
+        if (asyncTask != null){
+            asyncTask.setAwsSearchTaskListener(null);
+        }
+        super.onDestroy();
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -100,9 +109,9 @@ public class RestaurantNameSearchActivity extends BaseActivity {
             showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants for query %s", query));
             if (StringUtils.isNotBlank(query)) {
                 searchRequest = new AwsSearchRequest(query);
-                AwsSearchRequestTask asyncTask = new AwsSearchRequestTask();
                 AwsEsSearchTaskListener listener = new AwsEsSearchTaskListener();
                 listener.setIntent(getIntent());
+                listener.setActivity(this);
                 listener.setRecyclerView(mRecycler);
                 asyncTask.setAwsSearchTaskListener(listener);
                 asyncTask.execute(searchRequest);

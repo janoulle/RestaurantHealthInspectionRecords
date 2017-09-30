@@ -3,7 +3,11 @@ package com.janeullah.apps.healthinspectionviewer.interfaces;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.adapters.RestaurantsSearchListAdapter;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
@@ -48,6 +52,9 @@ public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSea
             RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(recyclerView.getContext(), processedAwsResponse);
             recyclerView.setAdapter(adapter);
         }else {
+            ProgressBar progressBar = activity.findViewById(R.id.loadingModalForIndeterminateProgress);
+            progressBar.setVisibility(View.INVISIBLE);
+            activity.showToast("Failed to fetch search results.", Toast.LENGTH_SHORT);
             //show error message
             // turn off spinner
         }
