@@ -126,7 +126,7 @@ android {
 android.applicationVariants.all {
     // Set this to false to disable Firebase Performance Monitoring at compile time
     FirebasePerformance {
-        instrumentationEnabled true
+        instrumentationEnabled false
     }
 }
 

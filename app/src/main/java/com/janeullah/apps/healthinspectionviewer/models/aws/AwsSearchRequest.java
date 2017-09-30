@@ -3,6 +3,7 @@ package com.janeullah.apps.healthinspectionviewer.models.aws;
 import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.gson.Gson;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -41,6 +42,7 @@ import static org.apache.commons.lang3.StringUtils.trim;
  */
 
 public class AwsSearchRequest {
+    private static final Gson gson = new Gson();
     private SortedMap<String, String> headersSorted = new TreeMap<>();
     private final AwsElasticSearchRequest searchRequest = new AwsElasticSearchRequest();
     private static final String TAG = "AwsSearchRequest";
@@ -57,6 +59,14 @@ public class AwsSearchRequest {
         return searchRequest;
     }
 
+    public String getTimestampedDate(){
+        return timeStampedDate;
+    }
+
+    public String getJsonPayload(){
+        return gson.toJson(searchRequest);
+    }
+
     public Map<String,String> getHeaders(){
         return headersSorted;
     }
@@ -64,6 +74,10 @@ public class AwsSearchRequest {
     //https://github.com/square/retrofit/issues/1153
     public String getSignedHeaders(){
         return signedHeaders.trim();
+    }
+
+    public String getAuthorizationHeader(){
+        return headersSorted.get("authorization");
     }
 
     public AwsSearchRequest(){}

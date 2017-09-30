@@ -104,7 +104,7 @@ public class RestaurantNameSearchActivity extends BaseActivity {
                 AwsEsSearchTaskListener listener = new AwsEsSearchTaskListener();
                 listener.setIntent(getIntent());
                 listener.setRecyclerView(mRecycler);
-                asyncTask.setListener(listener);
+                asyncTask.setAwsSearchTaskListener(listener);
                 asyncTask.execute(searchRequest);
             }
         }
