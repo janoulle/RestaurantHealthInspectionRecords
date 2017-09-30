@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.services;
+package com.janeullah.apps.healthinspectionviewer.services.firebase;
 
 import android.util.Log;
 

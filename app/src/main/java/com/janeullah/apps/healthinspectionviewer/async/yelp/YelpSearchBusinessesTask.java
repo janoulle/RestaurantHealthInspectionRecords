@@ -1,17 +1,18 @@
-package com.janeullah.apps.healthinspectionviewer.tasks;
+package com.janeullah.apps.healthinspectionviewer.async.yelp;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
-import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfigurationForYelp;
+import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.dtos.YelpMatch;
+import com.janeullah.apps.healthinspectionviewer.interfaces.YelpSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
-import com.janeullah.apps.healthinspectionviewer.services.YelpService;
+import com.janeullah.apps.healthinspectionviewer.services.yelp.YelpService;
 import com.janeullah.apps.healthinspectionviewer.utils.YelpQueryParams;
 
 import java.io.IOException;
@@ -34,13 +35,13 @@ import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromNe
 public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Integer,YelpResults> {
     private static final String TAG = "YelpSearchTask";
     private static final Gson gson = new Gson();
-    private Listener listener;
+    private YelpSearchTaskListener listener;
 
     @Override
     protected YelpResults doInBackground(YelpSearchRequest... params) {
         try {
             Log.i(TAG,"Initiated background processing...");
-            YelpService yelpService = RetrofitConfigurationForYelp.YELP_API_SERVICE;
+            YelpService yelpService = RetrofitConfiguration.YELP_SERVICE;
 
             //prepare query
             Map<String, Object> queryParams = new HashMap<>();
@@ -95,11 +96,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
         }
     }
 
-    public void setListener(Listener listener) {
+    public void setYelpSearchTaskListener(YelpSearchTaskListener listener){
         this.listener = listener;
-    }
-
-    public interface Listener {
-        void onSuccess(YelpResults object);
     }
 }

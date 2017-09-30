@@ -25,11 +25,12 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.County;
-import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
+import com.janeullah.apps.healthinspectionviewer.services.firebase.FirebaseInitialization;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +60,7 @@ public class MainActivity extends BaseActivity {
     private ChildEventListener mCountyListener;
 
     @Override
+    @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

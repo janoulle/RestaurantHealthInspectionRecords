@@ -1,5 +1,8 @@
 package com.janeullah.apps.healthinspectionviewer.models.yelp;
 
+import android.content.Intent;
+
+import com.google.firebase.database.Exclude;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -23,6 +26,13 @@ public class YelpResults {
     @SerializedName("region")
     @Expose
     private Region region;
+
+    @Exclude
+    private String searchQuery;
+
+    @Exclude
+    private Intent intent;
+
 
     /*TODO: investigate solution here http://stackoverflow.com/questions/4802887/gson-how-to-exclude-specific-fields-from-serialization-without-annotations
         Marking as 'transient' to prevent Gson serializaton issues
@@ -60,5 +70,13 @@ public class YelpResults {
 
     public void setMatchedBusiness(Business matchedBusiness) {
         this.matchedBusiness = matchedBusiness;
+    }
+
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String value){
+        searchQuery = value;
     }
 }

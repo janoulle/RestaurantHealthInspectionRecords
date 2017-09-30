@@ -3,6 +3,7 @@ package com.janeullah.apps.healthinspectionviewer.dtos;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.janeullah.apps.healthinspectionviewer.models.aws.Source;
 
 import org.parceler.Parcel;
 
@@ -43,6 +44,14 @@ public class FlattenedRestaurant {
         /**
          * Default constructor
          */
+    }
+
+    public FlattenedRestaurant(Source awsSearchHit){
+        //this.score, this.criticalViolations, this.nonCriticalViolations are not in the AWS response
+        this.id = awsSearchHit.getId().longValue();
+        this.name = awsSearchHit.getName();
+        this.address = awsSearchHit.getAddress();
+        this.county = awsSearchHit.getCounty();
     }
 
     public FlattenedRestaurant(Long id, int score, int criticalViolations, int nonCriticalViolations, String name, String dateReported, String address, String county) {

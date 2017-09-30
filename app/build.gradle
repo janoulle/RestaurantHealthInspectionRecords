@@ -7,6 +7,7 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -55,12 +56,13 @@ android {
             keyAlias keyStoreProperties['NEGA_DEBUG_KEY_ALIAS']
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion "26.0.0"
+
+    compileSdkVersion 26
+    buildToolsVersion "$build_tools_version"
     defaultConfig {
         applicationId "com.janeullah.apps.healthinspectionviewer"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 6
         versionName "4.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -85,11 +87,15 @@ android {
             manifestPlaceholders = [google_map_key: GOOGLE_MAPS_API_KEY]
         }
 
+        //https://stackoverflow.com/questions/17197636/is-it-possible-to-declare-a-variable-in-gradle-usable-in-java
         //http://stackoverflow.com/questions/35722904/saving-the-api-key-in-gradle-properties
         //http://stackoverflow.com/questions/33134031/is-there-a-safe-way-to-manage-api-keys
         buildTypes.each {
             it.buildConfigField 'String', 'YELP_CLIENT_ID', YELP_CLIENT_ID
             it.buildConfigField 'String', 'YELP_CLIENT_SECRET', YELP_CLIENT_SECRET
+            it.buildConfigField 'String', 'AWS_ES_READONLY_ACCESS_KEY', AWS_ES_READONLY_ACCESS_KEY
+            it.buildConfigField 'String', 'AWS_ES_READONLY_SECRET', AWS_ES_READONLY_SECRET
+            it.buildConfigField 'String', 'AWS_ES_HOST', AWS_ES_HOST
         }
     }
 
@@ -114,6 +120,13 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+android.applicationVariants.all {
+    // Set this to false to disable Firebase Performance Monitoring at compile time
+    FirebasePerformance {
+        instrumentationEnabled true
     }
 }
 
@@ -143,6 +156,7 @@ dependencies {
     compile "com.google.firebase:firebase-core:$firebase_version"
     compile "com.google.firebase:firebase-database:$firebase_version"
     compile "com.google.firebase:firebase-crash:$firebase_version"
+    compile "com.google.firebase:firebase-config:$firebase_version"
     compile("com.squareup.retrofit2:retrofit:$retrofit_version") {
         exclude module: 'okhttp'
     }
@@ -170,6 +184,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:0.5'
     compile "com.google.firebase:firebase-perf:$firebase_version"
+    //compile "com.amazonaws.aws-android-sdk-core:$aws_sdk_version"
 }
 
 apply plugin: 'com.google.gms.google-services'

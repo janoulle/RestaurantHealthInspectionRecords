@@ -16,7 +16,7 @@ import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.analytics.ActionParameters;
-import com.janeullah.apps.healthinspectionviewer.services.UUIDInitializer;
+import com.janeullah.apps.healthinspectionviewer.utils.UUIDInitializer;
 
 import java.util.Calendar;
 
@@ -115,7 +115,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         logSelectionEventWithFabric(key,value,tag);
     }
-
-
 }
 

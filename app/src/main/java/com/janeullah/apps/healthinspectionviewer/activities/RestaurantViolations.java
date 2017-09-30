@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.adapters.ViolationPagerAdapter;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
@@ -49,8 +50,8 @@ public class RestaurantViolations extends BaseActivity {
 
     private FlattenedRestaurant mRestaurantSelected;
 
-
     @Override
+    @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_violations);

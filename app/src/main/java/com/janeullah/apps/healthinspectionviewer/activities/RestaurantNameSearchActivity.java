@@ -17,12 +17,15 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.janeullah.apps.healthinspectionviewer.R;
+import com.janeullah.apps.healthinspectionviewer.async.aws.AwsSearchRequestTask;
 import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
+import com.janeullah.apps.healthinspectionviewer.interfaces.AwsEsSearchTaskListener;
+import com.janeullah.apps.healthinspectionviewer.models.aws.AwsSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.parceler.Parcels;
 
 import java.util.Locale;
@@ -32,10 +35,7 @@ import butterknife.ButterKnife;
 
 public class RestaurantNameSearchActivity extends BaseActivity {
     private static final String TAG = "RestaurantSearch";
-
-    private DatabaseReference negaRestaurantsDatabaseReference;
-    private Query mQuery;
-    private FirebaseRecyclerAdapter<FlattenedRestaurant, RestaurantViewHolder> mAdapter;
+    private AwsSearchRequest searchRequest = null;
 
     @BindView(R.id.restaurants_search_listing_recyclerview)
     protected RecyclerView mRecycler;
@@ -60,10 +60,7 @@ public class RestaurantNameSearchActivity extends BaseActivity {
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
 
-        negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
-                .getNegaDatabaseReference()
-                .child("restaurants");
-
+        //add divider to layout
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecycler.getContext(),
                 layoutManager.getOrientation());
         mRecycler.addItemDecoration(dividerItemDecoration);
@@ -101,9 +98,15 @@ public class RestaurantNameSearchActivity extends BaseActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants for query %s", query));
-
-            mQuery = negaRestaurantsDatabaseReference
-                    .orderByKey();
+            if (StringUtils.isNotBlank(query)) {
+                searchRequest = new AwsSearchRequest(query);
+                AwsSearchRequestTask asyncTask = new AwsSearchRequestTask();
+                AwsEsSearchTaskListener listener = new AwsEsSearchTaskListener();
+                listener.setIntent(getIntent());
+                listener.setRecyclerView(mRecycler);
+                asyncTask.setListener(listener);
+                asyncTask.execute(searchRequest);
+            }
         }
     }
 

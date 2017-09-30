@@ -1,7 +1,9 @@
 package com.janeullah.apps.healthinspectionviewer.models.yelp;
 
+import com.google.firebase.database.Exclude;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelProperty;
@@ -50,4 +52,14 @@ public class YelpAuthTokenResponse {
         this.tokenType = tokenType;
     }
 
+    @Exclude
+    public FlattenedRestaurant restaurantSelected;
+
+    public FlattenedRestaurant getRestaurantSelected(){
+        return restaurantSelected;
+    }
+
+    public void setRestaurantSelected(FlattenedRestaurant value){
+        this.restaurantSelected = value;
+    }
 }

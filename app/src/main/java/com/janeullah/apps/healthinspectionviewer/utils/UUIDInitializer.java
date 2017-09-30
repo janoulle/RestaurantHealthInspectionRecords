@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.services;
+package com.janeullah.apps.healthinspectionviewer.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

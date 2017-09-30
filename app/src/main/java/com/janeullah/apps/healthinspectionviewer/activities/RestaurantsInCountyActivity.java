@@ -19,11 +19,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
+import com.janeullah.apps.healthinspectionviewer.services.firebase.FirebaseInitialization;
 import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder;
 
 import org.parceler.Parcels;
@@ -64,6 +65,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     public Toolbar mAppToolbar;
 
     @Override
+    @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants_in_county);

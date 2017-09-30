@@ -20,3 +20,4 @@ libs/
 !/app/libs/
 /keystore.properties
 keystore.properties
+/app/aws.properties
