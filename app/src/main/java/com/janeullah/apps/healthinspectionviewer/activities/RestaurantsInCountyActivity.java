@@ -155,7 +155,6 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         });
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -186,26 +185,34 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             String key = queryRef.getKey();
             Log.v(TAG, "Key: " + key);
             viewHolder.bindData(model);
+            viewHolder.setOnClickListener(new RestaurantRowClickListener(viewHolder,model));
             hideProgressDialog();
             countOfRestaurants.incrementAndGet();
-            addListenerToRestaurantItem(viewHolder, model);
+        }
+    }
+
+    private class RestaurantRowClickListener implements View.OnClickListener{
+        private static final String TAG = "RestaurantRowListener";
+        private RestaurantViewHolder restaurantViewHolder;
+        private FlattenedRestaurant sourceModel;
+
+        RestaurantRowClickListener(RestaurantViewHolder holder, FlattenedRestaurant sourceModel){
+            this.restaurantViewHolder = holder;
+            this.sourceModel = sourceModel;
         }
 
-        private void addListenerToRestaurantItem(RestaurantViewHolder viewHolder, final FlattenedRestaurant model) {
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Intent intent = new Intent(RestaurantsInCountyActivity.this, RestaurantDataActivity.class);
-                    Log.i(TAG,String.format(Locale.getDefault(),"%s selected",model.name));
-                    intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
-                    intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
-                    intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
-                    intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,model.address);
+        @Override
+        public void onClick(View v) {
+            final Intent intent = new Intent(restaurantViewHolder.itemView.getContext(), RestaurantDataActivity.class);
+            Log.i(TAG,String.format(Locale.getDefault(),"%s selected",sourceModel.name));
+            intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, sourceModel.getNameKey());
+            intent.putExtra(IntentNames.COUNTY_SELECTED, sourceModel.county);
+            intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(sourceModel));
+            intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,sourceModel.address);
 
-                    logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG);
-                    startActivity(intent);
-                }
-            });
+            FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(restaurantViewHolder.itemView.getContext());
+            logSelectionEvent(AppConstants.RESTAURANT_SELECTION,sourceModel.getNameKey(),TAG,mFirebaseAnalytics);
+            startActivity(intent);
         }
     }
 }

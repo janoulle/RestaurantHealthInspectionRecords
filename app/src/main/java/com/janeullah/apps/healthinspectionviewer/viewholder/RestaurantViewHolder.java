@@ -39,6 +39,8 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder  {
     @BindView(R.id.restaurantCheckMark)
     public ImageView restaurantCheckMark;
 
+    private String county;
+
     public RestaurantViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -49,6 +51,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder  {
         restaurantAddress.setText(restaurant.address);
         restaurantNameKey.setText(restaurant.getNameKey());
         restaurantId.setText(String.valueOf(restaurant.id));
+        county = restaurant.county;
         computeAndSetResourceId(restaurant);
     }
 
@@ -80,5 +83,9 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder  {
         }catch( Exception e){
             Log.e(TAG,"Exception setting restaurant check mark resource in viewholder.",e);
         }
+    }
+
+    public void setOnClickListener(View.OnClickListener clickListener){
+        itemView.setOnClickListener(clickListener);
     }
 }
