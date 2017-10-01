@@ -57,7 +57,7 @@ public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSea
         }else {
             String message = "Failed to find a match for the query provided=" + intent.getStringExtra(SearchManager.QUERY);
             Log.d(TAG,message);
-            activity.showToast(message, Toast.LENGTH_SHORT);
+            activity.showToast(message, Toast.LENGTH_LONG);
             //show error message
             // turn off spinner
         }

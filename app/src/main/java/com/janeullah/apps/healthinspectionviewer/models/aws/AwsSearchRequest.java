@@ -82,6 +82,7 @@ public class AwsSearchRequest {
         }
     }
 
+    //this currently runs an exact match query. Research ES on how to perform a contains query
     private void populateSearchRequestObject(String searchValue) {
         Match matchTerm = new Match();
         matchTerm.setName(searchValue);
