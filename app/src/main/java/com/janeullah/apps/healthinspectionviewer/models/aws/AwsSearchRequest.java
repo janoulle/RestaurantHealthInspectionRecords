@@ -92,7 +92,7 @@ public class AwsSearchRequest {
         searchRequest.setSize(100);
     }
 
-        @Override
+    @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("headers", headers)
