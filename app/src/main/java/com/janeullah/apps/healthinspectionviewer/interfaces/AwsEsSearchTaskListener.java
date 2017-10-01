@@ -45,15 +45,15 @@ public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSea
 
     @Override
     public Void onSuccess(AwsElasticSearchResponse awsElasticSearchResponse) {
+        ProgressBar progressBar = activity.findViewById(R.id.loadingModalForIndeterminateProgress);
+        progressBar.setVisibility(View.INVISIBLE);
         if (awsElasticSearchResponse != null) {
             intent.putExtra(IntentNames.AWS_ES_RESULTS, Parcels.wrap(awsElasticSearchResponse));
             List<FlattenedRestaurant> processedAwsResponse = processAwsResponse(awsElasticSearchResponse);
             //add adapter to recyclerview
-            RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(recyclerView.getContext(), processedAwsResponse);
+            RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(activity, processedAwsResponse);
             recyclerView.setAdapter(adapter);
         }else {
-            ProgressBar progressBar = activity.findViewById(R.id.loadingModalForIndeterminateProgress);
-            progressBar.setVisibility(View.INVISIBLE);
             activity.showToast("Failed to fetch search results.", Toast.LENGTH_SHORT);
             //show error message
             // turn off spinner

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerBase;
 import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerForAuthorizationHeader;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
+import com.janeullah.apps.healthinspectionviewer.utils.StringUtilities;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -19,7 +20,6 @@ import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSear
 import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_ES_SERVICE;
 import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_REGION;
 import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_SEARCH_URL;
-import static com.janeullah.apps.healthinspectionviewer.utils.AwsUtilities.getString;
 
 /**
  * ttps://github.com/square/retrofit/issues/1153
@@ -59,7 +59,7 @@ public class AwsSearchRequest {
     private void setup() {
         try {
             // precompute hash of the body content
-            String payload = getString(searchRequest);
+            String payload = StringUtilities.getString(searchRequest);
             byte[] contentHash = AWS4SignerBase.hash(payload);
             String contentHashString = BinaryUtils.toHex(contentHash);
 
