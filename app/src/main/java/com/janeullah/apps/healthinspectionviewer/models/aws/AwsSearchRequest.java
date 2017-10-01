@@ -2,7 +2,6 @@ package com.janeullah.apps.healthinspectionviewer.models.aws;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerBase;
 import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerForAuthorizationHeader;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
@@ -31,17 +30,12 @@ import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSear
  */
 
 public class AwsSearchRequest {
-    private static final Gson gson = new Gson();
     private Map<String, String> headers = new HashMap<>();
     private final AwsElasticSearchRequest searchRequest = new AwsElasticSearchRequest();
     private static final String TAG = "AwsSearchRequest";
 
     public AwsElasticSearchRequest getPayload() {
         return searchRequest;
-    }
-
-    public String getJsonPayload() {
-        return gson.toJson(searchRequest);
     }
 
     public Map<String, String> getHeaders() {
@@ -86,9 +80,9 @@ public class AwsSearchRequest {
     private void populateSearchRequestObject(String searchValue) {
         Match matchTerm = new Match();
         matchTerm.setName(searchValue);
-        ExactMatchQuery exactMatchQuery = new ExactMatchQuery();
-        exactMatchQuery.setMatch(matchTerm);
-        searchRequest.setExactMatchQuery(exactMatchQuery);
+        ContainsMatchQuery containsMatchQuery = new ContainsMatchQuery();
+        containsMatchQuery.setMatch(matchTerm);
+        searchRequest.setContainsMatchQuery(containsMatchQuery);
         searchRequest.setSize(100);
     }
 

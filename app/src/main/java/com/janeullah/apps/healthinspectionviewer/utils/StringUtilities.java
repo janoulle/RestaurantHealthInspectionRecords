@@ -10,20 +10,19 @@ import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Spannable helper functions: https://developer.android.com/guide/topics/resources/string-resource.html
- *
- * @author Jane Ullah
- * @date 7/8/2017.
+ * Other helper functions as needed.
  */
 public class StringUtilities {
     private StringUtilities(){}
 
     private static final String TAG = "StringUtilities";
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     public static final String FORWARD_SLASH = "/";
-    public static final String BACK_SLASH = "/";
+    public static final String BACK_SLASH = "\\";
     public static final String NEW_LINE = "\n";
     public static final String COLON = ":";
     public static final String SEMICOLON = ";";
@@ -97,6 +96,7 @@ public class StringUtilities {
         return apply(content, new ForegroundColorSpan(color));
     }
 
+    //https://google.github.io/gson/apidocs/com/google/gson/GsonBuilder.html#disableHtmlEscaping
     public static <T> String getString(T request) {
         try {
             return gson.toJson(request);

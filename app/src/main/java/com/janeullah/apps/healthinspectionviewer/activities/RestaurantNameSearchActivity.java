@@ -59,6 +59,8 @@ public class RestaurantNameSearchActivity extends BaseActivity {
                 layoutManager.getOrientation());
         mRecycler.addItemDecoration(dividerItemDecoration);
 
+        //setting recylerview adapter in the awstasklistener when the search query is completed
+
         // Get the intent, verify the action and get the query
         handleIntent(getIntent());
     }
@@ -76,7 +78,6 @@ public class RestaurantNameSearchActivity extends BaseActivity {
         }
         super.onDestroy();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

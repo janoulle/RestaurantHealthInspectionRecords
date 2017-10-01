@@ -14,17 +14,17 @@ import org.parceler.Parcel;
 public class AwsElasticSearchRequest {
     @SerializedName("query")
     @Expose
-    private ExactMatchQuery exactMatchQuery;
+    private ContainsMatchQuery containsMatchQuery;
     @SerializedName("size")
     @Expose
     private Integer size;
 
-    public ExactMatchQuery getExactMatchQuery() {
-        return exactMatchQuery;
+    public ContainsMatchQuery getContainsMatchQuery() {
+        return containsMatchQuery;
     }
 
-    public void setExactMatchQuery(ExactMatchQuery exactMatchQuery) {
-        this.exactMatchQuery = exactMatchQuery;
+    public void setContainsMatchQuery(ContainsMatchQuery containsMatchQuery) {
+        this.containsMatchQuery = containsMatchQuery;
     }
 
     public Integer getSize() {
@@ -37,6 +37,6 @@ public class AwsElasticSearchRequest {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("query", exactMatchQuery).append("size", size).toString();
+        return new ToStringBuilder(this).append("query", containsMatchQuery).append("size", size).toString();
     }
 }
