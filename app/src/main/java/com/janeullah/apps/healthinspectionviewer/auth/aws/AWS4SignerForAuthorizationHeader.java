@@ -1,5 +1,7 @@
 package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
+import android.util.Log;
+
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 
 import java.net.URL;
@@ -13,6 +15,7 @@ import java.util.Map;
  * 'Authorization' header.
  */
 public class AWS4SignerForAuthorizationHeader extends AWS4SignerBase {
+    private static final String TAG = "AWS4Signer";
 
     public AWS4SignerForAuthorizationHeader(URL endpointUrl, String httpMethod,
                                             String serviceName, String regionName) {
@@ -73,17 +76,17 @@ public class AWS4SignerForAuthorizationHeader extends AWS4SignerBase {
         String canonicalRequest = getCanonicalRequest(endpointUrl, httpMethod,
                 canonicalizedQueryParameters, canonicalizedHeaderNames,
                 canonicalizedHeaders, bodyHash);
-        System.out.println("--------- Canonical request --------");
-        System.out.println(canonicalRequest);
-        System.out.println("------------------------------------");
+        Log.d(TAG,"--------- Canonical request --------");
+        Log.d(TAG,canonicalRequest);
+        Log.d(TAG,"------------------------------------");
 
         // construct the string to be signed
         String dateStamp = dateStampFormat.format(now);
         String scope =  dateStamp + "/" + regionName + "/" + serviceName + "/" + TERMINATOR;
         String stringToSign = getStringToSign(SCHEME, ALGORITHM, dateTimeStamp, scope, canonicalRequest);
-        System.out.println("--------- String to sign -----------");
-        System.out.println(stringToSign);
-        System.out.println("------------------------------------");
+        Log.d(TAG,"--------- String to sign -----------");
+        Log.d(TAG,stringToSign);
+        Log.d(TAG,"------------------------------------");
 
         // compute the signing key
         byte[] kSecret = (SCHEME + awsSecretKey).getBytes();

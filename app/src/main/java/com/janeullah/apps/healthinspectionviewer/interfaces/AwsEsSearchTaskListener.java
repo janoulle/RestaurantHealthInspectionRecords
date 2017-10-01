@@ -1,5 +1,6 @@
 package com.janeullah.apps.healthinspectionviewer.interfaces;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,14 +48,16 @@ public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSea
     public Void onSuccess(AwsElasticSearchResponse awsElasticSearchResponse) {
         ProgressBar progressBar = activity.findViewById(R.id.loadingModalForIndeterminateProgress);
         progressBar.setVisibility(View.INVISIBLE);
-        if (awsElasticSearchResponse != null) {
+        if (awsElasticSearchResponse != null && awsElasticSearchResponse.getHits().getTotal() > 0) {
             intent.putExtra(IntentNames.AWS_ES_RESULTS, Parcels.wrap(awsElasticSearchResponse));
             List<FlattenedRestaurant> processedAwsResponse = processAwsResponse(awsElasticSearchResponse);
             //add adapter to recyclerview
             RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(activity, processedAwsResponse);
             recyclerView.setAdapter(adapter);
         }else {
-            activity.showToast("Failed to fetch search results.", Toast.LENGTH_SHORT);
+            String message = "Failed to find a match for the query provided=" + intent.getStringExtra(SearchManager.QUERY);
+            Log.d(TAG,message);
+            activity.showToast(message, Toast.LENGTH_SHORT);
             //show error message
             // turn off spinner
         }

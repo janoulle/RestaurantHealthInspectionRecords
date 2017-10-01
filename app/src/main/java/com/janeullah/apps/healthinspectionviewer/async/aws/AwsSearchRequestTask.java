@@ -32,7 +32,7 @@ public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,Aws
             Response<AwsElasticSearchResponse> response = searchRequest.execute();
             if (response.isSuccessful()) {
                 Log.i(TAG,"Search results received for query="+awsSearchRequests[0]);
-                Log.e(TAG,"Search response is successful. Result="+response);
+                Log.e(TAG,"Search response is successful. Result="+response.body());
                 return response.body();
             }
             Log.e(TAG,"Search response not successful. Result="+response);
