@@ -9,18 +9,10 @@ import com.janeullah.apps.healthinspectionviewer.interfaces.AwsEsSearchTaskListe
 import com.janeullah.apps.healthinspectionviewer.models.aws.AwsElasticSearchResponse;
 import com.janeullah.apps.healthinspectionviewer.models.aws.AwsSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.services.aws.AwsElasticSearchService;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-
-import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_ES_HOST;
-import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_SEARCH_URL;
 
 /**
  * @author Jane Ullah
@@ -44,6 +36,7 @@ public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,Aws
                 return response.body();
             }
             Log.e(TAG,"Search response not successful. Result="+response);
+            Log.e(TAG,"Error response: " + response.errorBody().string());
         }catch(Exception e){
             FirebaseCrash.report(e);
             Log.e(TAG,"Error fetching Search Results from AWS",e);
@@ -56,35 +49,6 @@ public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,Aws
         if (awsEsSearchTaskListener != null) {
             awsEsSearchTaskListener.onSuccess(result);
         }
-    }
-
-
-    /**
-     * Making a http call using OkHttp sample
-     * @param awsSearchRequest
-     * @throws IOException exception that
-     */
-    @Deprecated
-    private void vanillaOkHttpCall(AwsSearchRequest awsSearchRequest) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, awsSearchRequest.getJsonPayload());
-        Request request = new Request.Builder()
-                .url(AWS_SEARCH_URL)
-                .post(body)
-                .addHeader("content-type", "application/json")
-                .addHeader("host", AWS_ES_HOST)
-                .addHeader("x-amz-date", awsSearchRequest.getTimestampedDate())
-                .addHeader("authorization", awsSearchRequest.getAuthorizationHeader())
-                .addHeader("cache-control", "no-cache")
-                .build();
-
-        com.squareup.okhttp.Response response = client.newCall(request).execute();
-        if (response.isSuccessful()){
-            Log.i(TAG,"Search results received for query="+ awsSearchRequest);
-        }
-        Log.e(TAG,"Search response not successful. Result="+response);
     }
 
     public void setAwsSearchTaskListener(AwsEsSearchTaskListener listener){

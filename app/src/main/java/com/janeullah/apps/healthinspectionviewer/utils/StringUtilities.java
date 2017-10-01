@@ -6,6 +6,10 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
+
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.gson.Gson;
 
 /**
  * Spannable helper functions: https://developer.android.com/guide/topics/resources/string-resource.html
@@ -14,6 +18,10 @@ import android.text.style.StyleSpan;
  * @date 7/8/2017.
  */
 public class StringUtilities {
+    private StringUtilities(){}
+
+    private static final String TAG = "StringUtilities";
+    private static final Gson gson = new Gson();
     public static final String FORWARD_SLASH = "/";
     public static final String BACK_SLASH = "/";
     public static final String NEW_LINE = "\n";
@@ -87,5 +95,15 @@ public class StringUtilities {
      */
     public static CharSequence color(int color, CharSequence... content) {
         return apply(content, new ForegroundColorSpan(color));
+    }
+
+    public static <T> String getString(T request) {
+        try {
+            return gson.toJson(request);
+        } catch (Exception e) {
+            FirebaseCrash.report(e);
+            Log.e(TAG, "Failed to convert request (" + request + ") to string");
+        }
+        return "";
     }
 }
