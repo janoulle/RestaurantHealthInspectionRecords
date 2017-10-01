@@ -86,9 +86,9 @@ public class AwsSearchRequest {
     private void populateSearchRequestObject(String searchValue) {
         Match matchTerm = new Match();
         matchTerm.setName(searchValue);
-        Query query = new Query();
-        query.setMatch(matchTerm);
-        searchRequest.setQuery(query);
+        ExactMatchQuery exactMatchQuery = new ExactMatchQuery();
+        exactMatchQuery.setMatch(matchTerm);
+        searchRequest.setExactMatchQuery(exactMatchQuery);
         searchRequest.setSize(100);
     }
 
