@@ -1,14 +1,15 @@
-package com.janeullah.apps.healthinspectionviewer.tasks;
+package com.janeullah.apps.healthinspectionviewer.async.yelp;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.BuildConfig;
-import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfigurationForYelp;
+import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
+import com.janeullah.apps.healthinspectionviewer.interfaces.YelpAccessTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
-import com.janeullah.apps.healthinspectionviewer.services.YelpService;
+import com.janeullah.apps.healthinspectionviewer.services.yelp.YelpService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,13 +30,13 @@ import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromNe
 
 public class YelpAccessRequestTask extends AsyncTask<Void,Integer,YelpAuthTokenResponse>  {
     private static final String TAG = "YelpAccessRequestTask";
-    private Listener listener;
+    private YelpAccessTaskListener yelpAccessTaskListener;
 
     @Override
     protected YelpAuthTokenResponse doInBackground(Void... params) {
         try {
             Log.i(TAG,"Initiated background processing...");
-            YelpService yelpService = RetrofitConfigurationForYelp.YELP_API_SERVICE;
+            YelpService yelpService = RetrofitConfiguration.YELP_SERVICE;
             Map<String, String> accessRequestData = new HashMap<>();
             accessRequestData.put(YelpConstants.GRANT_TYPE, YelpConstants.DEFAULT_GRANT_TYPE);
             accessRequestData.put(YelpConstants.CLIENT_ID, BuildConfig.YELP_CLIENT_ID);
@@ -61,17 +62,12 @@ public class YelpAccessRequestTask extends AsyncTask<Void,Integer,YelpAuthTokenR
 
     @Override
     protected void onPostExecute(YelpAuthTokenResponse result) {
-        if (listener != null) {
-            listener.onSuccess(result);
+        if (yelpAccessTaskListener != null) {
+            yelpAccessTaskListener.onSuccess(result);
         }
     }
 
-    public void setListener(Listener listener) {
-        this.listener = listener;
+    public void setYelpAccessTaskListener(YelpAccessTaskListener yelpAccessTaskListener) {
+        this.yelpAccessTaskListener = yelpAccessTaskListener;
     }
-
-    public interface Listener {
-        void onSuccess(YelpAuthTokenResponse object);
-    }
-
 }

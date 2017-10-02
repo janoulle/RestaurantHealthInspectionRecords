@@ -16,7 +16,7 @@ import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.analytics.ActionParameters;
-import com.janeullah.apps.healthinspectionviewer.services.UUIDInitializer;
+import com.janeullah.apps.healthinspectionviewer.utils.UUIDInitializer;
 
 import java.util.Calendar;
 
@@ -106,16 +106,22 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void logSelectionEvent(String key, String value, String tag) {
+        logSelectionEvent(key, value,tag, null);
+    }
+
+    protected void logSelectionEvent(String key, String value, String tag, FirebaseAnalytics firebaseAnalytics) {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.LOCATION, tag);
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, UUIDInitializer.getInstance(this).getUUID());
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, key);
         bundle.putString(FirebaseAnalytics.Param.VALUE,value);
         bundle.putLong(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().getTimeInMillis());
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        if (firebaseAnalytics == null) {
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        }else{
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT,bundle);
+        }
         logSelectionEventWithFabric(key,value,tag);
     }
-
-
 }
 

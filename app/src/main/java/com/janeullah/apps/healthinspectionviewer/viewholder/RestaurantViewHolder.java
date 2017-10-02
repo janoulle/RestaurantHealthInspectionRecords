@@ -39,21 +39,25 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder  {
     @BindView(R.id.restaurantCheckMark)
     public ImageView restaurantCheckMark;
 
+    private String county;
+
     public RestaurantViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void bindData(final Context context, final FlattenedRestaurant restaurant) {
+    public void bindData(final FlattenedRestaurant restaurant) {
         restaurantName.setText(restaurant.name);
         restaurantAddress.setText(restaurant.address);
         restaurantNameKey.setText(restaurant.getNameKey());
         restaurantId.setText(String.valueOf(restaurant.id));
-        computeAndSetResourceId(context,restaurant);
+        county = restaurant.county;
+        computeAndSetResourceId(restaurant);
     }
 
-    private void computeAndSetResourceId(final Context context, final FlattenedRestaurant restaurant){
+    private void computeAndSetResourceId(final FlattenedRestaurant restaurant){
         try {
+            Context context = itemView.getContext();
             if (restaurant.criticalViolations == 0 && restaurant.score >= 90) {
                 restaurant.restaurantCheckMarkResourceId = R.drawable.ic_greencheck;
                 restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.greencheckmark_contentdescriptor);
@@ -65,7 +69,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder  {
                 restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.yellowcheckmark_contentdescriptor);
             }
 
-            Resources resources = context.getResources();
+            Resources resources = itemView.getContext().getResources();
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
                 restaurantCheckMark.setImageDrawable(resources.getDrawable(restaurant.restaurantCheckMarkResourceId,context.getTheme()));
             }else{
@@ -79,5 +83,9 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder  {
         }catch( Exception e){
             Log.e(TAG,"Exception setting restaurant check mark resource in viewholder.",e);
         }
+    }
+
+    public void setOnClickListener(View.OnClickListener clickListener){
+        itemView.setOnClickListener(clickListener);
     }
 }

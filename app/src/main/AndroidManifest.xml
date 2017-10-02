@@ -46,6 +46,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${google_map_key}" />
 
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".activities.RestaurantNameSearchActivity"/>
+
+        <meta-data android:name="firebase_performance_logcat_enabled" android:value="true" />
+
+
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name">
@@ -96,13 +103,13 @@
         <service
             android:name=".services.FetchAddressIntentService"
             android:exported="false" />
-        <service android:name=".services.AppFirebaseTokenRetrievalService">
+        <service android:name=".services.firebase.AppFirebaseTokenRetrievalService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".services.AppFirebaseMessagingService"
+            android:name=".services.firebase.AppFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -122,6 +129,20 @@
             android:name=".activities.LegalActivity"
             android:label="@string/title_activity_legal"
             android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.janeullah.apps.healthinspectionviewer.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.RestaurantNameSearchActivity"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_restaurant_name_search">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.janeullah.apps.healthinspectionviewer.activities.MainActivity" />

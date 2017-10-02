@@ -3,14 +3,12 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -20,14 +18,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
-import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
+import com.janeullah.apps.healthinspectionviewer.listeners.RestaurantRowClickListener;
+import com.janeullah.apps.healthinspectionviewer.services.firebase.FirebaseInitialization;
 import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder;
-
-import org.parceler.Parcels;
 
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,6 +62,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     public Toolbar mAppToolbar;
 
     @Override
+    @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants_in_county);
@@ -80,8 +78,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants in %s", mCountyName));
 
         setSupportActionBar(mAppToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle(String.format(Locale.getDefault(),"Restaurants In %s", mCountyName));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -91,6 +88,7 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
                 .getNegaDatabaseReference()
                 .child("restaurants");
+        negaRestaurantsDatabaseReference.keepSynced(true);
 
         mQuery = negaRestaurantsDatabaseReference
                 .orderByChild("county")
@@ -130,41 +128,12 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
-        mAdapter = new FirebaseRecyclerAdapter<FlattenedRestaurant, RestaurantViewHolder>(FlattenedRestaurant.class, R.layout.item_flattenedrestaurant,
-                RestaurantViewHolder.class, mQuery) {
-            @Override
-            protected void populateViewHolder(final RestaurantViewHolder viewHolder, final FlattenedRestaurant model, int position) {
-                final DatabaseReference queryRef = getRef(position);
-                String key = queryRef.getKey();
-                Log.v(TAG, "Key: " + key);
-                viewHolder.bindData(getApplicationContext(),model);
-                hideProgressDialog();
-                countOfRestaurants.incrementAndGet();
-                addListenerToRestaurantItem(viewHolder, model);
-            }
-        };
+        mAdapter = new RestaurantsInCountyAdapter(FlattenedRestaurant.class, R.layout.item_flattenedrestaurant, RestaurantViewHolder.class, mQuery);
         mRecycler.setAdapter(mAdapter);
 
         //https://gist.github.com/puf/f49a1b07e92952b44f2dc36d9af04e3c#file-mainactivity-java-L102
         //http://stackoverflow.com/questions/34982347/how-to-be-notified-when-firebaselistadapter-finishes
         updateTextViewHeader();
-    }
-
-    private void addListenerToRestaurantItem(RestaurantViewHolder viewHolder, final FlattenedRestaurant model) {
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(RestaurantsInCountyActivity.this, RestaurantDataActivity.class);
-                Log.i(TAG,String.format(Locale.getDefault(),"%s selected",model.name));
-                intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
-                intent.putExtra(IntentNames.COUNTY_SELECTED, mCountyName);
-                intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
-                intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,model.address);
-
-                logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG);
-                startActivity(intent);
-            }
-        });
     }
 
     private void updateTextViewHeader() {
@@ -183,12 +152,39 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         });
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (mAdapter != null) {
             mAdapter.cleanup();
+        }
+    }
+
+    private class RestaurantsInCountyAdapter extends FirebaseRecyclerAdapter<FlattenedRestaurant, RestaurantViewHolder>{
+        private static final String TAG = "RICAdapter";
+        /**
+         * @param modelClass      Firebase will marshall the data at a location into
+         *                        an instance of a class that you provide
+         * @param modelLayout     This is the layout used to represent a single item in the list.
+         *                        You will be responsible for populating an instance of the corresponding
+         *                        view with the data from an instance of modelClass.
+         * @param viewHolderClass The class that hold references to all sub-views in an instance modelLayout.
+         * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location,
+         *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
+         */
+        public RestaurantsInCountyAdapter(Class<FlattenedRestaurant> modelClass, int modelLayout, Class<RestaurantViewHolder> viewHolderClass, Query ref) {
+            super(modelClass, modelLayout, viewHolderClass, ref);
+        }
+
+        @Override
+        protected void populateViewHolder(RestaurantViewHolder viewHolder, FlattenedRestaurant model, int position) {
+            final DatabaseReference queryRef = getRef(position);
+            String key = queryRef.getKey();
+            Log.v(TAG, "Key: " + key);
+            viewHolder.bindData(model);
+            viewHolder.setOnClickListener(new RestaurantRowClickListener(viewHolder,model,RestaurantsInCountyActivity.this));
+            hideProgressDialog();
+            countOfRestaurants.incrementAndGet();
         }
     }
 }
