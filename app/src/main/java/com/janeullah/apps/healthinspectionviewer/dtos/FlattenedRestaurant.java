@@ -52,6 +52,9 @@ public class FlattenedRestaurant {
         this.name = awsSearchHit.getName();
         this.address = awsSearchHit.getAddress();
         this.county = awsSearchHit.getCounty();
+        this.score = awsSearchHit.getScore() == null ? 0 : awsSearchHit.getScore();
+        this.criticalViolations = awsSearchHit.getCriticalViolations() == null ? 0:awsSearchHit.getCriticalViolations();
+        this.nonCriticalViolations = awsSearchHit.getNonCriticalViolations() == null ? 0:awsSearchHit.getNonCriticalViolations();
     }
 
     public FlattenedRestaurant(Long id, int score, int criticalViolations, int nonCriticalViolations, String name, String dateReported, String address, String county) {

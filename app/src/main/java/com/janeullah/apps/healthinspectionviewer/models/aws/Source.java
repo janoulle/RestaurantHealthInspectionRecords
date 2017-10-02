@@ -16,6 +16,15 @@ public class Source {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("score")
+    @Expose
+    private Integer score;
+    @SerializedName("nonCriticalViolations")
+    @Expose
+    private Integer nonCriticalViolations;
+    @SerializedName("criticalViolations")
+    @Expose
+    private Integer criticalViolations;
     @SerializedName("name")
     @Expose
     private String name;
@@ -80,8 +89,34 @@ public class Source {
         this.nameKey = nameKey;
     }
 
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getNonCriticalViolations() {
+        return nonCriticalViolations;
+    }
+
+    public void setNonCriticalViolations(Integer nonCriticalViolations) {
+        this.nonCriticalViolations = nonCriticalViolations;
+    }
+
+    public Integer getCriticalViolations() {
+        return criticalViolations;
+    }
+
+    public void setCriticalViolations(Integer criticalViolations) {
+        this.criticalViolations = criticalViolations;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", id).append("name", name).append("dateReported", dateReported).append("address", address).append("county", county).append("nameKey", nameKey).toString();
+        return new ToStringBuilder(this).append("id", id).append("name", name)
+                .append("score", score).append("nonCriticalViolations",nonCriticalViolations).append("criticalViolations", criticalViolations)
+                .append("dateReported", dateReported).append("address", address).append("county", county).append("nameKey", nameKey).toString();
     }
 }
