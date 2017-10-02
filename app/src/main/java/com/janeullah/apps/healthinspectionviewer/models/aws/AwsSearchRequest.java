@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,13 +77,16 @@ public class AwsSearchRequest {
         }
     }
 
-    //this currently runs an exact match query. Research ES on how to perform a contains query
     private void populateSearchRequestObject(String searchValue) {
         Match matchTerm = new Match();
         matchTerm.setName(searchValue);
         ContainsMatchQuery containsMatchQuery = new ContainsMatchQuery();
         containsMatchQuery.setMatch(matchTerm);
         searchRequest.setContainsMatchQuery(containsMatchQuery);
+
+        Sort nameSort = new Sort();
+        nameSort.setNameKeyword(new NameKeyword("asc"));
+        searchRequest.setSort(Collections.singletonList(nameSort));
         searchRequest.setSize(100);
     }
 

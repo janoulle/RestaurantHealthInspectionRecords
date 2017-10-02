@@ -73,6 +73,7 @@ public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSea
                 results.add(restaurant);
             }
         }
+        //Collections.sort(results,new SearchDisplayComparator());
         return results;
     }
 }

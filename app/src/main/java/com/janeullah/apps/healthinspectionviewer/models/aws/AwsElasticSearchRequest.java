@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.parceler.Parcel;
 
+import java.util.List;
+
 /**
  * @author Jane Ullah
  * @date 9/26/2017.
@@ -15,6 +17,11 @@ public class AwsElasticSearchRequest {
     @SerializedName("query")
     @Expose
     private ContainsMatchQuery containsMatchQuery;
+
+    @SerializedName("sort")
+    @Expose
+    private List<Sort> sort = null;
+
     @SerializedName("size")
     @Expose
     private Integer size;
@@ -35,8 +42,16 @@ public class AwsElasticSearchRequest {
         this.size = size;
     }
 
+    public List<Sort> getSort(){
+        return sort;
+    }
+
+    public void setSort(List<Sort> sort){
+        this.sort = sort;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("query", containsMatchQuery).append("size", size).toString();
+        return new ToStringBuilder(this).append("query", containsMatchQuery).append("sort", sort).append("size", size).toString();
     }
 }
