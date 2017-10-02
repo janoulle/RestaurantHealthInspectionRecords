@@ -80,7 +80,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest,Intege
         if (!listOfPotentialMatches.isEmpty()) {
             YelpMatch closestMatch = YelpMatch.YELP_MATCH_ORDERING.max(listOfPotentialMatches);
             if (closestMatch.isAtOrAboveTolerance()) {
-                Log.i(TAG,"Found a match at or above tolerance levels (" + YelpMatch.getToleranceLevels() +") for yelp listings with following data: ");
+                Log.i(TAG,"Found a match at or above tolerance levels (" + YelpMatch.getToleranceLevels() +") for yelp listings with following data: " + closestMatch.getCandidate().getName());
                 yelpResults.setMatchedBusiness(closestMatch.getCandidate());
             }else{
                 Log.i(TAG,"YelpMatch found was below the tolerance level - " + YelpMatch.getToleranceLevels() + " Rejected closest match: " + gson.toJson(closestMatch));
