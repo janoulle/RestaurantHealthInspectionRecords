@@ -52,7 +52,7 @@ public class AwsEsSearchTaskListener implements TaskListener<Void, AwsElasticSea
             intent.putExtra(IntentNames.AWS_ES_RESULTS, Parcels.wrap(awsElasticSearchResponse));
             List<FlattenedRestaurant> processedAwsResponse = processAwsResponse(awsElasticSearchResponse);
             //add adapter to recyclerview
-            RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(activity, processedAwsResponse);
+            RestaurantsSearchListAdapter adapter = new RestaurantsSearchListAdapter(processedAwsResponse,activity);
             recyclerView.setAdapter(adapter);
         }else {
             String message = "Failed to find a match for the query provided=" + intent.getStringExtra(SearchManager.QUERY);

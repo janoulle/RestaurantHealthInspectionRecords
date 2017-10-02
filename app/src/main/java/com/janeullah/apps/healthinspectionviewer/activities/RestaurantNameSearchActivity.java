@@ -10,14 +10,20 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.async.aws.AwsSearchRequestTask;
+import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
+import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
+import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.interfaces.AwsEsSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.aws.AwsSearchRequest;
+import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder;
 
 import org.apache.commons.lang3.StringUtils;
+import org.parceler.Parcels;
 
 import java.util.Locale;
 
@@ -110,6 +116,31 @@ public class RestaurantNameSearchActivity extends BaseActivity {
                 asyncTask.setAwsSearchTaskListener(listener);
                 asyncTask.execute(searchRequest);
             }
+        }
+    }
+
+    private class RestaurantRowClickListener implements View.OnClickListener{
+        private static final String TAG = "RestaurantRowListener";
+        private RestaurantViewHolder restaurantViewHolder;
+        private FlattenedRestaurant sourceModel;
+
+        RestaurantRowClickListener(RestaurantViewHolder holder, FlattenedRestaurant sourceModel){
+            this.restaurantViewHolder = holder;
+            this.sourceModel = sourceModel;
+        }
+
+        @Override
+        public void onClick(View v) {
+            final Intent intent = new Intent(restaurantViewHolder.itemView.getContext(), RestaurantDataActivity.class);
+            Log.i(TAG,String.format(Locale.getDefault(),"%s selected",sourceModel.name));
+            intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, sourceModel.getNameKey());
+            intent.putExtra(IntentNames.COUNTY_SELECTED, sourceModel.county);
+            intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(sourceModel));
+            intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,sourceModel.address);
+
+            FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(restaurantViewHolder.itemView.getContext());
+            logSelectionEvent(AppConstants.RESTAURANT_SELECTION,sourceModel.getNameKey(),TAG,mFirebaseAnalytics);
+            startActivity(intent);
         }
     }
 }
