@@ -13,6 +13,7 @@ import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSear
 import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.YELP_API_HOST;
 
 /**
+ * https://stackoverflow.com/questions/36498131/set-dynamic-base-url-using-retrofit-2-0-and-dagger-2
  * https://github.com/square/okhttp/wiki/Interceptors
  * https://futurestud.io/tutorials/retrofit-2-log-requests-and-responses
  * @author Jane Ullah
@@ -23,28 +24,23 @@ public final class RetrofitConfiguration {
     public static final String TAG = "RetrofitConfig";
 
     private static OkHttpClient.Builder httpClient;
-    private static Retrofit.Builder builder;
 
-    public static YelpService YELP_SERVICE;
-    public static AwsElasticSearchService ELASTIC_SEARCH_SERVICE;
+    public static final YelpService YELP_SERVICE;
+    public static final AwsElasticSearchService ELASTIC_SEARCH_SERVICE;
 
     private RetrofitConfiguration(){}
 
     static{
-        getOkHttpClient();
+        setOkHttpClient();
 
         YELP_SERVICE = getRetrofitBuilder(YELP_API_HOST).build().create(YelpService.class);
         ELASTIC_SEARCH_SERVICE = getRetrofitBuilder(AWS_ES_HOST_URL).build().create(AwsElasticSearchService.class);
     }
 
-    private static void getOkHttpClient() {
+    private static void setOkHttpClient() {
         //https://github.com/codepath/android_guides/wiki/Debugging-with-Stetho
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        //https://stackoverflow.com/questions/36498131/set-dynamic-base-url-using-retrofit-2-0-and-dagger-2
-        /*HostSelectionInterceptor hostSelectionInterceptor = new HostSelectionInterceptor();
-        hostSelectionInterceptor.setHost(YELP_API_HOST);*/
 
         httpClient = new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())

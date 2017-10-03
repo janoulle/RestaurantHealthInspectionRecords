@@ -16,6 +16,7 @@ public class AwsElasticSearchConstants {
     public static final String AWS_REGION = "us-east-1";
     public static final String AWS_ES_SERVICE = "es";
     public static final String AWS_ALGORITHM = "AWS4-HMAC-SHA256";
+    public static final String HMAC_ALGORITHM = "HmacSHA256";
     public static final String AWS_ES_HOST = BuildConfig.AWS_ES_HOST;
     public static final String AWS_ES_HOST_URL = "https://" + AWS_ES_HOST;
     public static final String AWS_SEARCH_URL = "https://" + AWS_ES_HOST + "/" + AWS_ES_SEARCH_PATH;

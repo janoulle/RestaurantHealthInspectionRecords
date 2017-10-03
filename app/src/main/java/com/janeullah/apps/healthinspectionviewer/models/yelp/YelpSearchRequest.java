@@ -23,15 +23,15 @@ public class YelpSearchRequest {
     }
 
     public double getLatitude(){
-        if (restaurantMetadata != null && restaurantMetadata.coordinates != null){
-            return restaurantMetadata.coordinates.latitude;
+        if (restaurantMetadata != null && restaurantMetadata.getCoordinates() != null){
+            return restaurantMetadata.getCoordinates().latitude;
         }
         return 0d;
     }
 
     public double getLongitude(){
-        if (restaurantMetadata != null && restaurantMetadata.coordinates != null){
-            return restaurantMetadata.coordinates.longitude;
+        if (restaurantMetadata != null && restaurantMetadata.getCoordinates() != null){
+            return restaurantMetadata.getCoordinates().longitude;
         }
         return 0d;
     }
@@ -80,9 +80,9 @@ public class YelpSearchRequest {
     public boolean matchesCityStateZip(Business yelpBusinessObject){
         if (yelpBusinessObject != null && yelpBusinessObject.getLocation() != null){
             Location yelpLocation = yelpBusinessObject.getLocation();
-            return (TextUtils.equals(yelpLocation.getZipCode(),restaurantMetadata.postalCode) &&
-                    TextUtils.equals(yelpLocation.getCity(),restaurantMetadata.locality) &&
-                    TextUtils.equals(yelpLocation.getState(),restaurantMetadata.state));
+            return (TextUtils.equals(yelpLocation.getZipCode(),restaurantMetadata.getPostalCode()) &&
+                    TextUtils.equals(yelpLocation.getCity(),restaurantMetadata.getLocality()) &&
+                    TextUtils.equals(yelpLocation.getState(),restaurantMetadata.getState()));
         }
         return false;
     }

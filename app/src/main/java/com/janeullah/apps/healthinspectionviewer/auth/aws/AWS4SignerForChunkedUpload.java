@@ -1,16 +1,21 @@
 package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
+import android.util.Log;
+
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
 
+import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.HMAC_ALGORITHM;
+
 /**
  * http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-examples-using-sdks.html
  * Sample AWS4 signer demonstrating how to sign 'chunked' uploads
  */
 public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
+    private static final String TAG = "AWSChunkedSigner";
 
     /**
      * SHA256 substitute marker used in place of x-amz-content-sha256 when
@@ -91,7 +96,7 @@ public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
         String hostHeader = endpointUrl.getHost();
         int port = endpointUrl.getPort();
         if ( port > -1 ) {
-            hostHeader.concat(":" + Integer.toString(port));
+            hostHeader = hostHeader.concat(":" + Integer.toString(port));
         }
         headers.put("Host", hostHeader);
 
@@ -107,25 +112,25 @@ public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
         String canonicalRequest = getCanonicalRequest(endpointUrl, httpMethod,
                 canonicalizedQueryParameters, canonicalizedHeaderNames,
                 canonicalizedHeaders, bodyHash);
-        System.out.println("--------- Canonical request --------");
-        System.out.println(canonicalRequest);
-        System.out.println("------------------------------------");
+        Log.d(TAG,"--------- Canonical request --------");
+        Log.d(TAG,canonicalRequest);
+        Log.d(TAG,"------------------------------------");
 
         // construct the string to be signed
         String dateStamp = dateStampFormat.format(now);
         this.scope =  dateStamp + "/" + regionName + "/" + serviceName + "/" + TERMINATOR;
         String stringToSign = getStringToSign(SCHEME, ALGORITHM, dateTimeStamp, scope, canonicalRequest);
-        System.out.println("--------- String to sign -----------");
-        System.out.println(stringToSign);
-        System.out.println("------------------------------------");
+        Log.d(TAG,"--------- String to sign -----------");
+        Log.d(TAG,stringToSign);
+        Log.d(TAG,"------------------------------------");
 
         // compute the signing key
         byte[] kSecret = (SCHEME + awsSecretKey).getBytes();
-        byte[] kDate = sign(dateStamp, kSecret, "HmacSHA256");
-        byte[] kRegion = sign(regionName, kDate, "HmacSHA256");
-        byte[] kService = sign(serviceName, kRegion, "HmacSHA256");
-        this.signingKey= sign(TERMINATOR, kService, "HmacSHA256");
-        byte[] signature = sign(stringToSign, signingKey, "HmacSHA256");
+        byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
+        byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
+        byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
+        this.signingKey= sign(TERMINATOR, kService, HMAC_ALGORITHM);
+        byte[] signature = sign(stringToSign, signingKey, HMAC_ALGORITHM);
 
         // cache the computed signature ready for chunk 0 upload
         lastComputedSignature = BinaryUtils.toHex(signature);

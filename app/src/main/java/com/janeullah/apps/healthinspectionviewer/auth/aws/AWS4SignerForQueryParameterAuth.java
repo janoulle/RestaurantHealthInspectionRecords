@@ -1,10 +1,14 @@
 package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
+import android.util.Log;
+
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
+
+import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.HMAC_ALGORITHM;
 
 /**
  * http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-examples-using-sdks.html
@@ -12,6 +16,7 @@ import java.util.Map;
  * query string parameters.
  */
 public class AWS4SignerForQueryParameterAuth extends AWS4SignerBase {
+    private static final String TAG = "AwsQueryParamSigner";
 
     public AWS4SignerForQueryParameterAuth(URL endpointUrl, String httpMethod,
                                            String serviceName, String regionName) {
@@ -55,7 +60,7 @@ public class AWS4SignerForQueryParameterAuth extends AWS4SignerBase {
         String hostHeader = endpointUrl.getHost();
         int port = endpointUrl.getPort();
         if ( port > -1 ) {
-            hostHeader.concat(":" + Integer.toString(port));
+            hostHeader = hostHeader.concat(":" + Integer.toString(port));
         }
         headers.put("Host", hostHeader);
 
@@ -85,23 +90,23 @@ public class AWS4SignerForQueryParameterAuth extends AWS4SignerBase {
         String canonicalRequest = getCanonicalRequest(endpointUrl, httpMethod,
                 canonicalizedQueryParameters, canonicalizedHeaderNames,
                 canonicalizedHeaders, bodyHash);
-        System.out.println("--------- Canonical request --------");
-        System.out.println(canonicalRequest);
-        System.out.println("------------------------------------");
+        Log.d(TAG,"--------- Canonical request --------");
+        Log.d(TAG,canonicalRequest);
+        Log.d(TAG,"------------------------------------");
 
         // construct the string to be signed
         String stringToSign = getStringToSign(SCHEME, ALGORITHM, dateTimeStamp, scope, canonicalRequest);
-        System.out.println("--------- String to sign -----------");
-        System.out.println(stringToSign);
-        System.out.println("------------------------------------");
+        Log.d(TAG,"--------- String to sign -----------");
+        Log.d(TAG,stringToSign);
+        Log.d(TAG,"------------------------------------");
 
         // compute the signing key
         byte[] kSecret = (SCHEME + awsSecretKey).getBytes();
-        byte[] kDate = sign(dateStamp, kSecret, "HmacSHA256");
-        byte[] kRegion = sign(regionName, kDate, "HmacSHA256");
-        byte[] kService = sign(serviceName, kRegion, "HmacSHA256");
-        byte[] kSigning = sign(TERMINATOR, kService, "HmacSHA256");
-        byte[] signature = sign(stringToSign, kSigning, "HmacSHA256");
+        byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
+        byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
+        byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
+        byte[] kSigning = sign(TERMINATOR, kService, HMAC_ALGORITHM);
+        byte[] signature = sign(stringToSign, kSigning, HMAC_ALGORITHM);
 
         // form up the authorization parameters for the caller to place in the query string
         StringBuilder authString = new StringBuilder();

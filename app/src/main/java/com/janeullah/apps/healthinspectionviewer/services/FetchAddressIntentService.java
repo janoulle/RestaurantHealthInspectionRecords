@@ -124,8 +124,8 @@ public final class FetchAddressIntentService extends IntentService {
         }
         //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
         GeocodedAddressComponent geocodedAddressComponent = convertGeocodingResultsToGeocodedAddressComponent(geocodingResult);
-        restaurantSelected.coordinates = geocodedAddressComponent.coordinates;
-        Log.i(TAG, "Coordinates "+ geocodedAddressComponent.coordinates + " for restaurant " + restaurantSelected.name + " at address " + restaurantSelected.address +" found!");
+        restaurantSelected.coordinates = geocodedAddressComponent.getCoordinates();
+        Log.i(TAG, "Coordinates "+ geocodedAddressComponent.getCoordinates() + " for restaurant " + restaurantSelected.name + " at address " + restaurantSelected.address +" found!");
         sendNotification("Geocoding completed for address " + restaurantSelected.address,restaurantSelected);
         deliverSuccessResultToReceiver(GeocodeConstants.SUCCESS_RESULT,geocodedAddressComponent);
     }

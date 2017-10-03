@@ -1,5 +1,7 @@
 package com.janeullah.apps.healthinspectionviewer.utils;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,6 +18,9 @@ import java.util.Map;
  * Various Http helper routines
  */
 public class HttpUtils {
+    private static final String TAG = "HttpUtils";
+
+    private HttpUtils(){}
 
     /**
      * Makes a http request to the specified endpoint
@@ -75,10 +80,10 @@ public class HttpUtils {
             connection.setRequestMethod(httpMethod);
 
             if ( headers != null ) {
-                System.out.println("--------- Request headers ---------");
-                for ( String headerKey : headers.keySet() ) {
-                    System.out.println(headerKey + ": " + headers.get(headerKey));
-                    connection.setRequestProperty(headerKey, headers.get(headerKey));
+                Log.d(TAG,"--------- Request headers ---------");
+                for ( Map.Entry<String,String> headerEntry : headers.entrySet() ) {
+                    Log.d(TAG,headerEntry.getKey() + ": " + headerEntry.getValue());
+                    connection.setRequestProperty(headerEntry.getKey(), headerEntry.getValue());
                 }
             }
 

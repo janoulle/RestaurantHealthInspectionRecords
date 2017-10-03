@@ -286,7 +286,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if (resultCode == GeocodeConstants.SUCCESS_RESULT) {
                 mGeocodedAddressComponents = Parcels.unwrap(resultData.getParcelable(GeocodeConstants.RESULT_DATA_KEY));
-                mRestaurantCoordinates = mGeocodedAddressComponents.coordinates;
+                mRestaurantCoordinates = mGeocodedAddressComponents.getCoordinates();
                 Log.i(TAG, String.format(Locale.getDefault(),"Coordinates (%s) received", mRestaurantCoordinates));
                 if (!TextUtils.isEmpty(mSharedPreferences.getString(YelpConstants.SAVED_YELP_AUTH_TOKEN,""))){
                     YelpSearchRequest yelpSearchRequest = new YelpSearchRequest(constructYelpAuthTokenResponseFromPreferences(),mGeocodedAddressComponents,mRestaurantSelected);

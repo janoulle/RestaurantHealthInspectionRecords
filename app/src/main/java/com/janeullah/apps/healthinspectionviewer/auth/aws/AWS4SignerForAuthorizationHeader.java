@@ -4,9 +4,12 @@ import android.util.Log;
 
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
+
+import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.HMAC_ALGORITHM;
 
 
 /**
@@ -60,7 +63,7 @@ public class AWS4SignerForAuthorizationHeader extends AWS4SignerBase {
         String hostHeader = endpointUrl.getHost();
         int port = endpointUrl.getPort();
         if ( port > -1 ) {
-            hostHeader.concat(":" + Integer.toString(port));
+            hostHeader = hostHeader.concat(":" + Integer.toString(port));
         }
         headers.put("Host", hostHeader);
 
@@ -88,13 +91,7 @@ public class AWS4SignerForAuthorizationHeader extends AWS4SignerBase {
         Log.d(TAG,stringToSign);
         Log.d(TAG,"------------------------------------");
 
-        // compute the signing key
-        byte[] kSecret = (SCHEME + awsSecretKey).getBytes();
-        byte[] kDate = sign(dateStamp, kSecret, "HmacSHA256");
-        byte[] kRegion = sign(regionName, kDate, "HmacSHA256");
-        byte[] kService = sign(serviceName, kRegion, "HmacSHA256");
-        byte[] kSigning = sign(TERMINATOR, kService, "HmacSHA256");
-        byte[] signature = sign(stringToSign, kSigning, "HmacSHA256");
+        byte[] signature = getSignature(awsSecretKey, dateStamp, stringToSign);
 
         String credentialsAuthorizationHeader =
                 "Credential=" + awsAccessKey + "/" + scope;
@@ -109,5 +106,22 @@ public class AWS4SignerForAuthorizationHeader extends AWS4SignerBase {
                 + signatureAuthorizationHeader;
 
         return authorizationHeader;
+    }
+
+    // compute the signing key
+    private byte[] getSignature(String awsSecretKey, String dateStamp, String stringToSign) {
+        try {
+            byte[] kSecret = (SCHEME + awsSecretKey).getBytes("UTF-8");
+            byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
+            byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
+            byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
+            byte[] kSigning = sign(TERMINATOR, kService, HMAC_ALGORITHM);
+            return sign(stringToSign, kSigning, HMAC_ALGORITHM);
+        }catch(UnsupportedEncodingException e){
+            Log.e(TAG,"Unsuppported encoding exception for stringToSign="+stringToSign,e);
+        }catch (Exception e){
+            Log.e(TAG,"Unexpected exception when generating signing key for request="+stringToSign,e);
+        }
+        return new byte[0];
     }
 }
