@@ -47,14 +47,14 @@ public class FlattenedRestaurant {
     }
 
     public FlattenedRestaurant(Source awsSearchHit){
-        //this.score, this.criticalViolations, this.nonCriticalViolations are not in the AWS response
-        this.id = awsSearchHit.getId().longValue();
-        this.name = awsSearchHit.getName();
-        this.address = awsSearchHit.getAddress();
-        this.county = awsSearchHit.getCounty();
-        this.score = awsSearchHit.getScore() == null ? 0 : awsSearchHit.getScore();
-        this.criticalViolations = awsSearchHit.getCriticalViolations() == null ? 0:awsSearchHit.getCriticalViolations();
-        this.nonCriticalViolations = awsSearchHit.getNonCriticalViolations() == null ? 0:awsSearchHit.getNonCriticalViolations();
+        this(awsSearchHit.getId().longValue(),
+                getIntegerVal(awsSearchHit.getScore()),
+                getIntegerVal(awsSearchHit.getCriticalViolations()),
+                getIntegerVal(awsSearchHit.getNonCriticalViolations()),
+                awsSearchHit.getName(),
+                awsSearchHit.getDateReported(),
+                awsSearchHit.getAddress(),
+                awsSearchHit.getCounty());
     }
 
     public FlattenedRestaurant(Long id, int score, int criticalViolations, int nonCriticalViolations, String name, String dateReported, String address, String county) {
@@ -67,6 +67,10 @@ public class FlattenedRestaurant {
         this.address = address;
         this.county = county;
         this.hasAnyViolations = hasViolations();
+    }
+
+    private static int getIntegerVal(Integer value){
+        return value == null ? 0 : value;
     }
 
     @Exclude
