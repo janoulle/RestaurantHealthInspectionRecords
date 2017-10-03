@@ -14,17 +14,74 @@ import java.util.Map;
  * Date:  4/26/2017
  */
 @IgnoreExtraProperties
-@Parcel
+@Parcel(Parcel.Serialization.BEAN)
 public class FlattenedViolation {
-    @Exclude
-    public String section;
 
-    public Long violationId;
-    public String severity;
-    public String category;
-    public String inspectionType;
-    public String summary;
-    public String notes;
+    @Exclude
+    private String section;
+    private Long violationId;
+    private String severity;
+    private String category;
+    private String inspectionType;
+    private String summary;
+    private String notes;
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public Long getViolationId() {
+        return violationId;
+    }
+
+    public void setViolationId(Long violationId) {
+        this.violationId = violationId;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getInspectionType() {
+        return inspectionType;
+    }
+
+    public void setInspectionType(String inspectionType) {
+        this.inspectionType = inspectionType;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
 
     public FlattenedViolation() {
         /**
