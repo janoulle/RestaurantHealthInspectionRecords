@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.listeners.RestaurantRowClickListener;
 import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder;
 
 import java.util.ArrayList;
@@ -47,7 +46,6 @@ public class RestaurantsSearchListAdapter extends RecyclerView.Adapter<Restauran
         // Get the data model based on position
         FlattenedRestaurant restaurant = flattenedRestaurants.get(position);
         holder.bindData(restaurant);
-        holder.setOnClickListener(new RestaurantRowClickListener(holder,restaurant,activity));
     }
 
     @Override

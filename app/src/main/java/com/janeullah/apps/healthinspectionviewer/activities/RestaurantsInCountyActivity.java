@@ -22,7 +22,6 @@ import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.listeners.RestaurantRowClickListener;
 import com.janeullah.apps.healthinspectionviewer.services.firebase.FirebaseInitialization;
 import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder;
 
@@ -182,7 +181,6 @@ public class RestaurantsInCountyActivity extends BaseActivity {
             String key = queryRef.getKey();
             Log.v(TAG, "Key: " + key);
             viewHolder.bindData(model);
-            viewHolder.setOnClickListener(new RestaurantRowClickListener(viewHolder,model,RestaurantsInCountyActivity.this));
             hideProgressDialog();
             countOfRestaurants.incrementAndGet();
         }

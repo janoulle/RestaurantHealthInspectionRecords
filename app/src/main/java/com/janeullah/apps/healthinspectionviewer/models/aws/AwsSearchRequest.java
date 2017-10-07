@@ -48,10 +48,10 @@ public class AwsSearchRequest {
 
     public AwsSearchRequest(String searchValue) {
         populateSearchRequestObject(searchValue);
-        setup();
+        generateAndSetAuthorizationHeader();
     }
 
-    private void setup() {
+    private void generateAndSetAuthorizationHeader() {
         try {
             // precompute hash of the body content
             String payload = StringUtilities.getString(searchRequest);

@@ -32,6 +32,8 @@ import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.County;
 import com.janeullah.apps.healthinspectionviewer.services.firebase.FirebaseInitialization;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -58,6 +60,7 @@ public class MainActivity extends BaseActivity {
     public TextView mTitleView;
 
     private ChildEventListener mCountyListener;
+    private AtomicBoolean isDropDownInitialized = new AtomicBoolean(false);
 
     @Override
     @AddTrace(name = "onCreateTrace", enabled = true)
@@ -88,11 +91,14 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.countySubmitButton)
     protected void attachListenerToCountySubmitButton() {
         final Intent intent = new Intent(MainActivity.this, RestaurantsInCountyActivity.class);
-        String countyChosen = mCountySpinner.getSelectedItem().toString();
-        intent.putExtra(IntentNames.COUNTY_SELECTED, countyChosen);
-
-        logSelectionEvent(AppConstants.COUNTY_SELECTION,countyChosen,TAG);
-        startActivity(intent);
+        if (mCountySpinner.getSelectedItem() != null){
+            String countyChosen = mCountySpinner.getSelectedItem().toString();
+            intent.putExtra(IntentNames.COUNTY_SELECTED, countyChosen);
+            logSelectionEvent(AppConstants.COUNTY_SELECTION, countyChosen, TAG);
+            startActivity(intent);
+        }else{
+            showToast("Please make a selection",Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -143,7 +149,6 @@ public class MainActivity extends BaseActivity {
         mCountyListener = countyListener;
 
         cAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        mCountySpinner.setAdapter(cAdapter);
     }
 
     @NonNull
@@ -157,6 +162,10 @@ public class MainActivity extends BaseActivity {
                 Log.i(TAG, "County Restaurant Size: " + county.restaurants.size());
                 Log.i(TAG, "Snapshot Key: " + dataSnapshot.getKey());
                 cAdapter.add(dataSnapshot.getKey());
+                if (!isDropDownInitialized.get()){
+                    mCountySpinner.setAdapter(cAdapter);
+                    isDropDownInitialized.set(true);
+                }
             }
 
             @Override
