@@ -3,6 +3,10 @@ package com.janeullah.apps.healthinspectionviewer.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +20,8 @@ import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.analytics.ActionParameters;
+import com.janeullah.apps.healthinspectionviewer.utils.MessageDelayer;
+import com.janeullah.apps.healthinspectionviewer.utils.SimpleIdlingResource;
 import com.janeullah.apps.healthinspectionviewer.utils.UUIDInitializer;
 
 import java.util.Calendar;
@@ -26,9 +32,12 @@ import java.util.Calendar;
  * @date 4/27/2017.
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements MessageDelayer.DelayerCallback {
     protected FirebaseAnalytics mFirebaseAnalytics;
     private ProgressBar progressBar;
+    // The Idling Resource which will be null in production.
+    @Nullable
+    protected SimpleIdlingResource mIdlingResource;
 
     public void showProgressDialog(String message) {
         if (progressBar == null) {
@@ -77,6 +86,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
+    }
+
+
+    @Override
+    public void onDone(String text) {
+        // The delayer notifies the activity via a callback.
+        //please hold, caller
+    }
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
     }
 
     protected void logViewEventsWithFabric(String tag, String contentType){

@@ -55,7 +55,7 @@
     <string name="checkmark_description">Checkmark</string>
     <string name="action_legal">Disclaimer</string>
     <string name="action_about">About</string>
-    <string name="title_activity_about">About Me</string>
+    <string name="title_activity_about">About</string>
     <string name="title_activity_legal">Disclaimer</string>
 
     <string name="checkmark_desc">Green means no critical violations and a score of >= 90. Red means >= 1 or more critical violations. Yellow means a score below 90 and no critical violations.</string>

@@ -12,6 +12,7 @@ buildscript {
     ext.retrofit_version = '2.2.0'
     ext.build_tools_version = "26.0.1"
     ext.aws_sdk_version = "2.6.2"
+    ext.espresso_version = "2.2.2"
 
     repositories {
         jcenter()

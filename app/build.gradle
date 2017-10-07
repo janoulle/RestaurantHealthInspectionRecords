@@ -138,9 +138,6 @@ configurations.all {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
@@ -186,6 +183,22 @@ dependencies {
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:0.5'
     compile "com.google.firebase:firebase-perf:$firebase_version"
+    compile "com.android.support.test.espresso:espresso-idling-resource:$espresso_version"
+
+
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espresso_version", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espresso_version"
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+
+    androidTestCompile "com.android.support:support-annotations:$compile_sdk_version"
+    androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
