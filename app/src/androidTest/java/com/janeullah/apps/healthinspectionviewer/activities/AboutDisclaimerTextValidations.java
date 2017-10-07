@@ -58,11 +58,13 @@ public class AboutDisclaimerTextValidations extends BaseTest{
     public void aboutDisclaimerTextValidations() {
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        sleepForNMilliseconds(TEN_SECONDS);
 
         ViewInteraction appCompatTextView = onView(
                 allOf(withId(R.id.title), withText("About"), isDisplayed()));
         appCompatTextView.perform(click());
 
+        sleepForNMilliseconds(TEN_SECONDS);
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.aboutTextView), withText(" Made with duct tape, super glue, and love by Jane Ullah\n\n Some details:\n\n 1. Data was scraped from the websites below using a Spring application that makes use of Jsoup. This data was then transformed into the format needed for consumption by this application and for use with Firebase\n\n 2. Direct links to the County restaurant reports: Barrow, Elbert, Clarke, Greene, Jackson, Madison, Morgan, Oconee, Oglethorpe, and Walton "),
@@ -91,12 +93,14 @@ public class AboutDisclaimerTextValidations extends BaseTest{
                         withParent(withId(R.id.app_toolbar)),
                         isDisplayed()));
         appCompatImageButton.perform(click());
+        sleepForNMilliseconds(TEN_SECONDS);
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
         ViewInteraction appCompatTextView2 = onView(
                 allOf(withId(R.id.title), withText("Disclaimer"), isDisplayed()));
         appCompatTextView2.perform(click());
+        sleepForNMilliseconds(TEN_SECONDS);
 
         ViewInteraction textView3 = onView(
                 allOf(withId(R.id.legalTextView), withText(" Please note that PublicHealthAthens.com is the canonical and most-up-to-date source of information on the restaurant health inspection data. By using this app, you agree to indemnify and hold me, relatives, descendants, my neighbors, friends, and my dearly departed pet harmless from any events that result from using the application.\n\n The green, red, and yellow icons are indicators of the restaurant's score. The information on how these restaurants are scored is available on PublicHealthAthens.com. Captured here as of 09/16/2017, green means no critical violations and a score of >= 90. Red means >= 1 or more critical violations. Yellow means a score below 90 but not in the red.\n\n This app also consumes data from Yelp. Specifically, the Yelp stars shown when viewing some restaurants comes from yelp.com and Yelp.com is the canonical source for rating information. The ratings data shown are not guaranteed to match the actual restaurant being viewed.\n\n Internet connectivity is required to use this application. The restaurant information data is fetched from Firebase (TOS) and is temporarily cached on your device. You agree to bear the cost of any charges associated with the requirement for internet connectivity on your device.\n\n Other third party services in use include: Google Maps API for displaying the restaurant location (TOS), Firebase Crash Reporting (which does not collect any personally identifiable information), Fabric (TOS) for monitoring the app's stability and AWS ElasticSearch service powers the restaurant name search. "),

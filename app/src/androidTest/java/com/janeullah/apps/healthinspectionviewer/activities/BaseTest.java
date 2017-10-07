@@ -14,7 +14,20 @@ import org.hamcrest.TypeSafeMatcher;
  */
 
 public abstract class BaseTest {
+    protected static final Long TEN_SECONDS = 10000L;
 
+    protected static void sleepForNMilliseconds(Long millisecs){
+
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(millisecs);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     protected static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
