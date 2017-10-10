@@ -54,7 +54,7 @@ public class AwsSearchRequest {
     private void generateAndSetAuthorizationHeader() {
         try {
             // precompute hash of the body content
-            String payload = StringUtilities.getString(searchRequest);
+            String payload = StringUtilities.deserialize(searchRequest);
             byte[] contentHash = AWS4SignerBase.hash(payload);
             String contentHashString = BinaryUtils.toHex(contentHash);
 

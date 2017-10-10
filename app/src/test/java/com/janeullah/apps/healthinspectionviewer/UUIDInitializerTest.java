@@ -21,6 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  * https://developer.android.com/training/testing/unit-testing/local-unit-tests.html#build
  * @author Jane Ullah
  * @date 10/9/2017.

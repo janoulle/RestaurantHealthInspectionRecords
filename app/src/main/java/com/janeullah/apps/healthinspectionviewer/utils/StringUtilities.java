@@ -20,7 +20,7 @@ public class StringUtilities {
     private StringUtilities(){}
 
     private static final String TAG = "StringUtilities";
-    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().enableComplexMapKeySerialization().create();
     public static final String FORWARD_SLASH = "/";
     public static final String BACK_SLASH = "\\";
     public static final String NEW_LINE = "\n";
@@ -97,7 +97,7 @@ public class StringUtilities {
     }
 
     //https://google.github.io/gson/apidocs/com/google/gson/GsonBuilder.html#disableHtmlEscaping
-    public static <T> String getString(T request) {
+    public static <T> String deserialize(T request) {
         try {
             return gson.toJson(request);
         } catch (Exception e) {
@@ -105,5 +105,15 @@ public class StringUtilities {
             Log.e(TAG, "Failed to convert request (" + request + ") to string");
         }
         return "";
+    }
+
+    public static <T> T serialize(String jsonData, Class<T> clazz){
+        try{
+            return gson.fromJson(jsonData,clazz);
+        }catch (Exception e) {
+            FirebaseCrash.report(e);
+            Log.e(TAG, "Failed to convert request (" + jsonData + ") to type="+clazz);
+        }
+        return null;
     }
 }
