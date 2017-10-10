@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class UUIDInitializer {
     private static final String TAG = "UUIDInitializer";
-    private String uuidStashed = UUID.randomUUID().toString();
+    private static final String uuidStashed = UUID.randomUUID().toString();
     private static volatile UUIDInitializer instance = null;
     private static final Object lock = new Object();
 
