@@ -1,10 +1,9 @@
-package com.janeullah.apps.healthinspectionviewer;
+package com.janeullah.apps.healthinspectionviewer.utils;
 
 
 import com.google.maps.model.GeocodingResult;
+import com.janeullah.apps.healthinspectionviewer.TestingUtils;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
-import com.janeullah.apps.healthinspectionviewer.utils.GeocodingUtils;
-import com.janeullah.apps.healthinspectionviewer.utils.StringUtilities;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,7 @@ import static junit.framework.Assert.assertTrue;
  * @date 10/9/2017.
  */
 
-public class GeocodingResultTest {
+public class GeocodingUtilsTest {
     private static String SAMPLE_GEOCODING_RESULT = "";
 
     @Before

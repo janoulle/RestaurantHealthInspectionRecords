@@ -1,11 +1,10 @@
-package com.janeullah.apps.healthinspectionviewer;
+package com.janeullah.apps.healthinspectionviewer.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.constants.AppConstants;
-import com.janeullah.apps.healthinspectionviewer.utils.UUIDInitializer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
