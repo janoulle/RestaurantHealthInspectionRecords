@@ -20,7 +20,7 @@ public class StringUtilities {
     private StringUtilities(){}
 
     private static final String TAG = "StringUtilities";
-    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().enableComplexMapKeySerialization().create();
+    private static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     public static final String FORWARD_SLASH = "/";
     public static final String BACK_SLASH = "\\";
     public static final String NEW_LINE = "\n";
