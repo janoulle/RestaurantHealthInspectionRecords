@@ -74,7 +74,7 @@ android {
         release {
             debuggable false
             shrinkResources false
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             manifestPlaceholders = [google_map_key: GOOGLE_MAPS_API_KEY]
@@ -82,7 +82,10 @@ android {
         debug {
             debuggable true
             shrinkResources false
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
+            proguardFiles fileTree('proguard').asList().toArray()
             signingConfig signingConfigs.debug
             manifestPlaceholders = [google_map_key: GOOGLE_MAPS_API_KEY]
         }
@@ -102,11 +105,11 @@ android {
 
     //https://developer.android.com/studio/build/shrink-code.html
     productFlavors {
-        noproguard {
-
-        }
         proguard {
             proguardFile 'proguard-rules.pro'
+
+            //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
+            proguardFiles fileTree('proguard').asList().toArray()
         }
     }
 
