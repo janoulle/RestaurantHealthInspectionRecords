@@ -2,8 +2,10 @@ package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
 import android.util.Log;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
@@ -123,14 +125,8 @@ public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
         Log.d(TAG,"--------- String to sign -----------");
         Log.d(TAG,stringToSign);
         Log.d(TAG,"------------------------------------");
+        byte[] signature = getSignature(awsSecretKey, dateStamp, stringToSign);
 
-        // compute the signing key
-        byte[] kSecret = (SCHEME + awsSecretKey).getBytes();
-        byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
-        byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
-        byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
-        this.signingKey= sign(TERMINATOR, kService, HMAC_ALGORITHM);
-        byte[] signature = sign(stringToSign, signingKey, HMAC_ALGORITHM);
 
         // cache the computed signature ready for chunk 0 upload
         lastComputedSignature = BinaryUtils.toHex(signature);
@@ -148,6 +144,21 @@ public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
                 + signatureAuthorizationHeader;
 
         return authorizationHeader;
+    }
+
+    private byte[] getSignature(String awsSecretKey, String dateStamp, String stringToSign) {
+        try {
+            // compute the signing key
+            byte[] kSecret = (SCHEME + awsSecretKey).getBytes("UTF-8");
+            byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
+            byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
+            byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
+            this.signingKey = sign(TERMINATOR, kService, HMAC_ALGORITHM);
+            return sign(stringToSign, signingKey, HMAC_ALGORITHM);
+        }catch(UnsupportedEncodingException e){
+            FirebaseCrash.report(e);
+        }
+        return new byte[0];
     }
 
     /**

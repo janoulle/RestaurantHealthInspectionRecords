@@ -88,10 +88,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder implements Vie
                 final Bitmap picture = BitmapFactory.decodeResource(resources, restaurant.restaurantCheckMarkResourceId);
                 restaurantCheckMark.setImageBitmap(picture);
             }
-
-            //int resId = resources.getIdentifier(drawableName,"drawable",context.getPackageName());
-            //This code still works but Google recommends setImageDrawable or setImageBitmap over this
-            //restaurantCheckMark.setImageResource(restaurant.restaurantCheckMarkResourceId);
         }catch( Exception e){
             Log.e(TAG,"Exception setting restaurant check mark resource in viewholder.",e);
         }

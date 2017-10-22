@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.janeullah.apps.healthinspectionviewer.R;
-import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.viewholder.RestaurantViewHolder;
 
@@ -22,11 +21,9 @@ import java.util.List;
 public class RestaurantsSearchListAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
     private static final String TAG = "SearchAdapterRS";
     private List<FlattenedRestaurant> flattenedRestaurants = new ArrayList<>();
-    private BaseActivity activity;
 
-    public RestaurantsSearchListAdapter(List<FlattenedRestaurant> flattenedRestaurants, BaseActivity activity){
+    public RestaurantsSearchListAdapter(List<FlattenedRestaurant> flattenedRestaurants){
         this.flattenedRestaurants = flattenedRestaurants;
-        this.activity = activity;
     }
 
     @Override

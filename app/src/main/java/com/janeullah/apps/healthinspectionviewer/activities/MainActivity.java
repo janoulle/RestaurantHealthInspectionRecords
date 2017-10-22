@@ -87,6 +87,14 @@ public class MainActivity extends BaseActivity {
                 .getInstance()
                 .getNegaDatabaseReference()
                 .child("counties");
+
+        // Initialize the Amazon Cognito credentials provider
+        /* CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                AWS_COGNITO_POOL_ID,
+                Regions.US_EAST_1
+        );*/
+
         logViewEvent(TAG);
     }
 

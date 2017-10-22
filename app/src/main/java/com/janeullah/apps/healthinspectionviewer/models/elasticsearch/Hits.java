@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.models.aws;
+package com.janeullah.apps.healthinspectionviewer.models.elasticsearch;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

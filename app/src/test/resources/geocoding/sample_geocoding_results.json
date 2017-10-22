@@ -1,0 +1,66 @@
+[{
+  "addressComponents": [{
+    "longName": "1932",
+    "shortName": "1932",
+    "types": ["STREET_NUMBER"]
+  }, {
+    "longName": "Railroad Street",
+    "shortName": "Railroad St",
+    "types": ["ROUTE"]
+  }, {
+    "longName": "Statham",
+    "shortName": "Statham",
+    "types": ["LOCALITY", "POLITICAL"]
+  }, {
+    "longName": "Barrow County",
+    "shortName": "Barrow County",
+    "types": ["ADMINISTRATIVE_AREA_LEVEL_2", "POLITICAL"]
+  }, {
+    "longName": "Georgia",
+    "shortName": "GA",
+    "types": ["ADMINISTRATIVE_AREA_LEVEL_1", "POLITICAL"]
+  }, {
+    "longName": "United States",
+    "shortName": "US",
+    "types": ["COUNTRY", "POLITICAL"]
+  }, {
+    "longName": "30666",
+    "shortName": "30666",
+    "types": ["POSTAL_CODE"]
+  }, {
+    "longName": "1821",
+    "shortName": "1821",
+    "types": ["POSTAL_CODE_SUFFIX"]
+  }],
+  "formattedAddress": "1932 Railroad St, Statham, GA 30666, USA",
+  "geometry": {
+    "bounds": {
+      "northeast": {
+        "lat": 33.9648213,
+        "lng": -83.5959116
+      },
+      "southwest": {
+        "lat": 33.964622,
+        "lng": -83.5961298
+      }
+    },
+    "location": {
+      "lat": 33.9647217,
+      "lng": -83.5960207
+    },
+    "locationType": "ROOFTOP",
+    "viewport": {
+      "northeast": {
+        "lat": 33.9660706302915,
+        "lng": -83.59467171970849
+      },
+      "southwest": {
+        "lat": 33.96337266970851,
+        "lng": -83.5973696802915
+      }
+    }
+  },
+  "partialMatch": false,
+  "placeId": "ChIJY4ULy_Tf9YgRQaQ2dINsonM",
+  "types": ["PREMISE"]
+}]
