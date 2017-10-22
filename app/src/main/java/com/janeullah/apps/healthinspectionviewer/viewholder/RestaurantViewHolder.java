@@ -112,7 +112,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder implements Vie
         intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,model.address);
 
         //FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this.itemView.getContext());
-        //EventLoggingUtils.logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG,this.itemView.getContext(),mFirebaseAnalytics);
+        //EventLoggingUtils.logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG,mFirebaseAnalytics,this.itemView.getContext());
         this.itemView.getContext().startActivity(intent);
     }
 }

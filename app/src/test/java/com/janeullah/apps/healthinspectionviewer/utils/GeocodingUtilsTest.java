@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -29,6 +30,7 @@ public class GeocodingUtilsTest {
     @Test
     public void convertGeocodingResultsToGeocodedAddressComponent_isSuccessful() throws Exception{
         GeocodingResult[] geocodingResults = StringUtilities.serialize(SAMPLE_GEOCODING_RESULT,GeocodingResult[].class);
+        assertFalse(geocodingResults.length == 0);
         GeocodedAddressComponent result = GeocodingUtils.convertGeocodingResultsToGeocodedAddressComponent(geocodingResults[0]);
         assertTrue(result != null);
         assertEquals("GA",result.getState());

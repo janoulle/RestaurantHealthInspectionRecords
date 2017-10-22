@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity {
             // Submit the message to the delayer.
             MessageDelayer.processMessage(countyChosen, this, mIdlingResource);
 
-            logSelectionEvent(AppConstants.COUNTY_SELECTION, countyChosen, TAG);
+            logSelectionEvent(AppConstants.COUNTY_SELECTION, countyChosen, TAG,mFirebaseAnalytics);
             startActivity(intent);
         }else{
             showToast("Please make a selection",Toast.LENGTH_SHORT);
