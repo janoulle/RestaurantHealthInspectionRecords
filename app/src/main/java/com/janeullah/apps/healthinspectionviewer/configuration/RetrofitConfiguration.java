@@ -8,6 +8,7 @@ import com.janeullah.apps.healthinspectionviewer.services.yelp.YelpService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -56,5 +57,13 @@ public final class RetrofitConfiguration {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .baseUrl(apiBaseUrl);
+    }
+
+    public static <T> boolean isFromCache(Response<T> response) {
+        return response.raw().cacheResponse() != null;
+    }
+
+    public static <T> boolean isFromNetwork(Response<T> response) {
+        return response.raw().networkResponse() != null;
     }
 }

@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.utils;
+package com.janeullah.apps.healthinspectionviewer.constants;
 
 /**
  * TODO: this feels off. Refactor

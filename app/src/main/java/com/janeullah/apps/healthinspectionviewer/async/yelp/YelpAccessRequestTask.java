@@ -18,8 +18,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromCache;
-import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromNetwork;
+import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromCache;
+import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromNetwork;
 
 /**
  * https://medium.com/google-developer-experts/weakreference-in-android-dd1e66b9be9d

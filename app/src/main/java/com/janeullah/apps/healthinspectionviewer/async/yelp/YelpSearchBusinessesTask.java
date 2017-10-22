@@ -7,13 +7,13 @@ import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
+import com.janeullah.apps.healthinspectionviewer.constants.YelpQueryParams;
 import com.janeullah.apps.healthinspectionviewer.dtos.YelpMatch;
 import com.janeullah.apps.healthinspectionviewer.listeners.YelpSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.services.yelp.YelpService;
-import com.janeullah.apps.healthinspectionviewer.utils.YelpQueryParams;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromCache;
-import static com.janeullah.apps.healthinspectionviewer.utils.YelpUtils.isFromNetwork;
+import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromCache;
+import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromNetwork;
 
 /**
  * @author Jane Ullah
