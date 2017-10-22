@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.dtos.YelpMatch;
-import com.janeullah.apps.healthinspectionviewer.interfaces.YelpSearchTaskListener;
+import com.janeullah.apps.healthinspectionviewer.listeners.YelpSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.Business;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;

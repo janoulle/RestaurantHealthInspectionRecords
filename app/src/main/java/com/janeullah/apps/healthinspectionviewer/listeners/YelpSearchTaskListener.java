@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.interfaces;
+package com.janeullah.apps.healthinspectionviewer.listeners;
 
 import android.content.Intent;
 import android.util.Log;
@@ -10,6 +10,7 @@ import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedYelpData;
+import com.janeullah.apps.healthinspectionviewer.interfaces.TaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 
 import org.parceler.Parcels;

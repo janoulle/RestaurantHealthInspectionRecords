@@ -15,7 +15,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.async.aws.AwsElasticSearchRequestTask;
 import com.janeullah.apps.healthinspectionviewer.async.heroku.HerokuElasticSearchRequestTask;
-import com.janeullah.apps.healthinspectionviewer.interfaces.ElasticSearchTaskListener;
+import com.janeullah.apps.healthinspectionviewer.listeners.ElasticSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.aws.AwsElasticSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.models.heroku.HerokuElasticSearchRequest;
 
