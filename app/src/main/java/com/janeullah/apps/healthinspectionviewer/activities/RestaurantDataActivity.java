@@ -107,7 +107,7 @@ public class RestaurantDataActivity extends BaseActivity implements OnMapReadyCa
                 final Intent intent = new Intent(RestaurantDataActivity.this, RestaurantViolations.class);
                 intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(restaurant));
 
-                logSelectionEvent(AppConstants.RESTAURANT_DETAIL,restaurant.getNameKey(),TAG);
+                logSelectionEvent(AppConstants.RESTAURANT_DETAIL,restaurant.getNameKey(),TAG,mFirebaseAnalytics);
                 startActivity(intent);
             }
         };

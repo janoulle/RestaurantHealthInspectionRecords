@@ -10,8 +10,8 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class BinaryUtilsTest {
-    String testString = "pick up 5 oranges";
-    String expectedHexConversion = "7069636b2075702035206f72616e676573";
+    private String testString = "pick up 5 oranges";
+    private String expectedHexConversion = "7069636b2075702035206f72616e676573";
 
     @Test
     public void testStringToHexConversion_Success() throws Exception{
@@ -21,7 +21,7 @@ public class BinaryUtilsTest {
 
     @Test
     public void testHexToStringConversion_Success() throws Exception{
-        String actualStringConversion = new String(BinaryUtils.fromHex(expectedHexConversion));
+        String actualStringConversion = new String(BinaryUtils.fromHex(expectedHexConversion),"UTF-8");
         assertEquals(testString,actualStringConversion);
     }
 }

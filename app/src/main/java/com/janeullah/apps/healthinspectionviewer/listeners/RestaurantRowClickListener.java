@@ -43,7 +43,7 @@ public class RestaurantRowClickListener implements View.OnClickListener{
         intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,sourceModel.address);
 
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(restaurantViewHolder.itemView.getContext());
-        EventLoggingUtils.logSelectionEvent(AppConstants.RESTAURANT_SELECTION,sourceModel.getNameKey(),TAG,activity,mFirebaseAnalytics);
+        EventLoggingUtils.logSelectionEvent(AppConstants.RESTAURANT_SELECTION,sourceModel.getNameKey(),TAG,mFirebaseAnalytics,activity);
         restaurantViewHolder.itemView.getContext().startActivity(intent);
     }
 }
