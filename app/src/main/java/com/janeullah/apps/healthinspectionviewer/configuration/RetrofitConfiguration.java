@@ -51,7 +51,7 @@ public final class RetrofitConfiguration {
                 .addInterceptor(logging);
     }
 
-    private static Retrofit.Builder getRetrofitBuilder(String apiBaseUrl){
+    public static Retrofit.Builder getRetrofitBuilder(String apiBaseUrl){
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())

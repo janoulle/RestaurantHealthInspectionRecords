@@ -19,11 +19,27 @@ public class HerokuAppSleepingResponse {
     @Expose
     private Integer status;
 
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
+    }
+
+    @SerializedName("exception")
+    @Expose
+    private Exception exception;
+
     /**
      * No args constructor for use in serialization
      *
      */
     public HerokuAppSleepingResponse() {
+    }
+
+    public HerokuAppSleepingResponse(Exception e){
+        this.exception = e;
     }
 
     /**
