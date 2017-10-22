@@ -1,5 +1,6 @@
 package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
+import com.google.common.base.Charsets;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.HttpUtils;
 
@@ -223,7 +224,7 @@ public abstract class AWS4SignerBase {
     public static byte[] hash(String text) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(text.getBytes("UTF-8"));
+            md.update(text.getBytes(Charsets.UTF_8));
             return md.digest();
         } catch (Exception e) {
             throw new RuntimeException("Unable to compute hash while signing request: " + e.getMessage(), e);
@@ -245,7 +246,7 @@ public abstract class AWS4SignerBase {
 
     protected static byte[] sign(String stringData, byte[] key, String algorithm) {
         try {
-            byte[] data = stringData.getBytes("UTF-8");
+            byte[] data = stringData.getBytes(Charsets.UTF_8);
             Mac mac = Mac.getInstance(algorithm);
             mac.init(new SecretKeySpec(key, algorithm));
             return mac.doFinal(data);

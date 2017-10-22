@@ -2,10 +2,9 @@ package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.google.common.base.Charsets;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
@@ -147,18 +146,13 @@ public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
     }
 
     private byte[] getSignature(String awsSecretKey, String dateStamp, String stringToSign) {
-        try {
-            // compute the signing key
-            byte[] kSecret = (SCHEME + awsSecretKey).getBytes("UTF-8");
-            byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
-            byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
-            byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
-            this.signingKey = sign(TERMINATOR, kService, HMAC_ALGORITHM);
-            return sign(stringToSign, signingKey, HMAC_ALGORITHM);
-        }catch(UnsupportedEncodingException e){
-            FirebaseCrash.report(e);
-        }
-        return new byte[0];
+        // compute the signing key
+        byte[] kSecret = (SCHEME + awsSecretKey).getBytes(Charsets.UTF_8);
+        byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
+        byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
+        byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
+        this.signingKey = sign(TERMINATOR, kService, HMAC_ALGORITHM);
+        return sign(stringToSign, signingKey, HMAC_ALGORITHM);
     }
 
     /**
@@ -269,8 +263,8 @@ public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
         chunkHeader.append(CLRF);
 
         try {
-            byte[] header = chunkHeader.toString().getBytes("UTF-8");
-            byte[] trailer = CLRF.getBytes("UTF-8");
+            byte[] header = chunkHeader.toString().getBytes(Charsets.UTF_8);
+            byte[] trailer = CLRF.getBytes(Charsets.UTF_8);
             byte[] signedChunk = new byte[header.length + dataToChunk.length + trailer.length];
             System.arraycopy(header, 0, signedChunk, 0, header.length);
             System.arraycopy(dataToChunk, 0, signedChunk, header.length, dataToChunk.length);

@@ -2,9 +2,9 @@ package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
 import android.util.Log;
 
+import com.google.common.base.Charsets;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Map;
@@ -111,14 +111,12 @@ public class AWS4SignerForAuthorizationHeader extends AWS4SignerBase {
     // compute the signing key
     private byte[] getSignature(String awsSecretKey, String dateStamp, String stringToSign) {
         try {
-            byte[] kSecret = (SCHEME + awsSecretKey).getBytes("UTF-8");
+            byte[] kSecret = (SCHEME + awsSecretKey).getBytes(Charsets.UTF_8);
             byte[] kDate = sign(dateStamp, kSecret, HMAC_ALGORITHM);
             byte[] kRegion = sign(regionName, kDate, HMAC_ALGORITHM);
             byte[] kService = sign(serviceName, kRegion, HMAC_ALGORITHM);
             byte[] kSigning = sign(TERMINATOR, kService, HMAC_ALGORITHM);
             return sign(stringToSign, kSigning, HMAC_ALGORITHM);
-        }catch(UnsupportedEncodingException e){
-            Log.e(TAG,"Unsuppported encoding exception for stringToSign="+stringToSign,e);
         }catch (Exception e){
             Log.e(TAG,"Unexpected exception when generating signing key for request="+stringToSign,e);
         }

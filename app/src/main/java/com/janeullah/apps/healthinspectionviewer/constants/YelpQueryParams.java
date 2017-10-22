@@ -1,7 +1,6 @@
 package com.janeullah.apps.healthinspectionviewer.constants;
 
 /**
- * TODO: this feels off. Refactor
  * @author Jane Ullah
  * @date 5/3/2017.
  */

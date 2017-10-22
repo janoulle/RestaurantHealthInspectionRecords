@@ -28,9 +28,6 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class RestaurantNameSearchActivity extends BaseActivity {
     private static final String TAG = "RestaurantSearch";
-
-    /*private AwsElasticSearchRequest awsSearchRequest = null;
-    private AwsElasticSearchRequestTask awsAsyncTask = new AwsElasticSearchRequestTask();*/
     private ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
 
 
@@ -76,12 +73,6 @@ public class RestaurantNameSearchActivity extends BaseActivity {
 
     @Override
     public void onDestroy(){
-        /*if (awsAsyncTask != null){
-            awsAsyncTask.setElasticSearchListener(null);
-        }
-        if (herokuAsyncTask != null){
-            herokuAsyncTask.setElasticSearchListener(null);
-        }*/
         listener = null;
 
         super.onDestroy();
@@ -116,10 +107,6 @@ public class RestaurantNameSearchActivity extends BaseActivity {
                 listener.setRecyclerView(mRecycler);
 
                 //setup async task
-                //awsSearchRequest = new AwsElasticSearchRequest(trim(query));
-                //awsAsyncTask.setElasticSearchListener(listener);
-                //awsAsyncTask.execute(awsSearchRequest);
-
                 HerokuElasticSearchRequest herokuSearchRequest = new HerokuElasticSearchRequest(trim(query));
                 HerokuElasticSearchRequestTask herokuAsyncTask = new HerokuElasticSearchRequestTask();
                 herokuAsyncTask.setElasticSearchListener(listener);

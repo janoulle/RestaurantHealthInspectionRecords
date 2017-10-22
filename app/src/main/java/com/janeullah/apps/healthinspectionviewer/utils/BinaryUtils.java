@@ -8,6 +8,8 @@ import java.util.Locale;
  */
 public class BinaryUtils {
 
+    private BinaryUtils(){}
+
     /**
      * Converts byte data to a Hex-encoded string.
      *

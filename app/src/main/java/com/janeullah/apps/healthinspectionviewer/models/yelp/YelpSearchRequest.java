@@ -14,9 +14,21 @@ import org.apache.commons.lang3.StringUtils;
  */
 
 public class YelpSearchRequest {
-    public YelpAuthTokenResponse bearerToken;
-    public GeocodedAddressComponent restaurantMetadata;
-    public FlattenedRestaurant restaurant;
+    private YelpAuthTokenResponse bearerToken;
+    private GeocodedAddressComponent restaurantMetadata;
+    private FlattenedRestaurant restaurant;
+
+    public YelpSearchRequest(){
+        /**
+         * Default constructor
+         */
+    }
+
+    public YelpSearchRequest(YelpAuthTokenResponse bearerToken, GeocodedAddressComponent component, FlattenedRestaurant restaurant){
+        this.bearerToken = bearerToken;
+        this.restaurantMetadata = component;
+        this.restaurant = restaurant;
+    }
 
     public String getBearerToken(){
         return "Bearer " + bearerToken.getAccessToken();
@@ -34,18 +46,6 @@ public class YelpSearchRequest {
             return restaurantMetadata.getCoordinates().longitude;
         }
         return 0d;
-    }
-
-    public YelpSearchRequest(){
-        /**
-         * Default constructor
-         */
-    }
-
-    public YelpSearchRequest(YelpAuthTokenResponse bearerToken, GeocodedAddressComponent component, FlattenedRestaurant restaurant){
-        this.bearerToken = bearerToken;
-        this.restaurantMetadata = component;
-        this.restaurant = restaurant;
     }
 
     public YelpMatch scoreMatch(Business yelpBusinessObject){

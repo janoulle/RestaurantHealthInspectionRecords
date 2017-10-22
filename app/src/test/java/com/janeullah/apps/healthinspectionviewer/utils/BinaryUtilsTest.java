@@ -1,5 +1,7 @@
 package com.janeullah.apps.healthinspectionviewer.utils;
 
+import com.google.common.base.Charsets;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,13 +17,13 @@ public class BinaryUtilsTest {
 
     @Test
     public void testStringToHexConversion_Success() throws Exception{
-        String actualHexConversion = BinaryUtils.toHex(testString.getBytes("UTF-8"));
+        String actualHexConversion = BinaryUtils.toHex(testString.getBytes(Charsets.UTF_8));
         assertEquals(expectedHexConversion,actualHexConversion);
     }
 
     @Test
     public void testHexToStringConversion_Success() throws Exception{
-        String actualStringConversion = new String(BinaryUtils.fromHex(expectedHexConversion),"UTF-8");
+        String actualStringConversion = new String(BinaryUtils.fromHex(expectedHexConversion),Charsets.UTF_8);
         assertEquals(testString,actualStringConversion);
     }
 }

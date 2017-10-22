@@ -2,6 +2,8 @@ package com.janeullah.apps.healthinspectionviewer.utils;
 
 import android.util.Log;
 
+import com.google.common.base.Charsets;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -54,7 +56,7 @@ public class HttpUtils {
                 is = connection.getErrorStream();
             }
 
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charsets.UTF_8));
             String line;
             StringBuffer response = new StringBuffer();
             while ((line = rd.readLine()) != null) {
@@ -99,7 +101,7 @@ public class HttpUtils {
     public static String urlEncode(String url, boolean keepPathSlash) {
         String encoded;
         try {
-            encoded = URLEncoder.encode(url, "UTF-8");
+            encoded = URLEncoder.encode(url, Charsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 encoding is not supported.", e);
         }

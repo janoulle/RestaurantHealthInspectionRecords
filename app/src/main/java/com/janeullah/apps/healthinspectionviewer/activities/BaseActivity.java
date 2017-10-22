@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MessageD
 
     public void showProgressDialog(String message) {
         if (progressBar == null) {
-            progressBar = (ProgressBar) findViewById(R.id.loadingModalForIndeterminateProgress);
+            progressBar = findViewById(R.id.loadingModalForIndeterminateProgress);
         }
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }

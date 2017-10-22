@@ -66,7 +66,7 @@ public class ViolationFragment  extends Fragment {
         restaurant = Parcels.unwrap(getArguments().getParcelable(ARG_RESTAURANT));
         binding.setRestaurantSelected(restaurant);
 
-        mRecycler = (RecyclerView) rootView.findViewById(R.id.violationsInRestaurant);
+        mRecycler = rootView.findViewById(R.id.violationsInRestaurant);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
