@@ -28,9 +28,11 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class RestaurantNameSearchActivity extends BaseActivity {
     private static final String TAG = "RestaurantSearch";
+
     /*private AwsElasticSearchRequest awsSearchRequest = null;
     private AwsElasticSearchRequestTask awsAsyncTask = new AwsElasticSearchRequestTask();*/
     private ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
+
 
     @BindView(R.id.restaurants_search_listing_recyclerview)
     protected RecyclerView mRecycler;
@@ -81,6 +83,7 @@ public class RestaurantNameSearchActivity extends BaseActivity {
             herokuAsyncTask.setElasticSearchListener(null);
         }*/
         listener = null;
+
         super.onDestroy();
     }
 
