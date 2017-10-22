@@ -34,8 +34,8 @@ public class ViolationViewHolder extends RecyclerView.ViewHolder  {
     }
 
     public void bindData(final FlattenedViolation violation) {
-        violationCategory.setText(violation.category);
-        violationSummary.setText(violation.summary);
-        violationLongDesc.setText(violation.notes);
+        violationCategory.setText(violation.getCategory());
+        violationSummary.setText(violation.getSummary());
+        violationLongDesc.setText(violation.getNotes());
     }
 }

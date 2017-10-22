@@ -17,7 +17,7 @@ import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.databinding.FragmentRestaurantViolationsBinding;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedViolation;
-import com.janeullah.apps.healthinspectionviewer.services.FirebaseInitialization;
+import com.janeullah.apps.healthinspectionviewer.services.firebase.FirebaseInitialization;
 import com.janeullah.apps.healthinspectionviewer.viewholder.ViolationViewHolder;
 
 import org.parceler.Parcels;

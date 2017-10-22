@@ -3,6 +3,7 @@ package com.janeullah.apps.healthinspectionviewer.dtos;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.Source;
 
 import org.parceler.Parcel;
 
@@ -45,6 +46,17 @@ public class FlattenedRestaurant {
          */
     }
 
+    public FlattenedRestaurant(Source awsSearchHit){
+        this(awsSearchHit.getId().longValue(),
+                getIntegerVal(awsSearchHit.getScore()),
+                getIntegerVal(awsSearchHit.getCriticalViolations()),
+                getIntegerVal(awsSearchHit.getNonCriticalViolations()),
+                awsSearchHit.getName(),
+                awsSearchHit.getDateReported(),
+                awsSearchHit.getAddress(),
+                awsSearchHit.getCounty());
+    }
+
     public FlattenedRestaurant(Long id, int score, int criticalViolations, int nonCriticalViolations, String name, String dateReported, String address, String county) {
         this.id = id;
         this.score = score;
@@ -55,6 +67,10 @@ public class FlattenedRestaurant {
         this.address = address;
         this.county = county;
         this.hasAnyViolations = hasViolations();
+    }
+
+    private static int getIntegerVal(Integer value){
+        return value == null ? 0 : value;
     }
 
     @Exclude

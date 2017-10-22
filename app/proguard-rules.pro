@@ -311,7 +311,9 @@
 *;
 }
 
-
+-keep class android.support.** { *; }
+-keep interface android.support.** { *; }
 
 -dontwarn sun.misc.Unsafe
 -dontwarn com.google.common.collect.MinMaxPriorityQueue
+

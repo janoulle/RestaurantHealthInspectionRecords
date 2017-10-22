@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * https://developers.google.com/maps/documentation/geocoding/start
  * @author Jane Ullah
  * @date 5/3/2017.
  */
@@ -20,27 +21,27 @@ public class GeocodingUtils {
 
     public static GeocodedAddressComponent convertGeocodingResultsToGeocodedAddressComponent(GeocodingResult geocodingResult){
         GeocodedAddressComponent geocodedAddressComponent = new GeocodedAddressComponent();
-        geocodedAddressComponent.formattedAddress = geocodingResult.formattedAddress;
-        geocodedAddressComponent.coordinates = new LatLng(
+        geocodedAddressComponent.setFormattedAddress(geocodingResult.formattedAddress);
+        geocodedAddressComponent.setCoordinates(new LatLng(
                 geocodingResult.geometry.location.lat,
-                geocodingResult.geometry.location.lng);
+                geocodingResult.geometry.location.lng));
         AddressComponent[] addressComponents = geocodingResult.addressComponents;
         for(AddressComponent component : addressComponents){
             Map<String,Boolean> types = mapTypes(component.types);
             if (types.containsKey("street_number")){
-                geocodedAddressComponent.streetNumber = component.shortName;
+                geocodedAddressComponent.setStreetNumber(component.shortName);
             }else if (types.containsKey("route")){
-                geocodedAddressComponent.route = component.shortName;
+                geocodedAddressComponent.setRoute(component.shortName);
             }else if (types.containsKey("locality")){
-                geocodedAddressComponent.locality = component.shortName;
+                geocodedAddressComponent.setLocality(component.shortName);
             }else if (types.containsKey("administrative_area_level_2")){
-                geocodedAddressComponent.administrativeArea = component.shortName;
+                geocodedAddressComponent.setAdministrativeArea(component.shortName);
             }else if (types.containsKey("administrative_area_level_1")){
-                geocodedAddressComponent.state = component.shortName;
+                geocodedAddressComponent.setState(component.shortName);
             }else if (types.containsKey("country")){
-                geocodedAddressComponent.country = component.shortName;
+                geocodedAddressComponent.setCountry(component.shortName);
             }else if (types.containsKey("postal_code")){
-                geocodedAddressComponent.postalCode = component.shortName;
+                geocodedAddressComponent.setPostalCode(component.shortName);
             }
         }
         return geocodedAddressComponent;

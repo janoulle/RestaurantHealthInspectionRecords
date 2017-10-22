@@ -53,4 +53,40 @@
     <string name="non_critical_violations_tab">Non-Critical</string>
     <string name="healthcode_violations_button_label">HealthCode Violations</string>
     <string name="checkmark_description">Checkmark</string>
+    <string name="action_legal">Disclaimer</string>
+    <string name="action_about">About</string>
+    <string name="title_activity_about">About</string>
+    <string name="title_activity_legal">Disclaimer</string>
+
+    <string name="checkmark_desc">Green means no critical violations and a score of >= 90. Red means >= 1 or more critical violations. Yellow means a score below 90 and no critical violations.</string>
+    <string name="dataCredit">Data from <a href="http://publichealthathens.com/">PublicHealthAthens.com</a></string>
+    <string name="jsoupCredit">Data parsed with <strong><a href="http://jsoup.org/">jsoup</a></strong></string>
+    <string name="yelpCreditText">Restaurant rating data from <a href="https://www.yelp.com/static?p=tos">Yelp</a>.</string>
+
+    <!-- https://stackoverflow.com/questions/3235131/set-textview-text-from-html-formatted-string-resource-in-xml/18199543#18199543 -->
+    <string name="legalese">
+        Please note that <a href="http://publichealthathens.com/">PublicHealthAthens.com</a> is the canonical and most-up-to-date source of information on the restaurant health inspection data. By using this app, you agree to indemnify and hold me, relatives, descendants, my neighbors, friends, and  my dearly departed pet harmless from any events that result from using the application.\n\n
+        The green, red, and yellow icons are indicators of the restaurant\'s score. The information on how these restaurants are scored is available on <a href="http://publichealthathens.com/">PublicHealthAthens.com</a>. Captured here as of 09/16/2017, green means no critical violations and a score of >= 90. Red means >= 1 or more critical violations. Yellow means a score below 90 but not in the red.\n\n
+        This app also consumes data from <a href="https://www.yelp.com/static?p=tos">Yelp</a>. Specifically, the Yelp stars shown when viewing some restaurants comes from yelp.com and Yelp.com is the canonical source for rating information. The ratings data shown are not guaranteed to match the actual restaurant being viewed.\n\n
+        Internet connectivity is required to use this application. The restaurant information data is fetched from Firebase (<a href="https://firebase.google.com/terms/">TOS</a>) and is temporarily cached on your device. You agree to bear the cost of any charges associated with the requirement for internet connectivity on your device.\n\n
+        Other third party services in use include: Google Maps API for displaying the restaurant location (<a href="https://developers.google.com/maps/terms">TOS</a>), Firebase Crash Reporting (<a href="https://firebase.google.com/docs/crash/#user_privacy">which does not collect any personally identifiable information</a>), Fabric (<a href="https://fabric.io/terms">TOS</a>) for monitoring the app\'s stability and either <a href="https://www.heroku.com/policy/tos">Heroku </a> or <a href="https://aws.amazon.com/elasticsearch-service/">AWS</a> Elastic Search service powers the restaurant name search.
+    </string>
+    <string name="about_app">
+        Made with duct tape, super glue, and love by <b><a href="http://janeullah.com/">Jane Ullah</a></b>\n\n
+        Some details:\n\n
+        1. Data was scraped from the websites below using a Spring application that makes use of Jsoup. This data was then transformed into the format needed for consumption by this application and for use with Firebase\n\n
+        2. Direct links to the County restaurant reports: <a href="http://publichealthathens.com/healthscores/Barrow_county_restaurant_scores.html">Barrow</a>,
+        <a href="http://publichealthathens.com/healthscores/Elbert_county_restaurant_scores.html">Elbert</a>,
+        <a href="http://publichealthathens.com/healthscores/Clarke_county_restaurant_scores.html">Clarke</a>,
+        <a href="http://publichealthathens.com/healthscores/Greene_county_restaurant_scores.html">Greene</a>,
+        <a href="http://publichealthathens.com/healthscores/Jackson_county_restaurant_scores.html">Jackson</a>,
+        <a href="http://publichealthathens.com/healthscores/Madison_county_restaurant_scores.html">Madison</a>,
+        <a href="http://publichealthathens.com/healthscores/Morgan_county_restaurant_scores.html">Morgan</a>,
+        <a href="http://publichealthathens.com/healthscores/Oconee_county_restaurant_scores.html">Oconee</a>,
+        <a href="http://publichealthathens.com/healthscores/Oglethorpe_county_restaurant_scores.html">Oglethorpe</a>, and
+        <a href="http://publichealthathens.com/healthscores/Walton_county_restaurant_scores.html">Walton</a>
+    </string>
+    <string name="search_hint">Search restaurant name</string>
+    <string name="app_label">Search by restaurant name</string>
+    <string name="title_activity_restaurant_name_search">Restaurant Search Results</string>
 </resources>

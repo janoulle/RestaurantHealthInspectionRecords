@@ -8,9 +8,10 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.adapters.ViolationPagerAdapter;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
@@ -23,6 +24,8 @@ import butterknife.ButterKnife;
 
 public class RestaurantViolations extends BaseActivity {
     public static final String TAG = "RestaurantViolations";
+    public static final int HAS_ZERO_CRITICAL_VIOLATIONS = 0;
+    public static final int NON_CRITICAL_VIOLATIONS_TAB = 1;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -42,17 +45,19 @@ public class RestaurantViolations extends BaseActivity {
     @BindView(R.id.tabs)
     public TabLayout mTabLayout;
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.app_toolbar)
     public Toolbar mToolbar;
 
     private FlattenedRestaurant mRestaurantSelected;
 
-
     @Override
+    @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_violations);
         ButterKnife.bind(this);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,18 +75,12 @@ public class RestaurantViolations extends BaseActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
         //default user to tab with non-critical violations
-        if (mRestaurantSelected.criticalViolations == 0){
-            mViewPager.setCurrentItem(1);
+        if (mRestaurantSelected.criticalViolations == HAS_ZERO_CRITICAL_VIOLATIONS){
+            mViewPager.setCurrentItem(NON_CRITICAL_VIOLATIONS_TAB);
         }
 
         setTitle(getString(R.string.restaurant_violations_title));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
+        logViewEvent(TAG);
     }
 
     @Override
@@ -92,7 +91,11 @@ public class RestaurantViolations extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            loadActivity(this, AboutActivity.class);
+            return true;
+        } else if(id == R.id.action_legal){
+            loadActivity(this, LegalActivity.class);
             return true;
         }else if (id == android.R.id.home) {
             Log.i(TAG, "Up clicked!");
