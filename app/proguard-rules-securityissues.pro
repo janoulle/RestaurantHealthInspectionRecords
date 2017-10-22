@@ -25,7 +25,7 @@
 # Save the obfuscation mapping to a file, so you can de-obfuscate any stack
 # traces later on.
 # uncommenting for crashlytics use
-#-printmapping bin/classes-processed.map
+-printmapping bin/classes-processed.map
 
 # You can print out the seeds that are matching the keep options below.
 
