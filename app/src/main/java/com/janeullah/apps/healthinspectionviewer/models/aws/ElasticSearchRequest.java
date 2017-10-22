@@ -13,7 +13,7 @@ import java.util.List;
  * @date 9/26/2017.
  */
 @Parcel(Parcel.Serialization.BEAN)
-public class AwsElasticSearchRequest {
+public class ElasticSearchRequest {
     @SerializedName("query")
     @Expose
     private ContainsMatchQuery containsMatchQuery;

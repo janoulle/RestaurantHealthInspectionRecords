@@ -1,7 +1,9 @@
 package com.janeullah.apps.healthinspectionviewer.configuration;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.janeullah.apps.healthinspectionviewer.constants.HerokuConstants;
 import com.janeullah.apps.healthinspectionviewer.services.aws.AwsElasticSearchService;
+import com.janeullah.apps.healthinspectionviewer.services.heroku.HerokuElasticSearchService;
 import com.janeullah.apps.healthinspectionviewer.services.yelp.YelpService;
 
 import okhttp3.OkHttpClient;
@@ -26,7 +28,8 @@ public final class RetrofitConfiguration {
     private static OkHttpClient.Builder httpClient;
 
     public static final YelpService YELP_SERVICE;
-    public static final AwsElasticSearchService ELASTIC_SEARCH_SERVICE;
+    public static final AwsElasticSearchService AWS_ELASTIC_SEARCH_SERVICE;
+    public static final HerokuElasticSearchService HEROKU_ELASTIC_SEARCH_SERVICE;
 
     private RetrofitConfiguration(){}
 
@@ -34,7 +37,8 @@ public final class RetrofitConfiguration {
         setOkHttpClient();
 
         YELP_SERVICE = getRetrofitBuilder(YELP_API_HOST).build().create(YelpService.class);
-        ELASTIC_SEARCH_SERVICE = getRetrofitBuilder(AWS_ES_HOST_URL).build().create(AwsElasticSearchService.class);
+        AWS_ELASTIC_SEARCH_SERVICE = getRetrofitBuilder(AWS_ES_HOST_URL).build().create(AwsElasticSearchService.class);
+        HEROKU_ELASTIC_SEARCH_SERVICE = getRetrofitBuilder(HerokuConstants.ES_HOST_URL).build().create(HerokuElasticSearchService.class);
     }
 
     private static void setOkHttpClient() {

@@ -5,9 +5,9 @@ import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
-import com.janeullah.apps.healthinspectionviewer.interfaces.AwsEsSearchTaskListener;
-import com.janeullah.apps.healthinspectionviewer.models.aws.AwsElasticSearchResponse;
+import com.janeullah.apps.healthinspectionviewer.interfaces.EsSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.aws.AwsSearchRequest;
+import com.janeullah.apps.healthinspectionviewer.models.aws.ElasticSearchResponse;
 import com.janeullah.apps.healthinspectionviewer.services.aws.AwsElasticSearchService;
 
 import retrofit2.Call;
@@ -19,17 +19,17 @@ import retrofit2.Response;
  * @date 9/29/2017.
  */
 
-public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,AwsElasticSearchResponse>{
+public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,ElasticSearchResponse>{
     private static final String TAG = "AwsSearchTask";
-    private AwsEsSearchTaskListener awsEsSearchTaskListener;
+    private EsSearchTaskListener esSearchTaskListener;
 
     @Override
-    protected AwsElasticSearchResponse doInBackground(AwsSearchRequest... awsSearchRequests) {
+    protected ElasticSearchResponse doInBackground(AwsSearchRequest... awsSearchRequests) {
         try{
             Log.i(TAG,"Initiated background processing...");
-            AwsElasticSearchService elasticSearchService = RetrofitConfiguration.ELASTIC_SEARCH_SERVICE;
-            Call<AwsElasticSearchResponse> searchRequest = elasticSearchService.findRestaurantsByName(awsSearchRequests[0].getHeaders(),awsSearchRequests[0].getPayload());
-            Response<AwsElasticSearchResponse> response = searchRequest.execute();
+            AwsElasticSearchService elasticSearchService = RetrofitConfiguration.AWS_ELASTIC_SEARCH_SERVICE;
+            Call<ElasticSearchResponse> searchRequest = elasticSearchService.findRestaurantsByName(awsSearchRequests[0].getHeaders(),awsSearchRequests[0].getPayload());
+            Response<ElasticSearchResponse> response = searchRequest.execute();
             if (response.isSuccessful()) {
                 Log.i(TAG,"Search results received for query="+awsSearchRequests[0]);
                 Log.e(TAG,"Search response is successful. Result="+response.body());
@@ -45,13 +45,13 @@ public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,Aws
     }
 
     @Override
-    protected void onPostExecute(AwsElasticSearchResponse result) {
-        if (awsEsSearchTaskListener != null) {
-            awsEsSearchTaskListener.onSuccess(result);
+    protected void onPostExecute(ElasticSearchResponse result) {
+        if (esSearchTaskListener != null) {
+            esSearchTaskListener.onSuccess(result);
         }
     }
 
-    public void setAwsSearchTaskListener(AwsEsSearchTaskListener listener){
-        this.awsEsSearchTaskListener = listener;
+    public void setAwsSearchTaskListener(EsSearchTaskListener listener){
+        this.esSearchTaskListener = listener;
     }
 }

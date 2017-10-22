@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.services.aws;
+package com.janeullah.apps.healthinspectionviewer.services.heroku;
 
 import com.janeullah.apps.healthinspectionviewer.models.aws.ElasticSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.models.aws.ElasticSearchResponse;
@@ -11,16 +11,16 @@ import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 
-import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_ES_SEARCH_PATH;
+import static com.janeullah.apps.healthinspectionviewer.constants.HerokuConstants.ES_SEARCH_PATH;
 
 /**
  * @author Jane Ullah
- * @date 9/26/2017.
+ * @date 10/21/2017.
  */
 
-public interface AwsElasticSearchService {
-
-    @POST(StringUtilities.FORWARD_SLASH + AWS_ES_SEARCH_PATH)
+public interface HerokuElasticSearchService {
+    @POST(StringUtilities.FORWARD_SLASH + ES_SEARCH_PATH)
     Call<ElasticSearchResponse> findRestaurantsByName(@HeaderMap Map<String,String> headerParameters,
                                                       @Body ElasticSearchRequest searchRequest);
+
 }

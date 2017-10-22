@@ -96,6 +96,7 @@ android {
             it.buildConfigField 'String', 'AWS_ES_READONLY_ACCESS_KEY', AWS_ES_READONLY_ACCESS_KEY
             it.buildConfigField 'String', 'AWS_ES_READONLY_SECRET', AWS_ES_READONLY_SECRET
             it.buildConfigField 'String', 'AWS_ES_HOST', AWS_ES_HOST
+            it.buildConfigField 'String', 'HEROKU_NEGA_ES_HOST', HEROKU_NEGA_ES_HOST
         }
     }
 

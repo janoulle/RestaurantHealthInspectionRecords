@@ -32,10 +32,10 @@ import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSear
 
 public class AwsSearchRequest {
     private Map<String, String> headers = new HashMap<>();
-    private final AwsElasticSearchRequest searchRequest = new AwsElasticSearchRequest();
+    private final ElasticSearchRequest searchRequest = new ElasticSearchRequest();
     private static final String TAG = "AwsSearchRequest";
 
-    public AwsElasticSearchRequest getPayload() {
+    public ElasticSearchRequest getPayload() {
         return searchRequest;
     }
 

@@ -11,7 +11,7 @@ import org.parceler.Parcel;
  * @date 9/26/2017.
  */
 @Parcel(Parcel.Serialization.BEAN)
-public class AwsElasticSearchResponse {
+public class ElasticSearchResponse {
 
     @SerializedName("took")
     @Expose
