@@ -31,19 +31,11 @@ public class EventLoggingUtils {
         logSelectionEventWithFabric(key,value,tag, activity);
     }
 
-    public static void logSelectionEventWithFabric(String key, String value, String tag, BaseActivity activity){
+    private static void logSelectionEventWithFabric(String key, String value, String tag, BaseActivity activity){
         Answers.getInstance().logCustom(new CustomEvent("Selection Made")
                 .putCustomAttribute(ActionParameters.LOCATION.text(),tag)
                 .putCustomAttribute(ActionParameters.ITEM_NAME.text(),key)
                 .putCustomAttribute(ActionParameters.ITEM_VALUE.text(),value)
-                .putCustomAttribute(ActionParameters.UUID.text(),UUIDInitializer.getInstance(activity).getUUID())
-                .putCustomAttribute(ActionParameters.START_DATE.text(), Calendar.getInstance().getTimeInMillis()));
-    }
-
-    public static void logViewEventsWithFabric(String tag, String contentType, BaseActivity activity){
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName(tag)
-                .putContentType(contentType)
                 .putCustomAttribute(ActionParameters.UUID.text(),UUIDInitializer.getInstance(activity).getUUID())
                 .putCustomAttribute(ActionParameters.START_DATE.text(), Calendar.getInstance().getTimeInMillis()));
     }
@@ -55,5 +47,13 @@ public class EventLoggingUtils {
         bundle.putLong(FirebaseAnalytics.Param.START_DATE, Calendar.getInstance().getTimeInMillis());
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
         logViewEventsWithFabric(tag,"Activity",activity);
+    }
+
+    private static void logViewEventsWithFabric(String tag, String contentType, BaseActivity activity){
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName(tag)
+                .putContentType(contentType)
+                .putCustomAttribute(ActionParameters.UUID.text(),UUIDInitializer.getInstance(activity).getUUID())
+                .putCustomAttribute(ActionParameters.START_DATE.text(), Calendar.getInstance().getTimeInMillis()));
     }
 }
