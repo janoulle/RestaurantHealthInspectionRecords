@@ -7,7 +7,7 @@ import com.google.gson.Gson;
  * @date 9/30/2017.
  */
 
-public interface TaskListener<T,U> {
+public interface TaskListenable<T,U> {
     Gson gson = new Gson();
     T onSuccess(U arg);
 }

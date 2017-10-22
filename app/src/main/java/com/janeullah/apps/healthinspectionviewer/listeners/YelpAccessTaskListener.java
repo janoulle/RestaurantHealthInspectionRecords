@@ -8,7 +8,7 @@ import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.async.yelp.YelpSearchBusinessesTask;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
-import com.janeullah.apps.healthinspectionviewer.interfaces.TaskListener;
+import com.janeullah.apps.healthinspectionviewer.interfaces.TaskListenable;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
 
@@ -17,7 +17,7 @@ import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
  * @date 9/30/2017.
  */
 
-public class YelpAccessTaskListener implements TaskListener<Void, YelpAuthTokenResponse> {
+public class YelpAccessTaskListener implements TaskListenable<Void, YelpAuthTokenResponse> {
     private static final String TAG = "YelpAccessTaskListener";
     private SharedPreferences mSharedPreferences;
     private GeocodedAddressComponent mGeocodedAddressComponents;

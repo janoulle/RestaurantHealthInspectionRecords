@@ -30,8 +30,7 @@ public class RestaurantNameSearchActivity extends BaseActivity {
     private static final String TAG = "RestaurantSearch";
     /*private AwsElasticSearchRequest awsSearchRequest = null;
     private AwsElasticSearchRequestTask awsAsyncTask = new AwsElasticSearchRequestTask();*/
-    private HerokuElasticSearchRequest herokuSearchRequest = null;
-    private HerokuElasticSearchRequestTask herokuAsyncTask = new HerokuElasticSearchRequestTask();
+    private ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
 
     @BindView(R.id.restaurants_search_listing_recyclerview)
     protected RecyclerView mRecycler;
@@ -77,10 +76,11 @@ public class RestaurantNameSearchActivity extends BaseActivity {
     public void onDestroy(){
         /*if (awsAsyncTask != null){
             awsAsyncTask.setElasticSearchListener(null);
-        }*/
+        }
         if (herokuAsyncTask != null){
             herokuAsyncTask.setElasticSearchListener(null);
-        }
+        }*/
+        listener = null;
         super.onDestroy();
     }
 
@@ -108,7 +108,6 @@ public class RestaurantNameSearchActivity extends BaseActivity {
             showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants for query %s", query));
             if (StringUtils.isNotBlank(query)) {
                 //setup listener
-                ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
                 listener.setIntent(getIntent());
                 listener.setActivity(this);
                 listener.setRecyclerView(mRecycler);
@@ -118,7 +117,8 @@ public class RestaurantNameSearchActivity extends BaseActivity {
                 //awsAsyncTask.setElasticSearchListener(listener);
                 //awsAsyncTask.execute(awsSearchRequest);
 
-                herokuSearchRequest = new HerokuElasticSearchRequest(trim(query));
+                HerokuElasticSearchRequest herokuSearchRequest = new HerokuElasticSearchRequest(trim(query));
+                HerokuElasticSearchRequestTask herokuAsyncTask = new HerokuElasticSearchRequestTask();
                 herokuAsyncTask.setElasticSearchListener(listener);
                 herokuAsyncTask.execute(herokuSearchRequest);
             }
