@@ -7,7 +7,7 @@ import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.BuildConfig;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
-import com.janeullah.apps.healthinspectionviewer.interfaces.YelpAccessTaskListener;
+import com.janeullah.apps.healthinspectionviewer.listeners.YelpAccessTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.services.yelp.YelpService;
 

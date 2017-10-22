@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.interfaces;
+package com.janeullah.apps.healthinspectionviewer.listeners;
 
 import android.app.SearchManager;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.adapters.RestaurantsSearchListAdapter;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
+import com.janeullah.apps.healthinspectionviewer.interfaces.TaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.ElasticSearchResponse;
 import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.Hit;
 

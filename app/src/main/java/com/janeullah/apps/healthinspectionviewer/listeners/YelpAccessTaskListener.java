@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.interfaces;
+package com.janeullah.apps.healthinspectionviewer.listeners;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +8,7 @@ import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.async.yelp.YelpSearchBusinessesTask;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
+import com.janeullah.apps.healthinspectionviewer.interfaces.TaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpAuthTokenResponse;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpSearchRequest;
 
