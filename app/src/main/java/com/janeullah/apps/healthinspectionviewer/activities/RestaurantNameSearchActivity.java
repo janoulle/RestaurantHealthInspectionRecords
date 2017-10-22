@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.async.aws.AwsSearchRequestTask;
-import com.janeullah.apps.healthinspectionviewer.interfaces.EsSearchTaskListener;
+import com.janeullah.apps.healthinspectionviewer.interfaces.ElasticSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.aws.AwsSearchRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -103,7 +103,7 @@ public class RestaurantNameSearchActivity extends BaseActivity {
             showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants for query %s", query));
             if (StringUtils.isNotBlank(query)) {
                 searchRequest = new AwsSearchRequest(trim(query));
-                EsSearchTaskListener listener = new EsSearchTaskListener();
+                ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
                 listener.setIntent(getIntent());
                 listener.setActivity(this);
                 listener.setRecyclerView(mRecycler);

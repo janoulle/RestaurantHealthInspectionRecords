@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
-import com.janeullah.apps.healthinspectionviewer.interfaces.EsSearchTaskListener;
+import com.janeullah.apps.healthinspectionviewer.interfaces.ElasticSearchTaskListener;
 import com.janeullah.apps.healthinspectionviewer.models.aws.AwsSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.models.aws.ElasticSearchResponse;
 import com.janeullah.apps.healthinspectionviewer.services.aws.AwsElasticSearchService;
@@ -21,7 +21,7 @@ import retrofit2.Response;
 
 public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,ElasticSearchResponse>{
     private static final String TAG = "AwsSearchTask";
-    private EsSearchTaskListener esSearchTaskListener;
+    private ElasticSearchTaskListener elasticSearchTaskListener;
 
     @Override
     protected ElasticSearchResponse doInBackground(AwsSearchRequest... awsSearchRequests) {
@@ -46,12 +46,12 @@ public class AwsSearchRequestTask extends AsyncTask<AwsSearchRequest,Integer,Ela
 
     @Override
     protected void onPostExecute(ElasticSearchResponse result) {
-        if (esSearchTaskListener != null) {
-            esSearchTaskListener.onSuccess(result);
+        if (elasticSearchTaskListener != null) {
+            elasticSearchTaskListener.onSuccess(result);
         }
     }
 
-    public void setAwsSearchTaskListener(EsSearchTaskListener listener){
-        this.esSearchTaskListener = listener;
+    public void setAwsSearchTaskListener(ElasticSearchTaskListener listener){
+        this.elasticSearchTaskListener = listener;
     }
 }

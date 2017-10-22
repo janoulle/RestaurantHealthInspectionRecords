@@ -26,7 +26,7 @@ import java.util.List;
  * @date 9/30/2017.
  */
 
-public class EsSearchTaskListener implements TaskListener<Void, ElasticSearchResponse> {
+public class ElasticSearchTaskListener implements TaskListener<Void, ElasticSearchResponse> {
     private static final String TAG = "EsSearchTaskListener";
     private Intent intent;
     private BaseActivity activity;
