@@ -10,7 +10,7 @@ import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedYelpData;
-import com.janeullah.apps.healthinspectionviewer.interfaces.TaskListener;
+import com.janeullah.apps.healthinspectionviewer.interfaces.TaskListenable;
 import com.janeullah.apps.healthinspectionviewer.models.yelp.YelpResults;
 
 import org.parceler.Parcels;
@@ -22,7 +22,7 @@ import static io.fabric.sdk.android.Fabric.TAG;
  * @date 9/30/2017.
  */
 
-public class YelpSearchTaskListener implements TaskListener<Void,YelpResults> {
+public class YelpSearchTaskListener implements TaskListenable<Void,YelpResults> {
     private BaseActivity activity;
     private Intent intent;
 

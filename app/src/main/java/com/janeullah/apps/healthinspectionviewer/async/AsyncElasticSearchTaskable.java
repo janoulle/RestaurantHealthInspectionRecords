@@ -1,6 +1,8 @@
 package com.janeullah.apps.healthinspectionviewer.async;
 
-import com.janeullah.apps.healthinspectionviewer.interfaces.ElasticSearchTaskListener;
+
+import com.janeullah.apps.healthinspectionviewer.listeners.ElasticSearchTaskListener;
+
 
 /**
  * @author Jane Ullah

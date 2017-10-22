@@ -13,10 +13,8 @@ import android.view.MenuItem;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
-import com.janeullah.apps.healthinspectionviewer.async.aws.AwsElasticSearchRequestTask;
 import com.janeullah.apps.healthinspectionviewer.async.heroku.HerokuElasticSearchRequestTask;
 import com.janeullah.apps.healthinspectionviewer.listeners.ElasticSearchTaskListener;
-import com.janeullah.apps.healthinspectionviewer.models.aws.AwsElasticSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.models.heroku.HerokuElasticSearchRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,10 +28,11 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 public class RestaurantNameSearchActivity extends BaseActivity {
     private static final String TAG = "RestaurantSearch";
-    private AwsElasticSearchRequest awsSearchRequest = null;
-    private HerokuElasticSearchRequest herokuSearchRequest = null;
-    private AwsElasticSearchRequestTask awsAsyncTask = new AwsElasticSearchRequestTask();
-    private HerokuElasticSearchRequestTask herokuAsyncTask = new HerokuElasticSearchRequestTask();
+
+    /*private AwsElasticSearchRequest awsSearchRequest = null;
+    private AwsElasticSearchRequestTask awsAsyncTask = new AwsElasticSearchRequestTask();*/
+    private ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
+
 
     @BindView(R.id.restaurants_search_listing_recyclerview)
     protected RecyclerView mRecycler;
@@ -77,12 +76,14 @@ public class RestaurantNameSearchActivity extends BaseActivity {
 
     @Override
     public void onDestroy(){
-        if (awsAsyncTask != null){
+        /*if (awsAsyncTask != null){
             awsAsyncTask.setElasticSearchListener(null);
         }
         if (herokuAsyncTask != null){
             herokuAsyncTask.setElasticSearchListener(null);
-        }
+        }*/
+        listener = null;
+
         super.onDestroy();
     }
 
@@ -110,7 +111,6 @@ public class RestaurantNameSearchActivity extends BaseActivity {
             showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants for query %s", query));
             if (StringUtils.isNotBlank(query)) {
                 //setup listener
-                ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
                 listener.setIntent(getIntent());
                 listener.setActivity(this);
                 listener.setRecyclerView(mRecycler);
@@ -119,7 +119,9 @@ public class RestaurantNameSearchActivity extends BaseActivity {
                 //awsSearchRequest = new AwsElasticSearchRequest(trim(query));
                 //awsAsyncTask.setElasticSearchListener(listener);
                 //awsAsyncTask.execute(awsSearchRequest);
-                herokuSearchRequest = new HerokuElasticSearchRequest(trim(query));
+
+                HerokuElasticSearchRequest herokuSearchRequest = new HerokuElasticSearchRequest(trim(query));
+                HerokuElasticSearchRequestTask herokuAsyncTask = new HerokuElasticSearchRequestTask();
                 herokuAsyncTask.setElasticSearchListener(listener);
                 herokuAsyncTask.execute(herokuSearchRequest);
             }
