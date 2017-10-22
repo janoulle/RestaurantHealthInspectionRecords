@@ -25,7 +25,8 @@ public class HerokuElasticSearchRequest extends BaseElasticSearchRequest {
     private void generateAndSetAuthorizationHeader() {
         try {
             Uri bonsaiUrl = Uri.parse(HerokuConstants.ES_HOST_URL);
-            String encodedString = new String(Base64.encodeToString(bonsaiUrl.getUserInfo().getBytes("UTF-8"),Base64.DEFAULT));
+            //https://developer.android.com/reference/android/util/Base64.html. Default adds the new lines
+            String encodedString = new String(Base64.encodeToString(bonsaiUrl.getUserInfo().getBytes("UTF-8"),Base64.NO_WRAP));
             headers.put("Authorization", "Basic " + encodedString);
         } catch (Exception e) {
             Log.e(TAG, "Unspecified error while generating authorization headers", e);
