@@ -13,8 +13,8 @@ import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.adapters.RestaurantsSearchListAdapter;
 import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
-import com.janeullah.apps.healthinspectionviewer.models.aws.ElasticSearchResponse;
-import com.janeullah.apps.healthinspectionviewer.models.aws.Hit;
+import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.ElasticSearchResponse;
+import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.Hit;
 
 import org.parceler.Parcels;
 

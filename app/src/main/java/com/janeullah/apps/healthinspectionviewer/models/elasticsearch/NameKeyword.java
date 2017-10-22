@@ -1,4 +1,4 @@
-package com.janeullah.apps.healthinspectionviewer.models.aws;
+package com.janeullah.apps.healthinspectionviewer.models.elasticsearch;
 
 /**
  * @author Jane Ullah

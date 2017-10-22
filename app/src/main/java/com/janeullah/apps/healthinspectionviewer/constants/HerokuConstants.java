@@ -11,5 +11,5 @@ public class HerokuConstants {
     private HerokuConstants(){}
     public static final String ES_SEARCH_PATH = "restaurants/_search";
     public static final String ES_HOST_URL = "https://" + BuildConfig.HEROKU_NEGA_ES_HOST;
-    public static final String ES_SEARCH_URL = ES_HOST_URL + "/estaurants/_search";
+    public static final String ES_SEARCH_URL = ES_HOST_URL + "/" + ES_SEARCH_PATH;
 }

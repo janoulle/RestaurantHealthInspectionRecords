@@ -4,16 +4,13 @@ import android.util.Log;
 
 import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerBase;
 import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerForAuthorizationHeader;
+import com.janeullah.apps.healthinspectionviewer.interfaces.ElasticSearchRequestable;
+import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.BaseElasticSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.StringUtilities;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_ES_READONLY_ACCESS_KEY;
 import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSearchConstants.AWS_ES_READONLY_SECRET;
@@ -30,23 +27,14 @@ import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSear
  * @date 9/29/2017.
  */
 
-public class AwsSearchRequest {
-    private Map<String, String> headers = new HashMap<>();
-    private final ElasticSearchRequest searchRequest = new ElasticSearchRequest();
-    private static final String TAG = "AwsSearchRequest";
+public class AwsElasticSearchRequest extends BaseElasticSearchRequest implements ElasticSearchRequestable {
+    private static final String TAG = "AwsElasticSearchRequest";
 
-    public ElasticSearchRequest getPayload() {
-        return searchRequest;
+
+    public AwsElasticSearchRequest() {
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public AwsSearchRequest() {
-    }
-
-    public AwsSearchRequest(String searchValue) {
+    public AwsElasticSearchRequest(String searchValue) {
         populateSearchRequestObject(searchValue);
         generateAndSetAuthorizationHeader();
     }
@@ -75,26 +63,5 @@ public class AwsSearchRequest {
         } catch (Exception e) {
             Log.e(TAG, "Unspecified error while generating signature", e);
         }
-    }
-
-    private void populateSearchRequestObject(String searchValue) {
-        Match matchTerm = new Match();
-        matchTerm.setName(searchValue);
-        ContainsMatchQuery containsMatchQuery = new ContainsMatchQuery();
-        containsMatchQuery.setMatch(matchTerm);
-        searchRequest.setContainsMatchQuery(containsMatchQuery);
-
-        Sort nameSort = new Sort();
-        nameSort.setNameKeyword(new NameKeyword("asc"));
-        searchRequest.setSort(Collections.singletonList(nameSort));
-        searchRequest.setSize(100);
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("headers", headers)
-                .append("payload", searchRequest)
-                .toString();
     }
 }

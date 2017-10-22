@@ -1,7 +1,7 @@
 package com.janeullah.apps.healthinspectionviewer.services.heroku;
 
-import com.janeullah.apps.healthinspectionviewer.models.aws.ElasticSearchRequest;
-import com.janeullah.apps.healthinspectionviewer.models.aws.ElasticSearchResponse;
+import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.ElasticSearchRequest;
+import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.ElasticSearchResponse;
 import com.janeullah.apps.healthinspectionviewer.utils.StringUtilities;
 
 import java.util.Map;

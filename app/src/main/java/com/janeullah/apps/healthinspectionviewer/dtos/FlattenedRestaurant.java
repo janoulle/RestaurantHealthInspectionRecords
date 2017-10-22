@@ -3,7 +3,7 @@ package com.janeullah.apps.healthinspectionviewer.dtos;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.janeullah.apps.healthinspectionviewer.models.aws.Source;
+import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.Source;
 
 import org.parceler.Parcel;
 
