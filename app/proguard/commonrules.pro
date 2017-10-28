@@ -60,6 +60,14 @@
 # Switch off some optimizations that trip older versions of the Dalvik VM.
 -optimizations !code/simplification/arithmetic
 
+
+#https://github.com/getsentry/sentry-java/issues/373
+-dontwarn javax.naming.**
+-dontwarn javax.servlet.**
+-dontwarn org.slf4j.**
+-dontwarn android.support.**
+-dontwarn sun.misc.**
+
 # Preserve all fundamental application classes.
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -156,10 +164,3 @@
 
 #keeping custom exceptions
 -keep public class * extends java.lang.Exception
-
-#https://github.com/getsentry/sentry-java/issues/373
--dontwarn javax.naming.**
--dontwarn javax.servlet.**
--dontwarn org.slf4j.**
--dontwarn android.support.**
--dontwarn sun.misc.**
