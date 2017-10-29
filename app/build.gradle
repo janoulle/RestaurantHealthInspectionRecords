@@ -39,9 +39,13 @@ def loadKeyStoreProperties() {
 
 def keyStoreProperties = loadKeyStoreProperties()
 
+
 //https://developer.android.com/studio/build/build-variants.html#signing
 //https://developer.android.com/studio/build/manifest-build-variables.html
 android {
+
+    flavorDimensions "withproguard", "noproguard"
+
     signingConfigs {
         release {
             keyPassword keyStoreProperties['NEGA_RELEASE_KEY_PASSWORD']
@@ -110,6 +114,12 @@ android {
 
             //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
             proguardFiles fileTree('proguard').asList().toArray()
+
+            dimension "withproguard"
+        }
+
+        noproguard{
+            dimension "noproguard"
         }
     }
 
@@ -177,6 +187,7 @@ dependencies {
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     annotationProcessor "org.parceler:parceler:$parceler_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+    annotationProcessor 'com.google.auto.value:auto-value:1.2'
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     compile 'com.google.maps:google-maps-services:0.1.20'
@@ -187,10 +198,10 @@ dependencies {
     compile 'org.apache.commons:commons-text:1.0'
     compile 'com.yelp.clientlib:yelp-android:3.0.0'
     compile 'com.google.inject:guice:4.1.0'
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.2'
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    androidTestCompile 'com.android.support.test:runner:0.5'
+    testCompile 'org.mockito:mockito-core:2.11.0'
+    androidTestCompile 'com.android.support.test:runner:1.0.1'
     compile "com.google.firebase:firebase-perf:$firebase_version"
     compile "com.android.support.test.espresso:espresso-idling-resource:$espresso_version"
     //https://github.com/aws/aws-sdk-android/blob/master/aws-android-sdk-cognitoidentityprovider/pom.xml
