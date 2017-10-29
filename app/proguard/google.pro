@@ -20,8 +20,7 @@
 -dontwarn com.google.common.collect.**
 -dontwarn java.lang.ClassValue
 -dontwarn com.google.j2objc.annotations.Weak
--dontwarn   com.google.j2objc.annotations.**
-
+-dontwarn com.google.j2objc.annotations.**
 
 
 # deal with Google's voodoo
@@ -40,3 +39,5 @@
 -keep class com.google.j2objc.annotations.** { *; }
 -keep class java.lang.ClassValue { *; }
 
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**

@@ -44,7 +44,7 @@ def keyStoreProperties = loadKeyStoreProperties()
 //https://developer.android.com/studio/build/manifest-build-variables.html
 android {
 
-    flavorDimensions "withproguard", "noproguard"
+    flavorDimensions "withproguard"
 
     signingConfigs {
         release {
@@ -79,7 +79,9 @@ android {
             debuggable false
             shrinkResources false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
+            proguardFiles fileTree('proguard').asList().toArray()
             signingConfig signingConfigs.release
             manifestPlaceholders = [google_map_key: GOOGLE_MAPS_API_KEY]
         }
@@ -87,7 +89,7 @@ android {
             debuggable true
             shrinkResources false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
             //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
             proguardFiles fileTree('proguard').asList().toArray()
             signingConfig signingConfigs.debug
@@ -110,16 +112,9 @@ android {
     //https://developer.android.com/studio/build/shrink-code.html
     productFlavors {
         proguard {
-            proguardFile 'proguard-rules.pro'
 
-            //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
-            proguardFiles fileTree('proguard').asList().toArray()
 
             dimension "withproguard"
-        }
-
-        noproguard{
-            dimension "noproguard"
         }
     }
 

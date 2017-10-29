@@ -39,7 +39,8 @@
 -dump class_files.txt
 -printseeds seeds.txt
 -printusage unused.txt
--printmapping mapping.txt
+#-printmapping mapping.txt
+
 
 
 

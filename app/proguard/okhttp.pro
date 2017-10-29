@@ -7,7 +7,6 @@
 -dontwarn com.google.appengine.api.urlfetch.**
 -dontwarn com.google.android.gms.internal.zzhu
 
-
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**

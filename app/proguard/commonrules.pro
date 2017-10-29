@@ -28,7 +28,11 @@
 -verbose
 -dump class_files.txt
 -printseeds seeds.txt
+-printconfiguration config.txt
 -printusage unused.txt
+#-printmapping mapping.txt
+#-printmapping build/outputs/mapping/release/mapping.txt
+
 
 #https://docs.fabric.io/android/crashlytics/dex-and-proguard.html
 #For Fabric to properly de-obfuscate your crash reports, you need to remove this line from your configuration file, or we won’t be able to automatically upload your mapping file:
@@ -67,6 +71,9 @@
 -dontwarn org.slf4j.**
 -dontwarn android.support.**
 -dontwarn sun.misc.**
+-dontwarn org.mockito.**
+-dontwarn sun.reflect.**
+-dontwarn android.test.**
 
 # Preserve all fundamental application classes.
 -keep public class * extends android.app.Activity
@@ -164,3 +171,30 @@
 
 #keeping custom exceptions
 -keep public class * extends java.lang.Exception
+
+#https://stackoverflow.com/questions/33047806/proguard-duplicate-definition-of-library-class
+-dontnote android.net.http.*
+-dontnote org.apache.commons.codec.**
+-dontnote org.apache.http.**
+
+#https://stackoverflow.com/questions/36261672/proguard-problems-in-android-studio
+# support-v4
+#https://stackoverflow.com/questions/18978706/obfuscate-android-support-v7-widget-gridlayout-issue
+#-dontwarn android.support.v4.**
+#-keep class android.support.v4.app.** { *; }
+#-keep interface android.support.v4.app.** { *; }
+#-keep class android.support.v4.** { *; }
+
+
+# support-v7
+#-dontwarn android.support.v7.**
+#-keep class android.support.v7.internal.** { *; }
+#-keep interface android.support.v7.internal.** { *; }
+#-keep class android.support.v7.** { *; }
+
+# support design
+#@link http://stackoverflow.com/a/31028536
+#-dontwarn android.support.design.**
+#-keep class android.support.design.** { *; }
+#-keep interface android.support.design.** { *; }
+#-keep public class android.support.design.R$* { *; }
