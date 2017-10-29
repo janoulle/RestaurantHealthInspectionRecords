@@ -9,7 +9,6 @@
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**
 -dontwarn sun.misc.Unsafe
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
 -dontwarn org.mockito.**
 -dontwarn sun.reflect.**
@@ -18,9 +17,9 @@
 -dontwarn com.google.inject.internal.asm.util.$TraceClassVisitor
 -dontwarn com.google.common.collect.MinMaxPriorityQueue
 -dontwarn com.google.common.collect.**
--dontwarn java.lang.ClassValue
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn com.google.j2objc.annotations.**
+-dontwarn   java.lang.ClassValue
 
 
 # deal with Google's voodoo
@@ -34,10 +33,9 @@
 -keep class com.google.common.collect.** { *; }
 -keep class com.google.common.collect.MapMakerInternalMap$ReferenceEntry
 -keep class com.google.common.cache.LocalCache$ReferenceEntry
-
--keep class org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement { *; }
--keep class com.google.j2objc.annotations.** { *; }
 -keep class java.lang.ClassValue { *; }
+
+-keep class com.google.j2objc.annotations.** { *; }
 
 -keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**

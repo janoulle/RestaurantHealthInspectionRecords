@@ -26,10 +26,10 @@
 #https://www.simpligility.com/2010/12/hints-for-using-proguard-on-your-android-app/
 
 -verbose
--dump class_files.txt
--printseeds seeds.txt
--printconfiguration config.txt
--printusage unused.txt
+-dump build/outputs/class_files.txt
+-printseeds build/outputs/seeds.txt
+-printconfiguration build/outputs/config.txt
+-printusage build/outputs/unused.txt
 #-printmapping mapping.txt
 #-printmapping build/outputs/mapping/release/mapping.txt
 
