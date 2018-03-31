@@ -17,13 +17,11 @@ public class InspectionReport {
     private FlattenedRestaurant restaurant;
     private List<FlattenedViolation> violations;
 
-    public InspectionReport(){
-        /**
-         * Declaring default constructor due to overloaded one below
-         */
+    public InspectionReport() {
+        /** Declaring default constructor due to overloaded one below */
     }
 
-    public InspectionReport(FlattenedRestaurant restaurant){
+    public InspectionReport(FlattenedRestaurant restaurant) {
         this.restaurant = restaurant;
     }
 

@@ -26,12 +26,10 @@ import org.parceler.Parcels;
  * @author Jane Ullah
  * @date 5/20/2017.
  */
-public class ViolationFragment  extends Fragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
+public class ViolationFragment extends Fragment {
+    /** The fragment argument representing the section number for this fragment. */
     private static final String ARG_SECTION_NUMBER = "section_number";
+
     private static final String ARG_RESTAURANT = "restaurant";
     private static final String ARG_VIOLATION_SEVERITY = "violation_severity";
 
@@ -42,14 +40,11 @@ public class ViolationFragment  extends Fragment {
     private DatabaseReference negaRestaurantsDatabaseReference;
     private FirebaseRecyclerAdapter<FlattenedViolation, ViolationViewHolder> mAdapter;
 
-    public ViolationFragment() {
-    }
+    public ViolationFragment() {}
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-    public static ViolationFragment newInstance(int sectionNumber, FlattenedRestaurant restaurantSelected) {
+    /** Returns a new instance of this fragment for the given section number. */
+    public static ViolationFragment newInstance(
+            int sectionNumber, FlattenedRestaurant restaurantSelected) {
         ViolationFragment fragment = new ViolationFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -59,9 +54,11 @@ public class ViolationFragment  extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        FragmentRestaurantViolationsBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_restaurant_violations, container, false);
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FragmentRestaurantViolationsBinding binding =
+                DataBindingUtil.inflate(
+                        inflater, R.layout.fragment_restaurant_violations, container, false);
         View rootView = binding.getRoot();
         restaurant = Parcels.unwrap(getArguments().getParcelable(ARG_RESTAURANT));
         binding.setRestaurantSelected(restaurant);
@@ -71,9 +68,8 @@ public class ViolationFragment  extends Fragment {
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
 
-        negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
-                .getNegaDatabaseReference()
-                .child("violations");
+        negaRestaurantsDatabaseReference =
+                FirebaseInitialization.getInstance().getNegaDatabaseReference().child("violations");
         return rootView;
     }
 
@@ -81,32 +77,39 @@ public class ViolationFragment  extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Query violationsQuery = negaRestaurantsDatabaseReference
-                .child(restaurant.getNameKey())
-                .child("violations")
-                .orderByChild("severity")
-                .equalTo(getArgViolationSeverity());
+        Query violationsQuery =
+                negaRestaurantsDatabaseReference
+                        .child(restaurant.getNameKey())
+                        .child("violations")
+                        .orderByChild("severity")
+                        .equalTo(getArgViolationSeverity());
 
-        mAdapter = new FirebaseRecyclerAdapter<FlattenedViolation, ViolationViewHolder>(FlattenedViolation.class, R.layout.item_flattenedviolation,
-                ViolationViewHolder.class, violationsQuery) {
+        mAdapter =
+                new FirebaseRecyclerAdapter<FlattenedViolation, ViolationViewHolder>(
+                        FlattenedViolation.class,
+                        R.layout.item_flattenedviolation,
+                        ViolationViewHolder.class,
+                        violationsQuery) {
 
-            @Override
-            protected void populateViewHolder(ViolationViewHolder viewHolder, FlattenedViolation model, int position) {
-                final DatabaseReference violationRef = getRef(position);
-                final String violationRefKey = violationRef.getKey();
-                Log.v(TAG, "Key: " + violationRefKey);
-                viewHolder.bindData(model);
-            }
-        };
+                    @Override
+                    protected void populateViewHolder(
+                            ViolationViewHolder viewHolder,
+                            FlattenedViolation model,
+                            int position) {
+                        final DatabaseReference violationRef = getRef(position);
+                        final String violationRefKey = violationRef.getKey();
+                        Log.v(TAG, "Key: " + violationRefKey);
+                        viewHolder.bindData(model);
+                    }
+                };
         mRecycler.setAdapter(mAdapter);
     }
 
-    private String getArgViolationSeverity(){
+    private String getArgViolationSeverity() {
         int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-        if (sectionNumber == 1){
+        if (sectionNumber == 1) {
             return "CRITICAL";
         }
         return "NONCRITICAL";
     }
-
 }

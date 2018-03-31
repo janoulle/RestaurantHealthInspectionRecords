@@ -4,7 +4,6 @@ package com.janeullah.apps.healthinspectionviewer.analytics;
  * @author Jane Ullah
  * @date 9/17/2017.
  */
-
 public enum ActionParameters {
     UUID("uuid"),
     START_DATE("start_date"),
@@ -17,11 +16,11 @@ public enum ActionParameters {
 
     private String text;
 
-    ActionParameters(String value){
+    ActionParameters(String value) {
         this.text = value;
     }
 
-    public String text(){
+    public String text() {
         return text;
     }
 }

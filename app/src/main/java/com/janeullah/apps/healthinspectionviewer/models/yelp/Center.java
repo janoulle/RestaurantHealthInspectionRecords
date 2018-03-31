@@ -15,6 +15,7 @@ public class Center {
     @SerializedName("latitude")
     @Expose
     private Double latitude;
+
     @SerializedName("longitude")
     @Expose
     private Double longitude;
@@ -34,5 +35,4 @@ public class Center {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-
 }

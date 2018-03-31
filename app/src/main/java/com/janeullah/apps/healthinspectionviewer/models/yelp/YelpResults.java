@@ -20,19 +20,18 @@ public class YelpResults {
     @SerializedName("businesses")
     @Expose
     private List<Business> businesses = null;
+
     @SerializedName("total")
     @Expose
     private Integer total;
+
     @SerializedName("region")
     @Expose
     private Region region;
 
-    @Exclude
-    private String searchQuery;
+    @Exclude private String searchQuery;
 
-    @Exclude
-    private Intent intent;
-
+    @Exclude private Intent intent;
 
     /*TODO: investigate solution here http://stackoverflow.com/questions/4802887/gson-how-to-exclude-specific-fields-from-serialization-without-annotations
         Marking as 'transient' to prevent Gson serializaton issues
@@ -76,7 +75,7 @@ public class YelpResults {
         return searchQuery;
     }
 
-    public void setSearchQuery(String value){
+    public void setSearchQuery(String value) {
         searchQuery = value;
     }
 }

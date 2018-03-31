@@ -20,9 +20,7 @@ public class County {
     public Map<String, FlattenedRestaurant> restaurants;
 
     public County() {
-        /**
-         * Default constructor
-         */
+        /** Default constructor */
     }
 
     public County(String name, Map<String, FlattenedRestaurant> restaurants) {

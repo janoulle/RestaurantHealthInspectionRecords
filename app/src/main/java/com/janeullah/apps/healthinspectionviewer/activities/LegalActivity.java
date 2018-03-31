@@ -14,8 +14,10 @@ import butterknife.ButterKnife;
 
 public class LegalActivity extends BaseActivity {
     private static final String TAG = "DisclaimerActivity";
+
     @BindView(R.id.app_toolbar)
     public Toolbar mAppToolbar;
+
     @BindView(R.id.legalTextView)
     public TextView mTextView;
 
@@ -37,5 +39,4 @@ public class LegalActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
-
 }

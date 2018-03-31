@@ -18,9 +18,11 @@ public class YelpAuthTokenResponse {
     @SerializedName("access_token")
     @Expose
     private String accessToken;
+
     @SerializedName("expires_in")
     @Expose
     private Integer expiresIn;
+
     @SerializedName("token_type")
     @Expose
     private String tokenType;
@@ -52,14 +54,13 @@ public class YelpAuthTokenResponse {
         this.tokenType = tokenType;
     }
 
-    @Exclude
-    public FlattenedRestaurant restaurantSelected;
+    @Exclude public FlattenedRestaurant restaurantSelected;
 
-    public FlattenedRestaurant getRestaurantSelected(){
+    public FlattenedRestaurant getRestaurantSelected() {
         return restaurantSelected;
     }
 
-    public void setRestaurantSelected(FlattenedRestaurant value){
+    public void setRestaurantSelected(FlattenedRestaurant value) {
         this.restaurantSelected = value;
     }
 }

@@ -10,16 +10,17 @@ buildscript {
     ext.parceler_version = '1.1.6'
     ext.facebook_stetho_version = '1.5.0'
     ext.retrofit_version = '2.2.0'
-    ext.build_tools_version = "26.0.2"
+    ext.build_tools_version = "27.0.3"
     ext.amazon_sdk_version = "2.6.4"
     ext.espresso_version = "3.0.1"
 
     repositories {
         jcenter()
         maven { url 'https://maven.google.com'  }
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.1.0'
         classpath('com.google.firebase:firebase-plugins:1.1.1') {
             // TODO This shouldn't be necessary with the next update
             exclude group: 'com.google.guava', module: 'guava-jdk5'

@@ -16,27 +16,35 @@ public class Source {
     @SerializedName("id")
     @Expose
     private Integer id;
+
     @SerializedName("score")
     @Expose
     private Integer score;
+
     @SerializedName("nonCriticalViolations")
     @Expose
     private Integer nonCriticalViolations;
+
     @SerializedName("criticalViolations")
     @Expose
     private Integer criticalViolations;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("dateReported")
     @Expose
     private String dateReported;
+
     @SerializedName("address")
     @Expose
     private String address;
+
     @SerializedName("county")
     @Expose
     private String county;
+
     @SerializedName("nameKey")
     @Expose
     private String nameKey;
@@ -115,8 +123,16 @@ public class Source {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", id).append("name", name)
-                .append("score", score).append("nonCriticalViolations",nonCriticalViolations).append("criticalViolations", criticalViolations)
-                .append("dateReported", dateReported).append("address", address).append("county", county).append("nameKey", nameKey).toString();
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("name", name)
+                .append("score", score)
+                .append("nonCriticalViolations", nonCriticalViolations)
+                .append("criticalViolations", criticalViolations)
+                .append("dateReported", dateReported)
+                .append("address", address)
+                .append("county", county)
+                .append("nameKey", nameKey)
+                .toString();
     }
 }

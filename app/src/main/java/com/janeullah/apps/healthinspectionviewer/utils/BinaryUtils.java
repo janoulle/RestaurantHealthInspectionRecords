@@ -1,21 +1,16 @@
 package com.janeullah.apps.healthinspectionviewer.utils;
 
-
 import java.util.Locale;
 
-/**
- * Utilities for encoding and decoding binary data to and from different forms.
- */
+/** Utilities for encoding and decoding binary data to and from different forms. */
 public class BinaryUtils {
 
-    private BinaryUtils(){}
+    private BinaryUtils() {}
 
     /**
      * Converts byte data to a Hex-encoded string.
      *
-     * @param data
-     *            data to hex encode.
-     *
+     * @param data data to hex encode.
      * @return hex-encoded string.
      */
     public static String toHex(byte[] data) {
@@ -37,8 +32,7 @@ public class BinaryUtils {
     /**
      * Converts a Hex-encoded data string to the original byte data.
      *
-     * @param hexData
-     *            hex-encoded data to decode.
+     * @param hexData hex-encoded data to decode.
      * @return decoded data from the hex string.
      */
     public static byte[] fromHex(String hexData) {

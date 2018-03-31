@@ -25,5 +25,4 @@ public class Sort {
     public String toString() {
         return new ToStringBuilder(this).append("nameKeyword", nameKeyword).toString();
     }
-
 }

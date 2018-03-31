@@ -15,6 +15,7 @@ public class Coordinates {
     @SerializedName("latitude")
     @Expose
     private Double latitude;
+
     @SerializedName("longitude")
     @Expose
     private Double longitude;
@@ -34,5 +35,4 @@ public class Coordinates {
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
-
 }

@@ -41,7 +41,6 @@ import butterknife.ButterKnife;
  * @author Jane Ullah
  * @date 4/22/2017.
  */
-
 public class RestaurantsInCountyActivity extends BaseActivity {
     private static final String TAG = "RestaurantsListing";
 
@@ -71,30 +70,30 @@ public class RestaurantsInCountyActivity extends BaseActivity {
 
         mCountyName = getIntent().getStringExtra(IntentNames.COUNTY_SELECTED);
         if (mCountyName == null) {
-            Log.e(TAG,"County not selected");
+            Log.e(TAG, "County not selected");
             throw new IllegalArgumentException("Must pass a county selection");
         }
-        showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants in %s", mCountyName));
+        showProgressDialog(
+                String.format(Locale.getDefault(), "Loading restaurants in %s", mCountyName));
 
         setSupportActionBar(mAppToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle(String.format(Locale.getDefault(),"Restaurants In %s", mCountyName));
+        setTitle(String.format(Locale.getDefault(), "Restaurants In %s", mCountyName));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
 
-        negaRestaurantsDatabaseReference = FirebaseInitialization.getInstance()
-                .getNegaDatabaseReference()
-                .child("restaurants");
+        negaRestaurantsDatabaseReference =
+                FirebaseInitialization.getInstance()
+                        .getNegaDatabaseReference()
+                        .child("restaurants");
         negaRestaurantsDatabaseReference.keepSynced(true);
 
-        mQuery = negaRestaurantsDatabaseReference
-                .orderByChild("county")
-                .equalTo(mCountyName);
+        mQuery = negaRestaurantsDatabaseReference.orderByChild("county").equalTo(mCountyName);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecycler.getContext(),
-                layoutManager.getOrientation());
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(mRecycler.getContext(), layoutManager.getOrientation());
         mRecycler.addItemDecoration(dividerItemDecoration);
         logViewEvent(TAG);
     }
@@ -105,20 +104,20 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         if (id == R.id.action_about) {
             loadActivity(this, AboutActivity.class);
             return true;
-        } else if(id == R.id.action_legal){
+        } else if (id == R.id.action_legal) {
             loadActivity(this, LegalActivity.class);
             return true;
-        }else if (id == android.R.id.home) {
+        } else if (id == android.R.id.home) {
             Log.i(TAG, "Up clicked!");
             Intent upIntent = NavUtils.getParentActivityIntent(this);
-            navigateUp(this,upIntent);
+            navigateUp(this, upIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         showProgressDialog("Loading restaurants in " + mCountyName);
     }
@@ -127,28 +126,39 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
-        mAdapter = new RestaurantsInCountyAdapter(FlattenedRestaurant.class, R.layout.item_flattenedrestaurant, RestaurantViewHolder.class, mQuery);
+        mAdapter =
+                new RestaurantsInCountyAdapter(
+                        FlattenedRestaurant.class,
+                        R.layout.item_flattenedrestaurant,
+                        RestaurantViewHolder.class,
+                        mQuery);
         mRecycler.setAdapter(mAdapter);
 
-        //https://gist.github.com/puf/f49a1b07e92952b44f2dc36d9af04e3c#file-mainactivity-java-L102
-        //http://stackoverflow.com/questions/34982347/how-to-be-notified-when-firebaselistadapter-finishes
+        // https://gist.github.com/puf/f49a1b07e92952b44f2dc36d9af04e3c#file-mainactivity-java-L102
+        // http://stackoverflow.com/questions/34982347/how-to-be-notified-when-firebaselistadapter-finishes
         updateTextViewHeader();
     }
 
     private void updateTextViewHeader() {
-        mQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // the initial data has been loaded, hide the progress bar
-                Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
-                headerForView.setText(String.format(Locale.getDefault(),"%d found", mAdapter.getItemCount()));
-            }
+        mQuery.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // the initial data has been loaded, hide the progress bar
+                        Log.i(TAG, "Count of datasnapshot: " + dataSnapshot.getChildrenCount());
+                        headerForView.setText(
+                                String.format(
+                                        Locale.getDefault(), "%d found", mAdapter.getItemCount()));
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-                Log.e(TAG, "Error setting restaurants in county count " + firebaseError.getDetails());
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError firebaseError) {
+                        Log.e(
+                                TAG,
+                                "Error setting restaurants in county count "
+                                        + firebaseError.getDetails());
+                    }
+                });
     }
 
     @Override
@@ -159,24 +169,32 @@ public class RestaurantsInCountyActivity extends BaseActivity {
         }
     }
 
-    private class RestaurantsInCountyAdapter extends FirebaseRecyclerAdapter<FlattenedRestaurant, RestaurantViewHolder>{
+    private class RestaurantsInCountyAdapter
+            extends FirebaseRecyclerAdapter<FlattenedRestaurant, RestaurantViewHolder> {
         private static final String TAG = "RICAdapter";
         /**
-         * @param modelClass      Firebase will marshall the data at a location into
-         *                        an instance of a class that you provide
-         * @param modelLayout     This is the layout used to represent a single item in the list.
-         *                        You will be responsible for populating an instance of the corresponding
-         *                        view with the data from an instance of modelClass.
-         * @param viewHolderClass The class that hold references to all sub-views in an instance modelLayout.
-         * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location,
-         *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
+         * @param modelClass Firebase will marshall the data at a location into an instance of a
+         *     class that you provide
+         * @param modelLayout This is the layout used to represent a single item in the list. You
+         *     will be responsible for populating an instance of the corresponding view with the
+         *     data from an instance of modelClass.
+         * @param viewHolderClass The class that hold references to all sub-views in an instance
+         *     modelLayout.
+         * @param ref The Firebase location to watch for data changes. Can also be a slice of a
+         *     location, using some combination of {@code limit()}, {@code startAt()}, and {@code
+         *     endAt()}.
          */
-        public RestaurantsInCountyAdapter(Class<FlattenedRestaurant> modelClass, int modelLayout, Class<RestaurantViewHolder> viewHolderClass, Query ref) {
+        public RestaurantsInCountyAdapter(
+                Class<FlattenedRestaurant> modelClass,
+                int modelLayout,
+                Class<RestaurantViewHolder> viewHolderClass,
+                Query ref) {
             super(modelClass, modelLayout, viewHolderClass, ref);
         }
 
         @Override
-        protected void populateViewHolder(RestaurantViewHolder viewHolder, FlattenedRestaurant model, int position) {
+        protected void populateViewHolder(
+                RestaurantViewHolder viewHolder, FlattenedRestaurant model, int position) {
             final DatabaseReference queryRef = getRef(position);
             String key = queryRef.getKey();
             Log.v(TAG, "Key: " + key);

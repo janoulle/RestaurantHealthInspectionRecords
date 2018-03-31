@@ -10,7 +10,6 @@ import com.google.firebase.database.FirebaseDatabase;
  * @author Jane Ullah
  * @date 4/22/2017.
  */
-
 public class FirebaseInitialization {
     private static final String TAG = "FirebaseInitialization";
     private static final FirebaseInitialization ourInstance = new FirebaseInitialization();

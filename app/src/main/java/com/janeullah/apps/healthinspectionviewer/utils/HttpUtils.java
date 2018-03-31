@@ -16,26 +16,21 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 /**
- * http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-examples-using-sdks.html
- * Various Http helper routines
+ * http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-examples-using-sdks.html Various Http
+ * helper routines
  */
 public class HttpUtils {
     private static final String TAG = "HttpUtils";
 
-    private HttpUtils(){}
+    private HttpUtils() {}
 
-    /**
-     * Makes a http request to the specified endpoint
-     */
-    public static String invokeHttpRequest(URL endpointUrl,
-                                           String httpMethod,
-                                           Map<String, String> headers,
-                                           String requestBody) {
+    /** Makes a http request to the specified endpoint */
+    public static String invokeHttpRequest(
+            URL endpointUrl, String httpMethod, Map<String, String> headers, String requestBody) {
         HttpURLConnection connection = createHttpConnection(endpointUrl, httpMethod, headers);
         try {
-            if ( requestBody != null ) {
-                DataOutputStream wr = new DataOutputStream(
-                        connection.getOutputStream());
+            if (requestBody != null) {
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(requestBody);
                 wr.flush();
                 wr.close();
@@ -74,17 +69,16 @@ public class HttpUtils {
         }
     }
 
-    public static HttpURLConnection createHttpConnection(URL endpointUrl,
-                                                         String httpMethod,
-                                                         Map<String, String> headers) {
+    public static HttpURLConnection createHttpConnection(
+            URL endpointUrl, String httpMethod, Map<String, String> headers) {
         try {
             HttpURLConnection connection = (HttpURLConnection) endpointUrl.openConnection();
             connection.setRequestMethod(httpMethod);
 
-            if ( headers != null ) {
-                Log.d(TAG,"--------- Request headers ---------");
-                for ( Map.Entry<String,String> headerEntry : headers.entrySet() ) {
-                    Log.d(TAG,headerEntry.getKey() + ": " + headerEntry.getValue());
+            if (headers != null) {
+                Log.d(TAG, "--------- Request headers ---------");
+                for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
+                    Log.d(TAG, headerEntry.getKey() + ": " + headerEntry.getValue());
                     connection.setRequestProperty(headerEntry.getKey(), headerEntry.getValue());
                 }
             }
@@ -105,10 +99,9 @@ public class HttpUtils {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UTF-8 encoding is not supported.", e);
         }
-        if ( keepPathSlash ) {
+        if (keepPathSlash) {
             encoded = encoded.replace("%2F", "/");
         }
         return encoded;
     }
 }
-

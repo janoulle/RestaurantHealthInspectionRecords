@@ -1,6 +1,5 @@
 package com.janeullah.apps.healthinspectionviewer.dtos;
 
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -9,16 +8,12 @@ import org.parceler.Parcel;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Author: Jane Ullah
- * Date:  4/26/2017
- */
+/** Author: Jane Ullah Date: 4/26/2017 */
 @IgnoreExtraProperties
 @Parcel(Parcel.Serialization.BEAN)
 public class FlattenedViolation {
 
-    @Exclude
-    private String section;
+    @Exclude private String section;
     private Long violationId;
     private String severity;
     private String category;
@@ -82,14 +77,18 @@ public class FlattenedViolation {
         this.notes = notes;
     }
 
-
     public FlattenedViolation() {
-        /**
-         * Default constructor
-         */
+        /** Default constructor */
     }
 
-    public FlattenedViolation(Long violationId, String severity, String category, String section, String inspectionType, String summary, String notes) {
+    public FlattenedViolation(
+            Long violationId,
+            String severity,
+            String category,
+            String section,
+            String inspectionType,
+            String summary,
+            String notes) {
         this.violationId = violationId;
         this.severity = severity;
         this.category = category;

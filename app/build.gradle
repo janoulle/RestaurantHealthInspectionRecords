@@ -78,7 +78,7 @@ android {
         release {
             debuggable false
             shrinkResources false
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
             proguardFiles fileTree('proguard').asList().toArray()
@@ -88,7 +88,7 @@ android {
         debug {
             debuggable true
             shrinkResources false
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             //https://medium.com/@jonfinerty/beginner-to-proguard-b3327ff3a831
             proguardFiles fileTree('proguard').asList().toArray()
@@ -112,8 +112,6 @@ android {
     //https://developer.android.com/studio/build/shrink-code.html
     productFlavors {
         proguard {
-
-
             dimension "withproguard"
         }
     }
@@ -127,8 +125,8 @@ android {
         enabled = true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     testOptions {
@@ -168,7 +166,6 @@ dependencies {
     compile "com.google.firebase:firebase-crash:$firebase_version"
     compile "com.google.firebase:firebase-config:$firebase_version"
     compile "com.google.firebase:firebase-appindexing:$firebase_version"
-
     compile("com.squareup.retrofit2:retrofit:$retrofit_version") {
         exclude module: 'okhttp'
     }
@@ -178,11 +175,11 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
     compile "com.facebook.stetho:stetho:$facebook_stetho_version"
     compile "com.facebook.stetho:stetho-okhttp3:$facebook_stetho_version"
-
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     annotationProcessor "org.parceler:parceler:$parceler_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
     annotationProcessor 'com.google.auto.value:auto-value:1.2'
+    testCompile 'com.google.auto.value:auto-value:1.2'
     debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
     compile 'com.google.maps:google-maps-services:0.1.20'
@@ -199,11 +196,10 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:1.0.1'
     compile "com.google.firebase:firebase-perf:$firebase_version"
     compile "com.android.support.test.espresso:espresso-idling-resource:$espresso_version"
+
     //https://github.com/aws/aws-sdk-android/blob/master/aws-android-sdk-cognitoidentityprovider/pom.xml
     compile "com.amazonaws:aws-android-sdk-cognitoidentityprovider:$amazon_sdk_version"
     compile "com.amazonaws:aws-android-sdk-core:$amazon_sdk_version"
-
-
     androidTestCompile("com.android.support.test.espresso:espresso-core:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -214,11 +210,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-
     androidTestCompile "com.android.support:support-annotations:$compile_sdk_version"
     androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
-
-
 }
 
 apply plugin: 'com.google.gms.google-services'

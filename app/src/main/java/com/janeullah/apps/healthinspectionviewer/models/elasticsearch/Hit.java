@@ -15,15 +15,19 @@ public class Hit {
     @SerializedName("_index")
     @Expose
     private String index;
+
     @SerializedName("_type")
     @Expose
     private String type;
+
     @SerializedName("_id")
     @Expose
     private String id;
+
     @SerializedName("_score")
     @Expose
     private Double score;
+
     @SerializedName("_source")
     @Expose
     private Source source;
@@ -70,6 +74,12 @@ public class Hit {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("index", index).append("type", type).append("id", id).append("score", score).append("source", source).toString();
+        return new ToStringBuilder(this)
+                .append("index", index)
+                .append("type", type)
+                .append("id", id)
+                .append("score", score)
+                .append("source", source)
+                .toString();
     }
 }
