@@ -16,12 +16,15 @@ public class ElasticSearchResponse {
     @SerializedName("took")
     @Expose
     private Integer took;
+
     @SerializedName("timed_out")
     @Expose
     private Boolean timedOut;
+
     @SerializedName("_shards")
     @Expose
     private Shards shards;
+
     @SerializedName("hits")
     @Expose
     private Hits hits;
@@ -60,6 +63,11 @@ public class ElasticSearchResponse {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("took", took).append("timedOut", timedOut).append("shards", shards).append("hits", hits).toString();
+        return new ToStringBuilder(this)
+                .append("took", took)
+                .append("timedOut", timedOut)
+                .append("shards", shards)
+                .append("hits", hits)
+                .toString();
     }
 }

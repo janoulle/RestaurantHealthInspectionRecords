@@ -92,7 +92,7 @@ public class GeocodedAddressComponent {
         this.coordinates = coordinates;
     }
 
-    public String getAddressLine1(){
+    public String getAddressLine1() {
         return streetNumber + " " + route;
     }
 }

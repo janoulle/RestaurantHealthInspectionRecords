@@ -1,15 +1,13 @@
 package com.janeullah.apps.healthinspectionviewer.services.firebase;
 
-
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-//https://firebase.google.com/docs/cloud-messaging/android/topic-messaging?utm_source=studio
+// https://firebase.google.com/docs/cloud-messaging/android/topic-messaging?utm_source=studio
 public class AppFirebaseMessagingService extends FirebaseMessagingService {
     public static final String TAG = "AppFirebaseMessagingSvc";
-
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

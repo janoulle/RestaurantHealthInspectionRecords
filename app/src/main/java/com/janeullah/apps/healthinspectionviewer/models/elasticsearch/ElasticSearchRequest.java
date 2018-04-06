@@ -42,16 +42,20 @@ public class ElasticSearchRequest {
         this.size = size;
     }
 
-    public List<Sort> getSort(){
+    public List<Sort> getSort() {
         return sort;
     }
 
-    public void setSort(List<Sort> sort){
+    public void setSort(List<Sort> sort) {
         this.sort = sort;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("query", containsMatchQuery).append("sort", sort).append("size", size).toString();
+        return new ToStringBuilder(this)
+                .append("query", containsMatchQuery)
+                .append("sort", sort)
+                .append("size", size)
+                .toString();
     }
 }

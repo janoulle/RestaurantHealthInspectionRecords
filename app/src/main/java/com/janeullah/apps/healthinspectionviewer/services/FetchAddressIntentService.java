@@ -34,10 +34,10 @@ import java.io.IOException;
 import static com.janeullah.apps.healthinspectionviewer.utils.GeocodingUtils.convertGeocodingResultsToGeocodedAddressComponent;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * helper methods.
+ * An {@link IntentService} subclass for handling asynchronous task requests in a service on a
+ * separate handler thread.
+ *
+ * <p>helper methods.
  */
 public final class FetchAddressIntentService extends IntentService {
     public static final String TAG = "FetchAddressSvc";
@@ -45,8 +45,10 @@ public final class FetchAddressIntentService extends IntentService {
     protected ResultReceiver mReceiver;
 
     public static final int NOTIFICATION_ID = 1;
-    public static final String ACTION_GEOCODE = "com.janeullah.apps.healthinspectionviewer.services.action.geocode";
-    public static final String RECEIVER = "com.janeullah.apps.healthinspectionviewer.services.extra.geocoderesultsreceiver";
+    public static final String ACTION_GEOCODE =
+            "com.janeullah.apps.healthinspectionviewer.services.action.geocode";
+    public static final String RECEIVER =
+            "com.janeullah.apps.healthinspectionviewer.services.extra.geocoderesultsreceiver";
 
     public FetchAddressIntentService() {
         super("FetchAddressIntentService");
@@ -54,17 +56,21 @@ public final class FetchAddressIntentService extends IntentService {
 
     /**
      * http://blog.iangclifton.com/2010/10/08/using-meta-data-in-an-androidmanifest/
+     *
      * @return Gmaps api key
      */
-    private String fetchGoogleApiKey(){
+    private String fetchGoogleApiKey() {
         try {
-            ApplicationInfo ai = getPackageManager().getApplicationInfo(this.getPackageName(), PackageManager.GET_META_DATA);
+            ApplicationInfo ai =
+                    getPackageManager()
+                            .getApplicationInfo(
+                                    this.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             return bundle.getString("com.google.android.geo.API_KEY");
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage(),e);
+            Log.e(TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage(), e);
         } catch (NullPointerException e) {
-            Log.e(TAG, "Failed to load meta-data, NullPointer: " + e.getMessage(),e);
+            Log.e(TAG, "Failed to load meta-data, NullPointer: " + e.getMessage(), e);
         }
         return "";
     }
@@ -85,17 +91,22 @@ public final class FetchAddressIntentService extends IntentService {
         GeocodingResult[] geocodingResults = null;
         FlattenedRestaurant restaurantSelected = null;
         try {
-            restaurantSelected = Parcels.unwrap(intent.getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
-            geocodeContext
-                    .setApiKey(fetchGoogleApiKey())
-                    .setMaxRetries(3);
-            geocodingResults = GeocodingApi.geocode(geocodeContext, restaurantSelected.address).await();
-            Log.i(TAG,"Address: " + restaurantSelected.address + " latlng: " + geocodingResults[0].geometry.location.toString());
-        }catch(ApiException | IOException e){
+            restaurantSelected =
+                    Parcels.unwrap(intent.getParcelableExtra(IntentNames.RESTAURANT_SELECTED));
+            geocodeContext.setApiKey(fetchGoogleApiKey()).setMaxRetries(3);
+            geocodingResults =
+                    GeocodingApi.geocode(geocodeContext, restaurantSelected.address).await();
+            Log.i(
+                    TAG,
+                    "Address: "
+                            + restaurantSelected.address
+                            + " latlng: "
+                            + geocodingResults[0].geometry.location.toString());
+        } catch (ApiException | IOException e) {
             errorMessage = getString(R.string.service_not_available);
             Log.e(TAG, errorMessage, e);
             FirebaseCrash.report(e);
-        }catch(InterruptedException e){
+        } catch (InterruptedException e) {
             errorMessage = getString(R.string.operation_failure);
             Log.e(TAG, errorMessage, e);
             FirebaseCrash.report(e);
@@ -104,10 +115,13 @@ public final class FetchAddressIntentService extends IntentService {
         processResponse(errorMessage, geocodingResults, restaurantSelected);
     }
 
-    private void processResponse(String errorMessage, GeocodingResult[] geocodingResults, FlattenedRestaurant restaurantSelected) {
+    private void processResponse(
+            String errorMessage,
+            GeocodingResult[] geocodingResults,
+            FlattenedRestaurant restaurantSelected) {
         // Handle case where no address was found.
         String errMessage = errorMessage;
-        if (geocodingResults == null || geocodingResults.length  == 0) {
+        if (geocodingResults == null || geocodingResults.length == 0) {
             if (TextUtils.isEmpty(errMessage)) {
                 errMessage = getString(R.string.no_geocoded_address_found);
                 Log.e(TAG, errorMessage);
@@ -118,46 +132,67 @@ public final class FetchAddressIntentService extends IntentService {
         }
     }
 
-    private void handleGeocodedHappyPath(GeocodingResult geocodingResult, FlattenedRestaurant restaurantSelected) {
-        if (geocodingResult.partialMatch){
-            Log.d(TAG,"Inexact Geocoding results received on requested address (" + restaurantSelected.address + ")");
+    private void handleGeocodedHappyPath(
+            GeocodingResult geocodingResult, FlattenedRestaurant restaurantSelected) {
+        if (geocodingResult.partialMatch) {
+            Log.d(
+                    TAG,
+                    "Inexact Geocoding results received on requested address ("
+                            + restaurantSelected.address
+                            + ")");
         }
-        //http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
-        GeocodedAddressComponent geocodedAddressComponent = convertGeocodingResultsToGeocodedAddressComponent(geocodingResult);
+        // http://stackoverflow.com/questions/30106507/pass-longitude-and-latitude-with-intent-to-another-class
+        GeocodedAddressComponent geocodedAddressComponent =
+                convertGeocodingResultsToGeocodedAddressComponent(geocodingResult);
         restaurantSelected.coordinates = geocodedAddressComponent.getCoordinates();
-        Log.i(TAG, "Coordinates "+ geocodedAddressComponent.getCoordinates() + " for restaurant " + restaurantSelected.name + " at address " + restaurantSelected.address +" found!");
-        sendNotification("Geocoding completed for address " + restaurantSelected.address,restaurantSelected);
-        deliverSuccessResultToReceiver(GeocodeConstants.SUCCESS_RESULT,geocodedAddressComponent);
+        Log.i(
+                TAG,
+                "Coordinates "
+                        + geocodedAddressComponent.getCoordinates()
+                        + " for restaurant "
+                        + restaurantSelected.name
+                        + " at address "
+                        + restaurantSelected.address
+                        + " found!");
+        sendNotification(
+                "Geocoding completed for address " + restaurantSelected.address,
+                restaurantSelected);
+        deliverSuccessResultToReceiver(GeocodeConstants.SUCCESS_RESULT, geocodedAddressComponent);
     }
 
-    private void sendNotification(String msg, FlattenedRestaurant restaurant){
+    private void sendNotification(String msg, FlattenedRestaurant restaurant) {
         NotificationBuilderPojo dataNeededForNotification = new NotificationBuilderPojo();
         dataNeededForNotification.notificationId = NOTIFICATION_ID;
         dataNeededForNotification.bigText = msg;
         dataNeededForNotification.contentText = msg;
         dataNeededForNotification.contentTitle = "NEGA Restaurant Scores";
         dataNeededForNotification.smallIconResourceId = R.drawable.ic_greencheck;
-        dataNeededForNotification.notificationStyle = new NotificationCompat.BigTextStyle()
-                .setSummaryText("Geocoding complete: "+ restaurant.address)
-                .bigText("Completed geocoding for " + restaurant.name +  " at address: " + restaurant.address)
-                .setBigContentTitle(msg);
+        dataNeededForNotification.notificationStyle =
+                new NotificationCompat.BigTextStyle()
+                        .setSummaryText("Geocoding complete: " + restaurant.address)
+                        .bigText(
+                                "Completed geocoding for "
+                                        + restaurant.name
+                                        + " at address: "
+                                        + restaurant.address)
+                        .setBigContentTitle(msg);
         TaskStackBuilder stackBuilder = preserveStack(restaurant);
         dataNeededForNotification.pendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        TaskCompleteNotification.notify(this,dataNeededForNotification);
+        TaskCompleteNotification.notify(this, dataNeededForNotification);
     }
 
     @NonNull
     private TaskStackBuilder preserveStack(FlattenedRestaurant restaurant) {
-        //doing this to preserve data needed by RestaurantDataActivity
+        // doing this to preserve data needed by RestaurantDataActivity
         Intent resultIntent = new Intent(this, RestaurantDataActivity.class);
-        resultIntent.putExtra(IntentNames.STARTED_BY_NOTIFICATION,true);
+        resultIntent.putExtra(IntentNames.STARTED_BY_NOTIFICATION, true);
         resultIntent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(restaurant));
         resultIntent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, restaurant.getNameKey());
         resultIntent.putExtra(IntentNames.COUNTY_SELECTED, restaurant.county);
-        resultIntent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,restaurant.address);
-        resultIntent.putExtra(GeocodeConstants.RESULT_DATA_KEY,restaurant.coordinates);
+        resultIntent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED, restaurant.address);
+        resultIntent.putExtra(GeocodeConstants.RESULT_DATA_KEY, restaurant.coordinates);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
@@ -171,7 +206,8 @@ public final class FetchAddressIntentService extends IntentService {
         return stackBuilder;
     }
 
-    private void deliverSuccessResultToReceiver(int resultCode, GeocodedAddressComponent addressComponents) {
+    private void deliverSuccessResultToReceiver(
+            int resultCode, GeocodedAddressComponent addressComponents) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(GeocodeConstants.RESULT_DATA_KEY, Parcels.wrap(addressComponents));
         mReceiver.send(resultCode, bundle);

@@ -23,8 +23,8 @@ import android.support.test.espresso.IdlingResource;
 
 /**
  * Takes a String and returns it after a while via a callback.
- * <p>
- * This executes a long-running operation on a different thread that results in problems with
+ *
+ * <p>This executes a long-running operation on a different thread that results in problems with
  * Espresso if an {@link IdlingResource} is not implemented and registered.
  */
 public class MessageDelayer {
@@ -37,11 +37,14 @@ public class MessageDelayer {
 
     /**
      * Takes a String and returns it after {@link #DELAY_MILLIS} via a {@link DelayerCallback}.
+     *
      * @param message the String that will be returned via the callback
      * @param callback used to notify the caller asynchronously
      */
-    public static void processMessage(final String message, final DelayerCallback callback,
-                               @Nullable final SimpleIdlingResource idlingResource) {
+    public static void processMessage(
+            final String message,
+            final DelayerCallback callback,
+            @Nullable final SimpleIdlingResource idlingResource) {
         // The IdlingResource is null in production.
         if (idlingResource != null) {
             idlingResource.setIdleState(false);
@@ -49,16 +52,18 @@ public class MessageDelayer {
 
         // Delay the execution, return message via callback.
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (callback != null) {
-                    callback.onDone(message);
-                    if (idlingResource != null) {
-                        idlingResource.setIdleState(true);
+        handler.postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (callback != null) {
+                            callback.onDone(message);
+                            if (idlingResource != null) {
+                                idlingResource.setIdleState(true);
+                            }
+                        }
                     }
-                }
-            }
-        }, DELAY_MILLIS);
+                },
+                DELAY_MILLIS);
     }
 }

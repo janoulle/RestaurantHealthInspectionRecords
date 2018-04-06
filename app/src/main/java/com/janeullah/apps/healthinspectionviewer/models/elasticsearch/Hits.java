@@ -18,9 +18,11 @@ public class Hits {
     @SerializedName("total")
     @Expose
     private Integer total;
+
     @SerializedName("max_score")
     @Expose
     private Double maxScore;
+
     @SerializedName("hits")
     @Expose
     private List<Hit> hits = null;
@@ -51,6 +53,10 @@ public class Hits {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("total", total).append("maxScore", maxScore).append("hits", hits).toString();
+        return new ToStringBuilder(this)
+                .append("total", total)
+                .append("maxScore", maxScore)
+                .append("hits", hits)
+                .toString();
     }
 }

@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.async.heroku.HerokuElasticSearchRequestTask;
@@ -23,16 +26,13 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 
 import static org.apache.commons.lang3.StringUtils.trim;
 
 public class RestaurantNameSearchActivity extends BaseActivity {
     private static final String TAG = "RestaurantSearch";
-
-    /*private AwsElasticSearchRequest awsSearchRequest = null;
-    private AwsElasticSearchRequestTask awsAsyncTask = new AwsElasticSearchRequestTask();*/
     private ElasticSearchTaskListener listener = new ElasticSearchTaskListener();
-
 
     @BindView(R.id.restaurants_search_listing_recyclerview)
     protected RecyclerView mRecycler;
@@ -44,6 +44,9 @@ public class RestaurantNameSearchActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_name_search);
+
+        Fabric.with(this, new Crashlytics(), new Answers());
+        Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
@@ -52,17 +55,17 @@ public class RestaurantNameSearchActivity extends BaseActivity {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        //view setup
+        // view setup
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(layoutManager);
 
-        //add divider to layout
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecycler.getContext(),
-                layoutManager.getOrientation());
+        // add divider to layout
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(mRecycler.getContext(), layoutManager.getOrientation());
         mRecycler.addItemDecoration(dividerItemDecoration);
 
-        //setting recylerview adapter in the awstasklistener when the search query is completed
+        // setting recylerview adapter in the awstasklistener when the search query is completed
 
         // Get the intent, verify the action and get the query
         handleIntent(getIntent());
@@ -75,13 +78,7 @@ public class RestaurantNameSearchActivity extends BaseActivity {
     }
 
     @Override
-    public void onDestroy(){
-        /*if (awsAsyncTask != null){
-            awsAsyncTask.setElasticSearchListener(null);
-        }
-        if (herokuAsyncTask != null){
-            herokuAsyncTask.setElasticSearchListener(null);
-        }*/
+    public void onDestroy() {
         listener = null;
 
         super.onDestroy();
@@ -93,13 +90,13 @@ public class RestaurantNameSearchActivity extends BaseActivity {
         if (id == R.id.action_about) {
             loadActivity(this, AboutActivity.class);
             return true;
-        } else if(id == R.id.action_legal){
+        } else if (id == R.id.action_legal) {
             loadActivity(this, LegalActivity.class);
             return true;
-        }else if (id == android.R.id.home) {
+        } else if (id == android.R.id.home) {
             Log.i(TAG, "Up clicked!");
             Intent upIntent = NavUtils.getParentActivityIntent(this);
-            navigateUp(this,upIntent);
+            navigateUp(this, upIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -108,20 +105,19 @@ public class RestaurantNameSearchActivity extends BaseActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            showProgressDialog(String.format(Locale.getDefault(),"Loading restaurants for query %s", query));
+            showProgressDialog(
+                    String.format(Locale.getDefault(), "Loading restaurants for query %s", query));
             if (StringUtils.isNotBlank(query)) {
-                //setup listener
+                // setup listener
                 listener.setIntent(getIntent());
                 listener.setActivity(this);
                 listener.setRecyclerView(mRecycler);
 
-                //setup async task
-                //awsSearchRequest = new AwsElasticSearchRequest(trim(query));
-                //awsAsyncTask.setElasticSearchListener(listener);
-                //awsAsyncTask.execute(awsSearchRequest);
-
-                HerokuElasticSearchRequest herokuSearchRequest = new HerokuElasticSearchRequest(trim(query));
-                HerokuElasticSearchRequestTask herokuAsyncTask = new HerokuElasticSearchRequestTask();
+                // setup async task
+                HerokuElasticSearchRequest herokuSearchRequest =
+                        new HerokuElasticSearchRequest(trim(query));
+                HerokuElasticSearchRequestTask herokuAsyncTask =
+                        new HerokuElasticSearchRequestTask();
                 herokuAsyncTask.setElasticSearchListener(listener);
                 herokuAsyncTask.execute(herokuSearchRequest);
             }

@@ -17,10 +17,10 @@ import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSear
  * @author Jane Ullah
  * @date 9/26/2017.
  */
-
 public interface AwsElasticSearchService {
 
     @POST(StringUtilities.FORWARD_SLASH + AWS_ES_SEARCH_PATH)
-    Call<ElasticSearchResponse> findRestaurantsByName(@HeaderMap Map<String,String> headerParameters,
-                                                      @Body ElasticSearchRequest searchRequest);
+    Call<ElasticSearchResponse> findRestaurantsByName(
+            @HeaderMap Map<String, String> headerParameters,
+            @Body ElasticSearchRequest searchRequest);
 }

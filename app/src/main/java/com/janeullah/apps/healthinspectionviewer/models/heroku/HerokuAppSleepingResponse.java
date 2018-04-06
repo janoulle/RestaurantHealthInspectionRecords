@@ -4,7 +4,6 @@ package com.janeullah.apps.healthinspectionviewer.models.heroku;
  * @author Jane Ullah
  * @date 10/21/2017.
  */
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -15,6 +14,7 @@ public class HerokuAppSleepingResponse {
     @SerializedName("error")
     @Expose
     private String error;
+
     @SerializedName("status")
     @Expose
     private Integer status;
@@ -31,19 +31,14 @@ public class HerokuAppSleepingResponse {
     @Expose
     private Exception exception;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
-    public HerokuAppSleepingResponse() {
-    }
+    /** No args constructor for use in serialization */
+    public HerokuAppSleepingResponse() {}
 
-    public HerokuAppSleepingResponse(Exception e){
+    public HerokuAppSleepingResponse(Exception e) {
         this.exception = e;
     }
 
     /**
-     *
      * @param error
      * @param status
      */
@@ -74,6 +69,3 @@ public class HerokuAppSleepingResponse {
         return new ToStringBuilder(this).append("error", error).append("status", status).toString();
     }
 }
-
-
-

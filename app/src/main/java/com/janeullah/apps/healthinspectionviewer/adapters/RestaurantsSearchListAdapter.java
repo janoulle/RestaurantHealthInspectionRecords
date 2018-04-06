@@ -17,12 +17,11 @@ import java.util.List;
  * @author Jane Ullah
  * @date 9/30/2017.
  */
-
 public class RestaurantsSearchListAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
     private static final String TAG = "SearchAdapterRS";
     private List<FlattenedRestaurant> flattenedRestaurants = new ArrayList<>();
 
-    public RestaurantsSearchListAdapter(List<FlattenedRestaurant> flattenedRestaurants){
+    public RestaurantsSearchListAdapter(List<FlattenedRestaurant> flattenedRestaurants) {
         this.flattenedRestaurants = flattenedRestaurants;
     }
 

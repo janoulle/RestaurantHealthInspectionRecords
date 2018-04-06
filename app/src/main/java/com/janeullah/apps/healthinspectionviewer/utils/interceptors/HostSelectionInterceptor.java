@@ -11,8 +11,7 @@ import okhttp3.Response;
  * https://github.com/square/retrofit/pull/1652
  * https://gist.github.com/swankjesse/8571a8207a5815cca1fb#file-hostselectioninterceptor-java
  */
-
-public class HostSelectionInterceptor implements Interceptor  {
+public class HostSelectionInterceptor implements Interceptor {
     private volatile String host;
 
     public void setHost(String host) {
@@ -24,12 +23,8 @@ public class HostSelectionInterceptor implements Interceptor  {
         Request request = chain.request();
         String host = this.host;
         if (host != null) {
-            HttpUrl newUrl = request.url().newBuilder()
-                    .host(host)
-                    .build();
-            request = request.newBuilder()
-                    .url(newUrl)
-                    .build();
+            HttpUrl newUrl = request.url().newBuilder().host(host).build();
+            request = request.newBuilder().url(newUrl).build();
         }
         return chain.proceed(request);
     }

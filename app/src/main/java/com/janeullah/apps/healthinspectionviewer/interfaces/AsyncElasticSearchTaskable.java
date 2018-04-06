@@ -6,7 +6,6 @@ import com.janeullah.apps.healthinspectionviewer.listeners.ElasticSearchTaskList
  * @author Jane Ullah
  * @date 10/21/2017.
  */
-
 public interface AsyncElasticSearchTaskable {
     void setElasticSearchListener(ElasticSearchTaskListener elasticSearchTaskListener);
 }
