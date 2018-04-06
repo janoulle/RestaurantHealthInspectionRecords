@@ -35,6 +35,10 @@ public class YelpSearchTaskListener implements TaskListenable<Void, YelpResults>
 
     @Override
     public Void onSuccess(YelpResults yelpResults) {
+        if (yelpResults == null) {
+            Log.e(TAG, "Failed to receive search results from Yelp");
+            return null;
+        }
         intent.putExtra(IntentNames.YELP_RESULTS, Parcels.wrap(yelpResults));
         Log.v(
                 TAG,

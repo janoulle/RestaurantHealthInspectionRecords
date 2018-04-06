@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
  * @date 5/4/2017.
  */
 public class YelpSearchRequest {
-    private YelpAuthTokenResponse bearerToken;
     private GeocodedAddressComponent restaurantMetadata;
     private FlattenedRestaurant restaurant;
 
@@ -21,17 +20,9 @@ public class YelpSearchRequest {
         /** Default constructor */
     }
 
-    public YelpSearchRequest(
-            YelpAuthTokenResponse bearerToken,
-            GeocodedAddressComponent component,
-            FlattenedRestaurant restaurant) {
-        this.bearerToken = bearerToken;
+    public YelpSearchRequest(GeocodedAddressComponent component, FlattenedRestaurant restaurant) {
         this.restaurantMetadata = component;
         this.restaurant = restaurant;
-    }
-
-    public String getBearerToken() {
-        return "Bearer " + bearerToken.getAccessToken();
     }
 
     public double getLatitude() {

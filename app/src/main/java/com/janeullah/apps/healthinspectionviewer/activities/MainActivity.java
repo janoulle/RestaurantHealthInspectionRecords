@@ -69,12 +69,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Fabric fabric =
-                new Fabric.Builder(this)
-                        .kits(new Crashlytics(), new Answers())
-                        .debuggable(true)
-                        .build();
-        Fabric.with(fabric);
+        Fabric.with(this, new Crashlytics(), new Answers());
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         // Obtain the FirebaseAnalytics instance.

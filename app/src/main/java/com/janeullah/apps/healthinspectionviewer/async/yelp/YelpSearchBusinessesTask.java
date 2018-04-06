@@ -24,6 +24,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.janeullah.apps.healthinspectionviewer.BuildConfig.YELP_CLIENT_SECRET;
 import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromCache;
 import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromNetwork;
 
@@ -53,7 +54,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest, Integ
             queryParams.put(YelpConstants.LONGITUDE, params[0].getLongitude());
             queryParams.put(YelpConstants.TERM, "food");
             Call<YelpResults> searchRequest =
-                    yelpService.searchBusinesses(params[0].getBearerToken(), queryParams);
+                    yelpService.searchBusinesses("Bearer " + YELP_CLIENT_SECRET, queryParams);
             Response<YelpResults> response = searchRequest.execute();
             if (response.isSuccessful()) {
                 if (isFromCache(response)) {

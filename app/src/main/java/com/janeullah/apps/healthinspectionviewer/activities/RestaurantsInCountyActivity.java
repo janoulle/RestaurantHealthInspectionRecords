@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.facebook.stetho.Stetho;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * https://developer.android.com/training/implementing-navigation/ancestral.html
@@ -64,6 +68,9 @@ public class RestaurantsInCountyActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants_in_county);
+
+        Fabric.with(this, new Crashlytics(), new Answers());
+        Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
