@@ -72,7 +72,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //https://developer.android.com/studio/build/multidex.html
-        multiDexEnabled false
+        multiDexEnabled true
     }
     buildTypes {
         release {

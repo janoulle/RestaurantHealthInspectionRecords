@@ -13,6 +13,7 @@
 
     <!-- https://stackoverflow.com/questions/39825543/didnt-find-class-com-google-firebase-provider-firebaseinitprovider -->
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
