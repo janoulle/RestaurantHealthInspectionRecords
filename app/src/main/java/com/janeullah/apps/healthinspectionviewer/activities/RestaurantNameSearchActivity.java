@@ -11,8 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.janeullah.apps.healthinspectionviewer.R;
@@ -26,7 +24,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.fabric.sdk.android.Fabric;
 
 import static org.apache.commons.lang3.StringUtils.trim;
 
@@ -45,7 +42,7 @@ public class RestaurantNameSearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_name_search);
 
-        Fabric.with(this, new Crashlytics(), new Answers());
+        initializeFabric(this);
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
 

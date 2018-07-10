@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.common.base.Charsets;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 
 import java.net.URL;
 import java.util.Date;
@@ -121,6 +122,7 @@ public class AWS4SignerForAuthorizationHeader extends AWS4SignerBase {
                     TAG,
                     "Unexpected exception when generating signing key for request=" + stringToSign,
                     e);
+            EventLoggingUtils.logException(e);
         }
         return new byte[0];
     }

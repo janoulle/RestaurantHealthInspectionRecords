@@ -13,7 +13,6 @@ import android.support.v4.os.ResultReceiver;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
@@ -25,6 +24,7 @@ import com.janeullah.apps.healthinspectionviewer.constants.IntentNames;
 import com.janeullah.apps.healthinspectionviewer.dtos.FlattenedRestaurant;
 import com.janeullah.apps.healthinspectionviewer.dtos.GeocodedAddressComponent;
 import com.janeullah.apps.healthinspectionviewer.models.NotificationBuilderPojo;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.TaskCompleteNotification;
 
 import org.parceler.Parcels;
@@ -67,10 +67,9 @@ public final class FetchAddressIntentService extends IntentService {
                                     this.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             return bundle.getString("com.google.android.geo.API_KEY");
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException | NullPointerException e) {
             Log.e(TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage(), e);
-        } catch (NullPointerException e) {
-            Log.e(TAG, "Failed to load meta-data, NullPointer: " + e.getMessage(), e);
+            EventLoggingUtils.logException(e);
         }
         return "";
     }
@@ -105,11 +104,11 @@ public final class FetchAddressIntentService extends IntentService {
         } catch (ApiException | IOException e) {
             errorMessage = getString(R.string.service_not_available);
             Log.e(TAG, errorMessage, e);
-            FirebaseCrash.report(e);
+            EventLoggingUtils.logException(e);
         } catch (InterruptedException e) {
             errorMessage = getString(R.string.operation_failure);
             Log.e(TAG, errorMessage, e);
-            FirebaseCrash.report(e);
+            EventLoggingUtils.logException(e);
             Thread.currentThread().interrupt();
         }
         processResponse(errorMessage, geocodingResults, restaurantSelected);

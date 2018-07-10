@@ -7,6 +7,7 @@ import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerForAuthoriza
 import com.janeullah.apps.healthinspectionviewer.interfaces.ElasticSearchRequestable;
 import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.BaseElasticSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.StringUtilities;
 
 import java.net.MalformedURLException;
@@ -62,8 +63,10 @@ public class AwsElasticSearchRequest extends BaseElasticSearchRequest
             headers.put("Authorization", authorization);
         } catch (MalformedURLException e) {
             Log.e(TAG, "Malformed url in use for AWS query", e);
+            EventLoggingUtils.logException(e);
         } catch (Exception e) {
             Log.e(TAG, "Unspecified error while generating signature", e);
+            EventLoggingUtils.logException(e);
         }
     }
 }

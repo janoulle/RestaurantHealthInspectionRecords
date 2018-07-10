@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.common.base.Charsets;
 import com.janeullah.apps.healthinspectionviewer.constants.HerokuConstants;
 import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.BaseElasticSearchRequest;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 
 /**
  * @author Jane Ullah
@@ -34,6 +35,7 @@ public class HerokuElasticSearchRequest extends BaseElasticSearchRequest {
             headers.put("Authorization", "Basic " + encodedString);
         } catch (Exception e) {
             Log.e(TAG, "Unspecified error while generating authorization headers", e);
+            EventLoggingUtils.logException(e);
         }
     }
 }

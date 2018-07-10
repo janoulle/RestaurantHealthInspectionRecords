@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.facebook.stetho.json.ObjectMapper;
 import com.google.common.io.CharStreams;
-import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
 import com.janeullah.apps.healthinspectionviewer.interfaces.AsyncElasticSearchTaskable;
 import com.janeullah.apps.healthinspectionviewer.listeners.ElasticSearchTaskListener;
@@ -13,6 +12,7 @@ import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.ElasticSea
 import com.janeullah.apps.healthinspectionviewer.models.heroku.HerokuAppSleepingResponse;
 import com.janeullah.apps.healthinspectionviewer.models.heroku.HerokuElasticSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.services.heroku.HerokuElasticSearchService;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 
 import java.io.Reader;
 
@@ -58,8 +58,8 @@ public class HerokuElasticSearchRequestTask
             Log.e(TAG, "Search response not successful. Result=" + response);
             Log.e(TAG, "Error response: " + response.errorBody().string());
         } catch (Exception e) {
-            FirebaseCrash.report(e);
             Log.e(TAG, "Error fetching Search Results from AWS", e);
+            EventLoggingUtils.logException(e);
         }
         return null;
     }
@@ -71,7 +71,7 @@ public class HerokuElasticSearchRequestTask
             return mapper.convertValue(errorString, HerokuAppSleepingResponse.class);
         } catch (Exception e) {
             Log.e(TAG, "Error trying to determine if heroku dyno is in period of downtime", e);
-            FirebaseCrash.report(e);
+            EventLoggingUtils.logException(e);
         }
         return null;
     }

@@ -10,8 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.perf.metrics.AddTrace;
@@ -24,7 +22,6 @@ import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.fabric.sdk.android.Fabric;
 
 public class RestaurantViolations extends BaseActivity {
     public static final String TAG = "RestaurantViolations";
@@ -56,7 +53,7 @@ public class RestaurantViolations extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_violations);
 
-        Fabric.with(this, new Crashlytics(), new Answers());
+        initializeFabric(this);
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         // Obtain the FirebaseAnalytics instance.

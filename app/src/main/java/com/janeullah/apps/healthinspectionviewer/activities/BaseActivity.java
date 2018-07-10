@@ -13,11 +13,17 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.janeullah.apps.healthinspectionviewer.BuildConfig;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.MessageDelayer;
 import com.janeullah.apps.healthinspectionviewer.utils.SimpleIdlingResource;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * https://stackoverflow.com/questions/6745797/how-to-set-entire-application-in-portrait-mode-only/9784269#9784269
@@ -104,5 +110,18 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void logSelectionEvent(
             String key, String value, String tag, FirebaseAnalytics firebaseAnalytics) {
         EventLoggingUtils.logSelectionEvent(key, value, tag, firebaseAnalytics, this);
+    }
+
+    protected void initializeFabric(BaseActivity activity) {
+        // Set up Crashlytics, disabled for debug builds
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+        final Fabric fabric =
+                new Fabric.Builder(this)
+                        .kits(crashlyticsKit, new Answers())
+                        .debuggable(true)
+                        .build();
+        Fabric.with(fabric);
     }
 }

@@ -2,6 +2,7 @@ package com.janeullah.apps.healthinspectionviewer.auth.aws;
 
 import com.google.common.base.Charsets;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.HttpUtils;
 
 import java.net.URL;
@@ -236,6 +237,7 @@ public abstract class AWS4SignerBase {
             md.update(text.getBytes(Charsets.UTF_8));
             return md.digest();
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException(
                     "Unable to compute hash while signing request: " + e.getMessage(), e);
         }
@@ -248,6 +250,7 @@ public abstract class AWS4SignerBase {
             md.update(data);
             return md.digest();
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException(
                     "Unable to compute hash while signing request: " + e.getMessage(), e);
         }
@@ -260,6 +263,7 @@ public abstract class AWS4SignerBase {
             mac.init(new SecretKeySpec(key, algorithm));
             return mac.doFinal(data);
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException(
                     "Unable to calculate a request signature: " + e.getMessage(), e);
         }

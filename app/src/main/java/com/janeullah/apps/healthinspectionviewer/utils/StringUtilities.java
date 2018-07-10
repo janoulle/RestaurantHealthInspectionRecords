@@ -8,7 +8,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -101,8 +100,8 @@ public class StringUtilities {
         try {
             return gson.toJson(request);
         } catch (Exception e) {
-            FirebaseCrash.report(e);
-            Log.e(TAG, "Failed to convert request (" + request + ") to string");
+            Log.e(TAG, "Failed to convert request (" + request + ") to string", e);
+            EventLoggingUtils.logException(e);
         }
         return "";
     }
@@ -111,8 +110,8 @@ public class StringUtilities {
         try {
             return gson.fromJson(jsonData, clazz);
         } catch (Exception e) {
-            FirebaseCrash.report(e);
-            Log.e(TAG, "Failed to convert request (" + jsonData + ") to type=" + clazz);
+            Log.e(TAG, "Failed to convert request (" + jsonData + ") to type=" + clazz, e);
+            EventLoggingUtils.logException(e);
         }
         return null;
     }

@@ -3,7 +3,6 @@ package com.janeullah.apps.healthinspectionviewer.async.yelp;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration;
 import com.janeullah.apps.healthinspectionviewer.constants.YelpConstants;
@@ -27,6 +26,7 @@ import retrofit2.Response;
 import static com.janeullah.apps.healthinspectionviewer.BuildConfig.YELP_CLIENT_SECRET;
 import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromCache;
 import static com.janeullah.apps.healthinspectionviewer.configuration.RetrofitConfiguration.isFromNetwork;
+import static com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils.logException;
 
 /**
  * @author Jane Ullah
@@ -68,7 +68,7 @@ public class YelpSearchBusinessesTask extends AsyncTask<YelpSearchRequest, Integ
             Log.i(TAG, "Unsuccessful api call to Yelp for query params: " + queryParams);
         } catch (IOException e) {
             Log.d(TAG, "Error retrieving search results for Yelp api query", e);
-            FirebaseCrash.report(e);
+            logException(e);
         }
         return null;
     }

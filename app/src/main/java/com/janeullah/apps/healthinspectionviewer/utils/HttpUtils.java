@@ -36,6 +36,7 @@ public class HttpUtils {
                 wr.close();
             }
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("Request failed. " + e.getMessage(), e);
         }
         return executeHttpRequest(connection);
@@ -48,6 +49,7 @@ public class HttpUtils {
             try {
                 is = connection.getInputStream();
             } catch (IOException e) {
+                EventLoggingUtils.logException(e);
                 is = connection.getErrorStream();
             }
 
@@ -61,6 +63,7 @@ public class HttpUtils {
             rd.close();
             return response.toString();
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("Request failed. " + e.getMessage(), e);
         } finally {
             if (connection != null) {
@@ -88,6 +91,7 @@ public class HttpUtils {
             connection.setDoOutput(true);
             return connection;
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("Cannot create connection. " + e.getMessage(), e);
         }
     }
@@ -97,6 +101,7 @@ public class HttpUtils {
         try {
             encoded = URLEncoder.encode(url, Charsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("UTF-8 encoding is not supported.", e);
         }
         if (keepPathSlash) {

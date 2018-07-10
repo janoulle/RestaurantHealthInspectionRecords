@@ -2,10 +2,12 @@ package com.janeullah.apps.healthinspectionviewer.utils;
 
 import android.os.Bundle;
 
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
 import com.crashlytics.android.answers.CustomEvent;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 import com.janeullah.apps.healthinspectionviewer.activities.BaseActivity;
 import com.janeullah.apps.healthinspectionviewer.analytics.ActionParameters;
 
@@ -78,5 +80,10 @@ public class EventLoggingUtils {
                                 .putCustomAttribute(
                                         ActionParameters.START_DATE.text(),
                                         Calendar.getInstance().getTimeInMillis()));
+    }
+
+    public static void logException(Exception e) {
+        FirebaseCrash.report(e);
+        Crashlytics.logException(e);
     }
 }

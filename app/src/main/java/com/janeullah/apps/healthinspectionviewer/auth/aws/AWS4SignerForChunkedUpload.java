@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.common.base.Charsets;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 
 import java.net.URL;
 import java.util.Date;
@@ -264,6 +265,7 @@ public class AWS4SignerForChunkedUpload extends AWS4SignerBase {
             // this is the total data for the chunk that will be sent to the request stream
             return signedChunk;
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("Unable to sign the chunked data. " + e.getMessage(), e);
         }
     }

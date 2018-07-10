@@ -24,6 +24,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils.logException;
+
 /**
  * http://stackoverflow.com/questions/16611759/how-set-alpha-opacity-value-to-color-on-xml-drawable
  *
@@ -98,6 +100,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder implements Vie
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception setting restaurant check mark resource in viewholder.", e);
+            logException(e);
         }
     }
 
