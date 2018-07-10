@@ -44,8 +44,6 @@ def keyStoreProperties = loadKeyStoreProperties()
 //https://developer.android.com/studio/build/manifest-build-variables.html
 android {
 
-    flavorDimensions "withproguard"
-
     signingConfigs {
         release {
             keyPassword keyStoreProperties['NEGA_RELEASE_KEY_PASSWORD']
@@ -67,7 +65,7 @@ android {
         applicationId "com.janeullah.apps.healthinspectionviewer"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 16
+        versionCode 17
         versionName "4.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -76,6 +74,7 @@ android {
     }
     buildTypes {
         release {
+            useProguard false
             debuggable false
             shrinkResources false
             minifyEnabled false
@@ -86,6 +85,7 @@ android {
             manifestPlaceholders = [google_map_key: GOOGLE_MAPS_API_KEY, fabric_api_key: FABRIC_API_KEY]
         }
         debug {
+            useProguard false
             debuggable true
             shrinkResources false
             minifyEnabled false
@@ -110,10 +110,18 @@ android {
         }
     }
 
+    // Specifies the flavor dimensions you want to use. The order in which you
+    // list each dimension determines its priority, from highest to lowest,
+    // when Gradle merges variant sources and configurations. You must assign
+    // each product flavor you configure to one of the flavor dimensions.
+    flavorDimensions "version"
     //https://developer.android.com/studio/build/shrink-code.html
+    //https://developer.android.com/studio/build/build-variants
     productFlavors {
-        proguard {
-            dimension "withproguard"
+        full {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // This property is optional if you are using only one dimension.
+            dimension "version"
         }
     }
 
