@@ -28,26 +28,21 @@ public class FlattenedRestaurant {
     public String address;
     public String county;
 
-    @Exclude
-    public int restaurantCheckMarkResourceId;
+    @Exclude public int restaurantCheckMarkResourceId;
 
-    @Exclude
-    public String restaurantCheckMarkDescriptor;
+    @Exclude public String restaurantCheckMarkDescriptor;
 
-    @Exclude
-    public boolean hasAnyViolations;
+    @Exclude public boolean hasAnyViolations;
 
-    @Exclude
-    public LatLng coordinates;
+    @Exclude public LatLng coordinates;
 
     public FlattenedRestaurant() {
-        /**
-         * Default constructor
-         */
+        /** Default constructor */
     }
 
-    public FlattenedRestaurant(Source awsSearchHit){
-        this(awsSearchHit.getId().longValue(),
+    public FlattenedRestaurant(Source awsSearchHit) {
+        this(
+                awsSearchHit.getId().longValue(),
                 getIntegerVal(awsSearchHit.getScore()),
                 getIntegerVal(awsSearchHit.getCriticalViolations()),
                 getIntegerVal(awsSearchHit.getNonCriticalViolations()),
@@ -57,7 +52,15 @@ public class FlattenedRestaurant {
                 awsSearchHit.getCounty());
     }
 
-    public FlattenedRestaurant(Long id, int score, int criticalViolations, int nonCriticalViolations, String name, String dateReported, String address, String county) {
+    public FlattenedRestaurant(
+            Long id,
+            int score,
+            int criticalViolations,
+            int nonCriticalViolations,
+            String name,
+            String dateReported,
+            String address,
+            String county) {
         this.id = id;
         this.score = score;
         this.criticalViolations = criticalViolations;
@@ -69,12 +72,12 @@ public class FlattenedRestaurant {
         this.hasAnyViolations = hasViolations();
     }
 
-    private static int getIntegerVal(Integer value){
+    private static int getIntegerVal(Integer value) {
         return value == null ? 0 : value;
     }
 
     @Exclude
-    public boolean hasViolations(){
+    public boolean hasViolations() {
         return criticalViolations > 0 || nonCriticalViolations > 0;
     }
 

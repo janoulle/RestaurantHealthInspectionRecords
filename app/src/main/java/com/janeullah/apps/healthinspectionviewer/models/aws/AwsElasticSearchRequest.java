@@ -7,6 +7,7 @@ import com.janeullah.apps.healthinspectionviewer.auth.aws.AWS4SignerForAuthoriza
 import com.janeullah.apps.healthinspectionviewer.interfaces.ElasticSearchRequestable;
 import com.janeullah.apps.healthinspectionviewer.models.elasticsearch.BaseElasticSearchRequest;
 import com.janeullah.apps.healthinspectionviewer.utils.BinaryUtils;
+import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.StringUtilities;
 
 import java.net.MalformedURLException;
@@ -26,13 +27,11 @@ import static com.janeullah.apps.healthinspectionviewer.constants.AwsElasticSear
  * @author Jane Ullah
  * @date 9/29/2017.
  */
-
-public class AwsElasticSearchRequest extends BaseElasticSearchRequest implements ElasticSearchRequestable {
+public class AwsElasticSearchRequest extends BaseElasticSearchRequest
+        implements ElasticSearchRequestable {
     private static final String TAG = "AwsElasticSearchRequest";
 
-
-    public AwsElasticSearchRequest() {
-    }
+    public AwsElasticSearchRequest() {}
 
     public AwsElasticSearchRequest(String searchValue) {
         populateSearchRequestObject(searchValue);
@@ -46,22 +45,28 @@ public class AwsElasticSearchRequest extends BaseElasticSearchRequest implements
             byte[] contentHash = AWS4SignerBase.hash(payload);
             String contentHashString = BinaryUtils.toHex(contentHash);
 
-            //instantiate class doing the heavy lifting
+            // instantiate class doing the heavy lifting
             headers.put("content-length", Integer.toString(payload.length()));
-            AWS4SignerForAuthorizationHeader signer = new AWS4SignerForAuthorizationHeader(new URL(AWS_SEARCH_URL), "POST", AWS_ES_SERVICE, AWS_REGION);
+            AWS4SignerForAuthorizationHeader signer =
+                    new AWS4SignerForAuthorizationHeader(
+                            new URL(AWS_SEARCH_URL), "POST", AWS_ES_SERVICE, AWS_REGION);
 
-            String authorization = signer.computeSignature(headers,
-                    null, // no query parameters
-                    contentHashString,
-                    AWS_ES_READONLY_ACCESS_KEY,
-                    AWS_ES_READONLY_SECRET);
+            String authorization =
+                    signer.computeSignature(
+                            headers,
+                            null, // no query parameters
+                            contentHashString,
+                            AWS_ES_READONLY_ACCESS_KEY,
+                            AWS_ES_READONLY_SECRET);
 
             // express authorization for this as a header
             headers.put("Authorization", authorization);
         } catch (MalformedURLException e) {
             Log.e(TAG, "Malformed url in use for AWS query", e);
+            EventLoggingUtils.logException(e);
         } catch (Exception e) {
             Log.e(TAG, "Unspecified error while generating signature", e);
+            EventLoggingUtils.logException(e);
         }
     }
 }

@@ -4,7 +4,6 @@ package com.janeullah.apps.healthinspectionviewer.models.yelp;
  * @author Jane Ullah
  * @date 5/4/2017.
  */
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,45 +17,59 @@ public class Business {
     @SerializedName("id")
     @Expose
     private String id;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
+
     @SerializedName("is_closed")
     @Expose
     private Boolean isClosed;
+
     @SerializedName("url")
     @Expose
     private String url;
+
     @SerializedName("review_count")
     @Expose
     private Integer reviewCount;
+
     @SerializedName("categories")
     @Expose
     private List<Category> categories = null;
+
     @SerializedName("rating")
     @Expose
     private Double rating;
+
     @SerializedName("coordinates")
     @Expose
     private Coordinates coordinates;
+
     @SerializedName("transactions")
     @Expose
     private List<String> transactions = null;
+
     @SerializedName("price")
     @Expose
     private String price;
+
     @SerializedName("location")
     @Expose
     private Location location;
+
     @SerializedName("phone")
     @Expose
     private String phone;
+
     @SerializedName("display_phone")
     @Expose
     private String displayPhone;
+
     @SerializedName("distance")
     @Expose
     private Double distance;
@@ -180,5 +193,4 @@ public class Business {
     public void setDistance(Double distance) {
         this.distance = distance;
     }
-
 }

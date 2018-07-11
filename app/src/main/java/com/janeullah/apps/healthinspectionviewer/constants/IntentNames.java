@@ -4,9 +4,9 @@ package com.janeullah.apps.healthinspectionviewer.constants;
  * @author Jane Ullah
  * @date 4/22/2017.
  */
-
 public class IntentNames {
-    private IntentNames(){}
+    private IntentNames() {}
+
     public static final String RESTAURANTS_IN_COUNTY = "restaurantsInCounty";
     public static final String VIOLATIONS_IN_RESTAURANT = "violationsInRestaurant";
     public static final String COUNTY_SELECTED = "countySelected";

@@ -14,8 +14,7 @@ import butterknife.ButterKnife;
  * @author Jane Ullah
  * @date 5/20/2017.
  */
-
-public class ViolationViewHolder extends RecyclerView.ViewHolder  {
+public class ViolationViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = "ViolationViewHolder";
 
     @BindView(R.id.violationCategory)
@@ -26,7 +25,6 @@ public class ViolationViewHolder extends RecyclerView.ViewHolder  {
 
     @BindView(R.id.violationLongDesc)
     public TextView violationLongDesc;
-
 
     public ViolationViewHolder(View itemView) {
         super(itemView);

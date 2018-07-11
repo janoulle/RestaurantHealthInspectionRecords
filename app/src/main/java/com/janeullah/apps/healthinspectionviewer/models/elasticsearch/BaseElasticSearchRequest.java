@@ -12,7 +12,6 @@ import java.util.Map;
  * @author Jane Ullah
  * @date 10/21/2017.
  */
-
 public abstract class BaseElasticSearchRequest implements ElasticSearchRequestable {
     protected Map<String, String> headers = new HashMap<>();
     protected final ElasticSearchRequest searchRequest = new ElasticSearchRequest();

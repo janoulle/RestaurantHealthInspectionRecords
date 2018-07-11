@@ -12,10 +12,10 @@ import java.util.UUID;
 /**
  * https://stackoverflow.com/questions/6782660/incorrect-lazy-initialization
  * https://stackoverflow.com/questions/3578604/how-to-solve-the-double-checked-locking-is-broken-declaration-in-java
+ *
  * @author Jane Ullah
  * @date 9/16/2017.
  */
-
 public class UUIDInitializer {
     private static final String TAG = "UUIDInitializer";
     private static final String uuidStashed = UUID.randomUUID().toString();
@@ -27,7 +27,9 @@ public class UUIDInitializer {
             synchronized (lock) {
                 if (instance == null) {
                     instance = new UUIDInitializer();
-                    SharedPreferences preferences = activity.getSharedPreferences(AppConstants.UUID_KEY, Context.MODE_PRIVATE);
+                    SharedPreferences preferences =
+                            activity.getSharedPreferences(
+                                    AppConstants.UUID_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(AppConstants.UUID_IDENTIFIER, instance.getUUID());
                     editor.apply();
@@ -38,9 +40,9 @@ public class UUIDInitializer {
         return instance;
     }
 
-    private UUIDInitializer(){}
+    private UUIDInitializer() {}
 
-    public String getUUID(){
+    public String getUUID() {
         return uuidStashed;
     }
 }

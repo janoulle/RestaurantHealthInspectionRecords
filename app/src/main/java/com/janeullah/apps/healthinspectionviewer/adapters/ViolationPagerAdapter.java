@@ -28,7 +28,7 @@ public class ViolationPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a ViolationFragment
-        return ViolationFragment.newInstance(position + 1,restaurantSelected);
+        return ViolationFragment.newInstance(position + 1, restaurantSelected);
     }
 
     @Override

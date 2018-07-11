@@ -17,10 +17,9 @@ import static com.janeullah.apps.healthinspectionviewer.constants.HerokuConstant
  * @author Jane Ullah
  * @date 10/21/2017.
  */
-
 public interface HerokuElasticSearchService {
     @POST(StringUtilities.FORWARD_SLASH + ES_SEARCH_PATH)
-    Call<ElasticSearchResponse> findRestaurantsByName(@HeaderMap Map<String,String> headerParameters,
-                                                      @Body ElasticSearchRequest searchRequest);
-
+    Call<ElasticSearchResponse> findRestaurantsByName(
+            @HeaderMap Map<String, String> headerParameters,
+            @Body ElasticSearchRequest searchRequest);
 }

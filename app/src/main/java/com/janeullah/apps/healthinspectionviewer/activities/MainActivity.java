@@ -17,8 +17,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.ChildEventListener;
@@ -38,9 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.fabric.sdk.android.Fabric;
 
-//import android.widget.SearchView;
+// import android.widget.SearchView;
 
 /**
  * https://developer.android.com/training/appbar/setting-up.html
@@ -63,18 +60,13 @@ public class MainActivity extends BaseActivity {
     private ChildEventListener mCountyListener;
     private AtomicBoolean isDropDownInitialized = new AtomicBoolean(false);
 
-
     @Override
     @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics(),new Answers())
-                .debuggable(true)
-                .build();
-        Fabric.with(fabric);
+        initializeFabric(this);
         Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         // Obtain the FirebaseAnalytics instance.
@@ -83,10 +75,8 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(mAppToolbar);
 
         mTitleView.setText(R.string.select_county_main_activity);
-        negaCountyDatabaseReference = FirebaseInitialization
-                .getInstance()
-                .getNegaDatabaseReference()
-                .child("counties");
+        negaCountyDatabaseReference =
+                FirebaseInitialization.getInstance().getNegaDatabaseReference().child("counties");
 
         // Initialize the Amazon Cognito credentials provider
         /* CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
@@ -101,22 +91,23 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.countySubmitButton)
     protected void attachListenerToCountySubmitButton() {
         final Intent intent = new Intent(MainActivity.this, RestaurantsInCountyActivity.class);
-        if (mCountySpinner.getSelectedItem() != null){
+        if (mCountySpinner.getSelectedItem() != null) {
             String countyChosen = mCountySpinner.getSelectedItem().toString();
             intent.putExtra(IntentNames.COUNTY_SELECTED, countyChosen);
 
             // Submit the message to the delayer.
             MessageDelayer.processMessage(countyChosen, this, mIdlingResource);
 
-            logSelectionEvent(AppConstants.COUNTY_SELECTION, countyChosen, TAG,mFirebaseAnalytics);
+            logSelectionEvent(AppConstants.COUNTY_SELECTION, countyChosen, TAG, mFirebaseAnalytics);
             startActivity(intent);
-        }else{
-            showToast("Please make a selection",Toast.LENGTH_SHORT);
+        } else {
+            showToast("Please make a selection", Toast.LENGTH_SHORT);
         }
     }
 
     /**
      * https://developer.android.com/training/search/setup.html#create-sa
+     *
      * @param menu
      * @return
      */
@@ -145,7 +136,7 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.action_about) {
             loadActivity(this, AboutActivity.class);
             return true;
-        } else if(id == R.id.action_legal) {
+        } else if (id == R.id.action_legal) {
             loadActivity(this, LegalActivity.class);
             return true;
         }
@@ -156,7 +147,7 @@ public class MainActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
 
-        cAdapter = new ArrayAdapter<>(this,R.layout.item_spinner,R.id.countyItemSpinnerView);
+        cAdapter = new ArrayAdapter<>(this, R.layout.item_spinner, R.id.countyItemSpinnerView);
 
         ChildEventListener countyListener = getChildEventListener();
         negaCountyDatabaseReference.addChildEventListener(countyListener);
@@ -176,7 +167,7 @@ public class MainActivity extends BaseActivity {
                 Log.i(TAG, "County Restaurant Size: " + county.restaurants.size());
                 Log.i(TAG, "Snapshot Key: " + dataSnapshot.getKey());
                 cAdapter.add(dataSnapshot.getKey());
-                if (!isDropDownInitialized.get()){
+                if (!isDropDownInitialized.get()) {
                     mCountySpinner.setAdapter(cAdapter);
                     isDropDownInitialized.set(true);
                 }
@@ -194,8 +185,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "loadCounties:onCancelled", databaseError.toException());
-                Toast.makeText(MainActivity.this, "Failed to load all counties.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                                MainActivity.this,
+                                "Failed to load all counties.",
+                                Toast.LENGTH_SHORT)
+                        .show();
             }
         };
     }

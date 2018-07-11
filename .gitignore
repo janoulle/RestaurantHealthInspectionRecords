@@ -15,7 +15,6 @@
 /gradlew.bat
 .idea/
 app/libs/
-gradle/
 libs/
 !/app/libs/
 /keystore.properties

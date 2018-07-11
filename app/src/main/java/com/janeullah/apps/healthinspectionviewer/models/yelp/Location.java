@@ -4,7 +4,6 @@ package com.janeullah.apps.healthinspectionviewer.models.yelp;
  * @author Jane Ullah
  * @date 5/4/2017.
  */
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,24 +17,31 @@ public class Location {
     @SerializedName("address1")
     @Expose
     private String address1;
+
     @SerializedName("address2")
     @Expose
     private String address2;
+
     @SerializedName("address3")
     @Expose
     private String address3;
+
     @SerializedName("city")
     @Expose
     private String city;
+
     @SerializedName("zip_code")
     @Expose
     private String zipCode;
+
     @SerializedName("country")
     @Expose
     private String country;
+
     @SerializedName("state")
     @Expose
     private String state;
+
     @SerializedName("display_address")
     @Expose
     private List<String> displayAddress = null;
@@ -103,5 +109,4 @@ public class Location {
     public void setDisplayAddress(List<String> displayAddress) {
         this.displayAddress = displayAddress;
     }
-
 }

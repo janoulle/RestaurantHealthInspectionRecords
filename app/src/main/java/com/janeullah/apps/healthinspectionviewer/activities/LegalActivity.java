@@ -6,7 +6,9 @@ import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.widget.TextView;
 
+import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
 
 import butterknife.BindView;
@@ -14,15 +16,21 @@ import butterknife.ButterKnife;
 
 public class LegalActivity extends BaseActivity {
     private static final String TAG = "DisclaimerActivity";
+
     @BindView(R.id.app_toolbar)
     public Toolbar mAppToolbar;
+
     @BindView(R.id.legalTextView)
     public TextView mTextView;
 
     @Override
+    @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_legal);
+
+        initializeFabric(this);
+        Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -37,5 +45,4 @@ public class LegalActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
-
 }

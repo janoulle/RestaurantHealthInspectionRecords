@@ -24,8 +24,11 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils.logException;
+
 /**
  * http://stackoverflow.com/questions/16611759/how-set-alpha-opacity-value-to-color-on-xml-drawable
+ *
  * @author Jane Ullah
  * @date 4/28/2017.
  */
@@ -67,29 +70,37 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder implements Vie
         itemView.setOnClickListener(this);
     }
 
-    private void computeAndSetResourceId(final FlattenedRestaurant restaurant){
+    private void computeAndSetResourceId(final FlattenedRestaurant restaurant) {
         try {
             Context context = itemView.getContext();
             if (restaurant.criticalViolations == 0 && restaurant.score >= 90) {
                 restaurant.restaurantCheckMarkResourceId = R.drawable.ic_greencheck;
-                restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.greencheckmark_contentdescriptor);
+                restaurant.restaurantCheckMarkDescriptor =
+                        context.getString(R.string.greencheckmark_contentdescriptor);
             } else if (restaurant.criticalViolations >= 1) {
                 restaurant.restaurantCheckMarkResourceId = R.drawable.ic_redx;
-                restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.redx_contentdescriptor);
+                restaurant.restaurantCheckMarkDescriptor =
+                        context.getString(R.string.redx_contentdescriptor);
             } else {
                 restaurant.restaurantCheckMarkResourceId = R.drawable.ic_yellowcheck;
-                restaurant.restaurantCheckMarkDescriptor = context.getString(R.string.yellowcheckmark_contentdescriptor);
+                restaurant.restaurantCheckMarkDescriptor =
+                        context.getString(R.string.yellowcheckmark_contentdescriptor);
             }
 
             Resources resources = itemView.getContext().getResources();
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
-                restaurantCheckMark.setImageDrawable(resources.getDrawable(restaurant.restaurantCheckMarkResourceId,context.getTheme()));
-            }else{
-                final Bitmap picture = BitmapFactory.decodeResource(resources, restaurant.restaurantCheckMarkResourceId);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                restaurantCheckMark.setImageDrawable(
+                        resources.getDrawable(
+                                restaurant.restaurantCheckMarkResourceId, context.getTheme()));
+            } else {
+                final Bitmap picture =
+                        BitmapFactory.decodeResource(
+                                resources, restaurant.restaurantCheckMarkResourceId);
                 restaurantCheckMark.setImageBitmap(picture);
             }
-        }catch( Exception e){
-            Log.e(TAG,"Exception setting restaurant check mark resource in viewholder.",e);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception setting restaurant check mark resource in viewholder.", e);
+            logException(e);
         }
     }
 
@@ -101,18 +112,19 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder implements Vie
         this.selectedItems = selectedItems;
     }
 
-    //https://stackoverflow.com/questions/33524574/recyclerviewgetting-item-on-recyclerview/33524897#33524897
+    // https://stackoverflow.com/questions/33524574/recyclerviewgetting-item-on-recyclerview/33524897#33524897
     @Override
     public void onClick(View v) {
         final Intent intent = new Intent(this.itemView.getContext(), RestaurantDataActivity.class);
-        Log.i(TAG,String.format(Locale.getDefault(),"%s selected",model.name));
+        Log.i(TAG, String.format(Locale.getDefault(), "%s selected", model.name));
         intent.putExtra(IntentNames.RESTAURANT_KEY_SELECTED, model.getNameKey());
         intent.putExtra(IntentNames.COUNTY_SELECTED, model.county);
         intent.putExtra(IntentNames.RESTAURANT_SELECTED, Parcels.wrap(model));
-        intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED,model.address);
+        intent.putExtra(IntentNames.RESTAURANT_ADDRESS_SELECTED, model.address);
 
-        //FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this.itemView.getContext());
-        //EventLoggingUtils.logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG,mFirebaseAnalytics,this.itemView.getContext());
+        // FirebaseAnalytics mFirebaseAnalytics =
+        // FirebaseAnalytics.getInstance(this.itemView.getContext());
+        // EventLoggingUtils.logSelectionEvent(AppConstants.RESTAURANT_SELECTION,model.getNameKey(),TAG,mFirebaseAnalytics,this.itemView.getContext());
         this.itemView.getContext().startActivity(intent);
     }
 }

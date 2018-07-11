@@ -19,10 +19,10 @@ import static com.janeullah.apps.healthinspectionviewer.constants.YelpConstants.
  * https://stackoverflow.com/questions/36498131/set-dynamic-base-url-using-retrofit-2-0-and-dagger-2
  * https://github.com/square/okhttp/wiki/Interceptors
  * https://futurestud.io/tutorials/retrofit-2-log-requests-and-responses
+ *
  * @author Jane Ullah
  * @date 5/4/2017.
  */
-
 public final class RetrofitConfiguration {
     public static final String TAG = "RetrofitConfig";
 
@@ -32,27 +32,32 @@ public final class RetrofitConfiguration {
     public static final AwsElasticSearchService AWS_ELASTIC_SEARCH_SERVICE;
     public static final HerokuElasticSearchService HEROKU_ELASTIC_SEARCH_SERVICE;
 
-    private RetrofitConfiguration(){}
+    private RetrofitConfiguration() {}
 
-    static{
+    static {
         setOkHttpClient();
 
         YELP_SERVICE = getRetrofitBuilder(YELP_API_HOST).build().create(YelpService.class);
-        AWS_ELASTIC_SEARCH_SERVICE = getRetrofitBuilder(AWS_ES_HOST_URL).build().create(AwsElasticSearchService.class);
-        HEROKU_ELASTIC_SEARCH_SERVICE = getRetrofitBuilder(HerokuConstants.ES_HOST_URL).build().create(HerokuElasticSearchService.class);
+        AWS_ELASTIC_SEARCH_SERVICE =
+                getRetrofitBuilder(AWS_ES_HOST_URL).build().create(AwsElasticSearchService.class);
+        HEROKU_ELASTIC_SEARCH_SERVICE =
+                getRetrofitBuilder(HerokuConstants.ES_HOST_URL)
+                        .build()
+                        .create(HerokuElasticSearchService.class);
     }
 
     private static void setOkHttpClient() {
-        //https://github.com/codepath/android_guides/wiki/Debugging-with-Stetho
+        // https://github.com/codepath/android_guides/wiki/Debugging-with-Stetho
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        httpClient = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new StethoInterceptor())
-                .addInterceptor(logging);
+        httpClient =
+                new OkHttpClient.Builder()
+                        .addNetworkInterceptor(new StethoInterceptor())
+                        .addInterceptor(logging);
     }
 
-    private static Retrofit.Builder getRetrofitBuilder(String apiBaseUrl){
+    private static Retrofit.Builder getRetrofitBuilder(String apiBaseUrl) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())

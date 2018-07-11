@@ -4,9 +4,9 @@ package com.janeullah.apps.healthinspectionviewer.constants;
  * @author Jane Ullah
  * @date 4/30/2017.
  */
-
 public class GeocodeConstants {
-    private GeocodeConstants(){}
+    private GeocodeConstants() {}
+
     public static final int SUCCESS_RESULT = 0;
     public static final int FAILURE_RESULT = 1;
     public static final String PACKAGE_NAME = "com.janeullah.apps.healthinspectionviewer";

@@ -1,6 +1,5 @@
 package com.janeullah.apps.healthinspectionviewer.dtos;
 
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -10,10 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Author: Jane Ullah
- * Date:  4/26/2017
- */
+/** Author: Jane Ullah Date: 4/26/2017 */
 @IgnoreExtraProperties
 @Parcel
 public class FlattenedInspectionReport {
@@ -24,12 +20,15 @@ public class FlattenedInspectionReport {
     public List<FlattenedViolation> violations;
 
     public FlattenedInspectionReport() {
-        /**
-         * Default constructor
-         */
+        /** Default constructor */
     }
 
-    public FlattenedInspectionReport(String name, Long id, int score, String dateReported, List<FlattenedViolation> violations) {
+    public FlattenedInspectionReport(
+            String name,
+            Long id,
+            int score,
+            String dateReported,
+            List<FlattenedViolation> violations) {
         this.name = name;
         this.id = id;
         this.score = score;

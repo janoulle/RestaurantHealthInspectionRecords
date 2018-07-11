@@ -2,6 +2,8 @@ package com.janeullah.apps.healthinspectionviewer.utils;
 
 import android.util.Log;
 
+import com.google.common.base.Charsets;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,31 +16,27 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 /**
- * http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-examples-using-sdks.html
- * Various Http helper routines
+ * http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-examples-using-sdks.html Various Http
+ * helper routines
  */
 public class HttpUtils {
     private static final String TAG = "HttpUtils";
 
-    private HttpUtils(){}
+    private HttpUtils() {}
 
-    /**
-     * Makes a http request to the specified endpoint
-     */
-    public static String invokeHttpRequest(URL endpointUrl,
-                                           String httpMethod,
-                                           Map<String, String> headers,
-                                           String requestBody) {
+    /** Makes a http request to the specified endpoint */
+    public static String invokeHttpRequest(
+            URL endpointUrl, String httpMethod, Map<String, String> headers, String requestBody) {
         HttpURLConnection connection = createHttpConnection(endpointUrl, httpMethod, headers);
         try {
-            if ( requestBody != null ) {
-                DataOutputStream wr = new DataOutputStream(
-                        connection.getOutputStream());
+            if (requestBody != null) {
+                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(requestBody);
                 wr.flush();
                 wr.close();
             }
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("Request failed. " + e.getMessage(), e);
         }
         return executeHttpRequest(connection);
@@ -51,10 +49,11 @@ public class HttpUtils {
             try {
                 is = connection.getInputStream();
             } catch (IOException e) {
+                EventLoggingUtils.logException(e);
                 is = connection.getErrorStream();
             }
 
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charsets.UTF_8));
             String line;
             StringBuffer response = new StringBuffer();
             while ((line = rd.readLine()) != null) {
@@ -64,6 +63,7 @@ public class HttpUtils {
             rd.close();
             return response.toString();
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("Request failed. " + e.getMessage(), e);
         } finally {
             if (connection != null) {
@@ -72,17 +72,16 @@ public class HttpUtils {
         }
     }
 
-    public static HttpURLConnection createHttpConnection(URL endpointUrl,
-                                                         String httpMethod,
-                                                         Map<String, String> headers) {
+    public static HttpURLConnection createHttpConnection(
+            URL endpointUrl, String httpMethod, Map<String, String> headers) {
         try {
             HttpURLConnection connection = (HttpURLConnection) endpointUrl.openConnection();
             connection.setRequestMethod(httpMethod);
 
-            if ( headers != null ) {
-                Log.d(TAG,"--------- Request headers ---------");
-                for ( Map.Entry<String,String> headerEntry : headers.entrySet() ) {
-                    Log.d(TAG,headerEntry.getKey() + ": " + headerEntry.getValue());
+            if (headers != null) {
+                Log.d(TAG, "--------- Request headers ---------");
+                for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
+                    Log.d(TAG, headerEntry.getKey() + ": " + headerEntry.getValue());
                     connection.setRequestProperty(headerEntry.getKey(), headerEntry.getValue());
                 }
             }
@@ -92,6 +91,7 @@ public class HttpUtils {
             connection.setDoOutput(true);
             return connection;
         } catch (Exception e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("Cannot create connection. " + e.getMessage(), e);
         }
     }
@@ -99,14 +99,14 @@ public class HttpUtils {
     public static String urlEncode(String url, boolean keepPathSlash) {
         String encoded;
         try {
-            encoded = URLEncoder.encode(url, "UTF-8");
+            encoded = URLEncoder.encode(url, Charsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
+            EventLoggingUtils.logException(e);
             throw new RuntimeException("UTF-8 encoding is not supported.", e);
         }
-        if ( keepPathSlash ) {
+        if (keepPathSlash) {
             encoded = encoded.replace("%2F", "/");
         }
         return encoded;
     }
 }
-

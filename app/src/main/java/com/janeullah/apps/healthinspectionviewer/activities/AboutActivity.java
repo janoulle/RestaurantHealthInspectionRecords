@@ -6,7 +6,9 @@ import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.widget.TextView;
 
+import com.facebook.stetho.Stetho;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.janeullah.apps.healthinspectionviewer.R;
 
 import butterknife.BindView;
@@ -22,9 +24,13 @@ public class AboutActivity extends BaseActivity {
     public TextView mTextView;
 
     @Override
+    @AddTrace(name = "onCreateTrace", enabled = true)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        initializeFabric(this);
+        Stetho.initializeWithDefaults(this);
         ButterKnife.bind(this);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

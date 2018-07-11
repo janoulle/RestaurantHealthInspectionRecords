@@ -21,26 +21,35 @@ import static io.fabric.sdk.android.Fabric.TAG;
  * @author Jane Ullah
  * @date 9/30/2017.
  */
-
-public class YelpSearchTaskListener implements TaskListenable<Void,YelpResults> {
+public class YelpSearchTaskListener implements TaskListenable<Void, YelpResults> {
     private BaseActivity activity;
     private Intent intent;
 
-    public void setIntent(Intent intent){
+    public void setIntent(Intent intent) {
         this.intent = intent;
     }
 
-    public void setActivity(BaseActivity activity){
+    public void setActivity(BaseActivity activity) {
         this.activity = activity;
     }
 
     @Override
     public Void onSuccess(YelpResults yelpResults) {
+        if (yelpResults == null) {
+            Log.e(TAG, "Failed to receive search results from Yelp");
+            return null;
+        }
         intent.putExtra(IntentNames.YELP_RESULTS, Parcels.wrap(yelpResults));
-        Log.v(TAG,"Received yelp results for " + yelpResults.getSearchQuery() + ": " + yelpResults);
-        if (yelpResults.getMatchedBusiness() != null){
-            Log.v(TAG,"Found business match from Yelp listings: " + gson.toJson(yelpResults.getMatchedBusiness()));
-            FlattenedYelpData flattenedYelpData = new FlattenedYelpData(yelpResults.getMatchedBusiness());
+        Log.v(
+                TAG,
+                "Received yelp results for " + yelpResults.getSearchQuery() + ": " + yelpResults);
+        if (yelpResults.getMatchedBusiness() != null) {
+            Log.v(
+                    TAG,
+                    "Found business match from Yelp listings: "
+                            + gson.toJson(yelpResults.getMatchedBusiness()));
+            FlattenedYelpData flattenedYelpData =
+                    new FlattenedYelpData(yelpResults.getMatchedBusiness());
             RelativeLayout mYelpLayout = activity.findViewById(R.id.yelpDataLayout);
             ImageView yelpStars = activity.findViewById(R.id.yelpStarsDisplay);
             if (mYelpLayout != null) {

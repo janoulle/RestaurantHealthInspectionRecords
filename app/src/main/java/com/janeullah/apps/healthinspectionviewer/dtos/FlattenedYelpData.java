@@ -16,39 +16,37 @@ public class FlattenedYelpData {
     public String yelpBusinessId;
     public double rating;
 
-    public FlattenedYelpData(){
-        /**
-         * Default constructor
-         */
+    public FlattenedYelpData() {
+        /** Default constructor */
     }
 
-    public FlattenedYelpData(Business business){
+    public FlattenedYelpData(Business business) {
         reviewCount = business.getReviewCount();
         yelpBusinessId = business.getId();
         rating = business.getRating();
         computeAndSetYelpStarImages();
     }
 
-    public void computeAndSetYelpStarImages(){
-        if (Double.compare(rating,0) == 0){
+    public void computeAndSetYelpStarImages() {
+        if (Double.compare(rating, 0) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_0;
-        }else if (Double.compare(rating,1) == 0){
+        } else if (Double.compare(rating, 1) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_1;
-        }else if (Double.compare(rating,1.5) == 0){
+        } else if (Double.compare(rating, 1.5) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_1_half;
-        }else if (Double.compare(rating,2) == 0){
+        } else if (Double.compare(rating, 2) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_2;
-        }else if (Double.compare(rating,2.5) == 0){
+        } else if (Double.compare(rating, 2.5) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_2_half;
-        }else if (Double.compare(rating,3) == 0){
+        } else if (Double.compare(rating, 3) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_3;
-        }else if (Double.compare(rating,3.5) == 0){
+        } else if (Double.compare(rating, 3.5) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_3_half;
-        }else if (Double.compare(rating,4) == 0){
+        } else if (Double.compare(rating, 4) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_4;
-        }else if (Double.compare(rating,4.5) == 0){
+        } else if (Double.compare(rating, 4.5) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_4_half;
-        }else if (Double.compare(rating,5) == 0){
+        } else if (Double.compare(rating, 5) == 0) {
             yelpStarsResourceId = R.drawable.stars_small_5;
         }
     }

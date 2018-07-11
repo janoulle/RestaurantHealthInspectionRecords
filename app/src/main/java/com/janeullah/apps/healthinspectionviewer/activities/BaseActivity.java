@@ -13,28 +13,34 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.janeullah.apps.healthinspectionviewer.BuildConfig;
 import com.janeullah.apps.healthinspectionviewer.R;
 import com.janeullah.apps.healthinspectionviewer.utils.EventLoggingUtils;
 import com.janeullah.apps.healthinspectionviewer.utils.MessageDelayer;
 import com.janeullah.apps.healthinspectionviewer.utils.SimpleIdlingResource;
 
+import io.fabric.sdk.android.Fabric;
+
 /**
  * https://stackoverflow.com/questions/6745797/how-to-set-entire-application-in-portrait-mode-only/9784269#9784269
+ *
  * @author Jane Ullah
  * @date 4/27/2017.
  */
-
-public abstract class BaseActivity extends AppCompatActivity implements MessageDelayer.DelayerCallback {
+public abstract class BaseActivity extends AppCompatActivity
+        implements MessageDelayer.DelayerCallback {
     protected FirebaseAnalytics mFirebaseAnalytics;
     private ProgressBar progressBar;
     // The Idling Resource which will be null in production.
-    @Nullable
-    protected SimpleIdlingResource mIdlingResource;
+    @Nullable protected SimpleIdlingResource mIdlingResource;
 
     public void showProgressDialog(String message) {
         if (progressBar == null) {
-            progressBar = (ProgressBar) findViewById(R.id.loadingModalForIndeterminateProgress);
+            progressBar = findViewById(R.id.loadingModalForIndeterminateProgress);
         }
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }
@@ -69,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MessageD
         Toast.makeText(this, message, duration).show();
     }
 
-    protected <T> void loadActivity(Activity sourceActivity, Class<T> pageToLoad){
+    protected <T> void loadActivity(Activity sourceActivity, Class<T> pageToLoad) {
         Intent intent = new Intent(sourceActivity, pageToLoad);
         this.startActivity(intent);
     }
@@ -81,16 +87,13 @@ public abstract class BaseActivity extends AppCompatActivity implements MessageD
         return true;
     }
 
-
     @Override
     public void onDone(String text) {
         // The delayer notifies the activity via a callback.
-        //please hold, caller
+        // please hold, caller
     }
 
-    /**
-     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
-     */
+    /** Only called from test, creates and returns a new {@link SimpleIdlingResource}. */
     @VisibleForTesting
     @NonNull
     public IdlingResource getIdlingResource() {
@@ -101,11 +104,24 @@ public abstract class BaseActivity extends AppCompatActivity implements MessageD
     }
 
     protected void logViewEvent(String tag) {
-        EventLoggingUtils.logViewEvent(tag,mFirebaseAnalytics,this);
+        EventLoggingUtils.logViewEvent(tag, mFirebaseAnalytics, this);
     }
 
-    protected void logSelectionEvent(String key, String value, String tag, FirebaseAnalytics firebaseAnalytics) {
-        EventLoggingUtils.logSelectionEvent(key,value,tag,firebaseAnalytics,this);
+    protected void logSelectionEvent(
+            String key, String value, String tag, FirebaseAnalytics firebaseAnalytics) {
+        EventLoggingUtils.logSelectionEvent(key, value, tag, firebaseAnalytics, this);
+    }
+
+    protected void initializeFabric(BaseActivity activity) {
+        // Set up Crashlytics, disabled for debug builds
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+        final Fabric fabric =
+                new Fabric.Builder(this)
+                        .kits(crashlyticsKit, new Answers())
+                        .debuggable(true)
+                        .build();
+        Fabric.with(fabric);
     }
 }
-

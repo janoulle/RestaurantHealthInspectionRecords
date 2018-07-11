@@ -16,9 +16,11 @@ public class Shards {
     @SerializedName("total")
     @Expose
     private Integer total;
+
     @SerializedName("successful")
     @Expose
     private Integer successful;
+
     @SerializedName("failed")
     @Expose
     private Integer failed;
@@ -49,6 +51,10 @@ public class Shards {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("total", total).append("successful", successful).append("failed", failed).toString();
+        return new ToStringBuilder(this)
+                .append("total", total)
+                .append("successful", successful)
+                .append("failed", failed)
+                .toString();
     }
 }
